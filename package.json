@@ -1,20 +1,19 @@
 {
-  "name": "simaksuy-gunung",
+  "name": "simaksi",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Sistem Informasi Manajemen Pendakian Gunung (SIMAKSI)",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
-  "keywords": [],
+  "dependencies": {
+    "express": "^4.18.2",
+    "ejs": "^3.1.9",
+    "mysql2": "^3.2.0",
+    "bcryptjs": "^2.4.3",
+    "express-session": "^1.17.3"
+  },
+  "devDependencies": {},
   "author": "",
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Fabio-5letters/simaksuy-gunung.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Fabio-5letters/simaksuy-gunung/issues"
-  },
-  "homepage": "https://github.com/Fabio-5letters/simaksuy-gunung#readme"
+  "license": "ISC"
 }

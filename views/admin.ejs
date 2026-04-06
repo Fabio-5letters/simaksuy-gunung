@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <header class="bg-blue-500 text-white p-4">
+    <h1 class="text-xl font-bold">Admin Dashboard</h1>
+  </header>
+  <main class="p-4">
+    <section class="mb-8">
+      <h2 class="text-lg font-bold mb-4">Kelola Data Gunung</h2>
+      <form action="/admin/gunung" method="POST" class="mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" name="nama_gunung" placeholder="Nama Gunung" class="border rounded px-3 py-2" required>
+          <input type="text" name="lokasi" placeholder="Lokasi" class="border rounded px-3 py-2" required>
+          <input type="number" name="ketinggian" placeholder="Ketinggian (mdpl)" class="border rounded px-3 py-2" required>
+          <input type="number" name="kuota_harian" placeholder="Kuota Harian" class="border rounded px-3 py-2" required>
+          <select name="status" class="border rounded px-3 py-2" required>
+            <option value="Buka">Buka</option>
+            <option value="Tutup">Tutup</option>
+          </select>
+        </div>
+        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded mt-4">Tambah Gunung</button>
+      </form>
+      <table class="w-full border-collapse border border-gray-300">
+        <thead>
+          <tr>
+            <th class="border border-gray-300 px-4 py-2">Nama</th>
+            <th class="border border-gray-300 px-4 py-2">Lokasi</th>
+            <th class="border border-gray-300 px-4 py-2">Ketinggian</th>
+            <th class="border border-gray-300 px-4 py-2">Kuota</th>
+            <th class="border border-gray-300 px-4 py-2">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% gunung.forEach(g => { %>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2"><%= g.nama_gunung %></td>
+              <td class="border border-gray-300 px-4 py-2"><%= g.lokasi %></td>
+              <td class="border border-gray-300 px-4 py-2"><%= g.ketinggian %></td>
+              <td class="border border-gray-300 px-4 py-2"><%= g.kuota_harian %></td>
+              <td class="border border-gray-300 px-4 py-2"><%= g.status %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="text-lg font-bold mb-4">Kelola Berita</h2>
+      <form action="/admin/berita" method="POST" class="mb-4">
+        <input type="text" name="judul" placeholder="Judul" class="border rounded px-3 py-2 w-full mb-2" required>
+        <textarea name="isi_berita" placeholder="Isi Berita" class="border rounded px-3 py-2 w-full mb-2" required></textarea>
+        <input type="date" name="tanggal" class="border rounded px-3 py-2 w-full mb-2" required>
+        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Tambah Berita</button>
+      </form>
+      <ul>
+        <% berita.forEach(b => { %>
+          <li class="mb-4">
+            <h3 class="text-md font-bold"><%= b.judul %></h3>
+            <p><%= b.isi_berita %></p>
+            <p class="text-sm text-gray-500">Tanggal: <%= b.tanggal %></p>
+          </li>
+        <% }) %>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold mb-4">Kelola Simaksi</h2>
+      <table class="w-full border-collapse border border-gray-300">
+        <thead>
+          <tr>
+            <th class="border border-gray-300 px-4 py-2">Nama Pendaki</th>
+            <th class="border border-gray-300 px-4 py-2">Gunung</th>
+            <th class="border border-gray-300 px-4 py-2">Tanggal Pendakian</th>
+            <th class="border border-gray-300 px-4 py-2">Jumlah Anggota</th>
+            <th class="border border-gray-300 px-4 py-2">Status</th>
+            <th class="border border-gray-300 px-4 py-2">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% simaksi.forEach(s => { %>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2"><%= s.nama %></td>
+              <td class="border border-gray-300 px-4 py-2"><%= s.nama_gunung %></td>
+              <td class="border border-gray-300 px-4 py-2"><%= s.tanggal_pendakian %></td>
+              <td class="border border-gray-300 px-4 py-2"><%= s.jumlah_anggota %></td>
+              <td class="border border-gray-300 px-4 py-2"><%= s.status_pengajuan %></td>
+              <td class="border border-gray-300 px-4 py-2">
+                <form action="/admin/simaksi/<%= s.id %>" method="POST">
+                  <select name="status_pengajuan" class="border rounded px-3 py-2">
+                    <option value="Pending" <%= s.status_pengajuan === 'Pending' ? 'selected' : '' %>>Pending</option>
+                    <option value="Disetujui" <%= s.status_pengajuan === 'Disetujui' ? 'selected' : '' %>>Disetujui</option>
+                    <option value="Ditolak" <%= s.status_pengajuan === 'Ditolak' ? 'selected' : '' %>>Ditolak</option>
+                  </select>
+                  <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Update</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

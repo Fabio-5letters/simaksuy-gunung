@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beranda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <header class="bg-blue-500 text-white p-4">
+    <h1 class="text-xl font-bold">Beranda</h1>
+  </header>
+  <main class="p-4">
+    <section class="mb-8">
+      <h2 class="text-lg font-bold mb-4">Daftar Gunung</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <% gunung.forEach(g => { %>
+          <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-lg font-bold"><%= g.nama_gunung %></h3>
+            <p>Lokasi: <%= g.lokasi %></p>
+            <p>Ketinggian: <%= g.ketinggian %> mdpl</p>
+            <p>Kuota Harian: <%= g.kuota_harian %></p>
+            <form action="/simaksi" method="POST">
+              <input type="hidden" name="id_gunung" value="<%= g.id %>">
+              <label for="tanggal_pendakian" class="block text-sm font-medium">Tanggal Pendakian</label>
+              <input type="date" name="tanggal_pendakian" class="w-full border rounded px-3 py-2 mb-2" required>
+              <label for="jumlah_anggota" class="block text-sm font-medium">Jumlah Anggota</label>
+              <input type="number" name="jumlah_anggota" class="w-full border rounded px-3 py-2 mb-2" required>
+              <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Ajukan Simaksi</button>
+            </form>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="text-lg font-bold mb-4">Berita dan Pengumuman</h2>
+      <ul>
+        <% berita.forEach(b => { %>
+          <li class="mb-4">
+            <h3 class="text-md font-bold"><%= b.judul %></h3>
+            <p><%= b.isi_berita %></p>
+            <p class="text-sm text-gray-500">Tanggal: <%= b.tanggal %></p>
+          </li>
+        <% }) %>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold mb-4">Daftar Simaksi Saya</h2>
+      <table class="w-full border-collapse border border-gray-300">
+        <thead>
+          <tr>
+            <th class="border border-gray-300 px-4 py-2">Gunung</th>
+            <th class="border border-gray-300 px-4 py-2">Tanggal Pendakian</th>
+            <th class="border border-gray-300 px-4 py-2">Jumlah Anggota</th>
+            <th class="border border-gray-300 px-4 py-2">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% simaksi.forEach(s => { %>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2"><%= s.nama_gunung %></td>
+              <td class="border border-gray-300 px-4 py-2"><%= s.tanggal_pendakian %></td>
+              <td class="border border-gray-300 px-4 py-2"><%= s.jumlah_anggota %></td>
+              <td class="border border-gray-300 px-4 py-2"><%= s.status_pengajuan %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
