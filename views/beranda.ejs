@@ -1,74 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Beranda</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda - Taman Nasional Gunung Merbabu</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="/css/output.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
-  <header class="bg-blue-500 text-white p-4">
-    <h1 class="text-xl font-bold">Beranda</h1>
-  </header>
-  <main class="p-4">
-    <section class="mb-8">
-      <h2 class="text-lg font-bold mb-4">Daftar Gunung</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <% gunung.forEach(g => { %>
-          <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-lg font-bold"><%= g.nama_gunung %></h3>
-            <p>Lokasi: <%= g.lokasi %></p>
-            <p>Ketinggian: <%= g.ketinggian %> mdpl</p>
-            <p>Kuota Harian: <%= g.kuota_harian %></p>
-            <form action="/simaksi" method="POST">
-              <input type="hidden" name="id_gunung" value="<%= g.id %>">
-              <label for="tanggal_pendakian" class="block text-sm font-medium">Tanggal Pendakian</label>
-              <input type="date" name="tanggal_pendakian" class="w-full border rounded px-3 py-2 mb-2" required>
-              <label for="jumlah_anggota" class="block text-sm font-medium">Jumlah Anggota</label>
-              <input type="number" name="jumlah_anggota" class="w-full border rounded px-3 py-2 mb-2" required>
-              <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Ajukan Simaksi</button>
-            </form>
-          </div>
-        <% }) %>
-      </div>
-    </section>
+<body>
+    <div class="min-h-screen bg-gray-50">
+        <!-- Navbar -->
+        <header class="bg-green-800 text-white shadow-lg">
+            <div class="container mx-auto flex justify-between items-center py-4 px-6">
+                <h1 class="text-3xl font-extrabold tracking-wide">Taman Nasional Gunung Merbabu</h1>
+                <nav>
+                    <ul class="flex space-x-6 text-lg">
+                        <li><a href="/" class="hover:text-green-300 transition duration-300">Home</a></li>
+                        <li><a href="/berita" class="hover:text-green-300 transition duration-300">Berita</a></li>
+                        <li><a href="/pendakian" class="hover:text-green-300 transition duration-300">Pendakian</a></li>
+                        <li><a href="/kontak" class="hover:text-green-300 transition duration-300">Kontak</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
 
-    <section class="mb-8">
-      <h2 class="text-lg font-bold mb-4">Berita dan Pengumuman</h2>
-      <ul>
-        <% berita.forEach(b => { %>
-          <li class="mb-4">
-            <h3 class="text-md font-bold"><%= b.judul %></h3>
-            <p><%= b.isi_berita %></p>
-            <p class="text-sm text-gray-500">Tanggal: <%= b.tanggal %></p>
-          </li>
-        <% }) %>
-      </ul>
-    </section>
+        <!-- Hero Section -->
+        <section class="hero-section" style="background-image: url('https://via.placeholder.com/1920x1080');">
+            <div class="text-white">
+                <h2 class="text-5xl font-bold mb-4">Selamat Datang di Taman Nasional Gunung Merbabu</h2>
+                <p class="text-xl">Menjaga kelestarian alam untuk generasi mendatang</p>
+                <button class="mt-6 px-6 py-3 bg-green-600 hover:bg-green-500 text-white font-semibold rounded-lg shadow-md transition duration-300">Pelajari Lebih Lanjut</button>
+            </div>
+        </section>
 
-    <section>
-      <h2 class="text-lg font-bold mb-4">Daftar Simaksi Saya</h2>
-      <table class="w-full border-collapse border border-gray-300">
-        <thead>
-          <tr>
-            <th class="border border-gray-300 px-4 py-2">Gunung</th>
-            <th class="border border-gray-300 px-4 py-2">Tanggal Pendakian</th>
-            <th class="border border-gray-300 px-4 py-2">Jumlah Anggota</th>
-            <th class="border border-gray-300 px-4 py-2">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% simaksi.forEach(s => { %>
-            <tr>
-              <td class="border border-gray-300 px-4 py-2"><%= s.nama_gunung %></td>
-              <td class="border border-gray-300 px-4 py-2"><%= s.tanggal_pendakian %></td>
-              <td class="border border-gray-300 px-4 py-2"><%= s.jumlah_anggota %></td>
-              <td class="border border-gray-300 px-4 py-2"><%= s.status_pengajuan %></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </section>
-  </main>
+        <!-- Informasi Section -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-6">
+                <h3 class="text-3xl font-bold text-center mb-8 text-gray-800">Tentang Taman Nasional</h3>
+                <p class="text-center text-gray-600 leading-relaxed text-lg">
+                    Taman Nasional Gunung Merbabu adalah kawasan konservasi yang memiliki keindahan alam luar biasa. Dengan flora dan fauna yang beragam, taman nasional ini menjadi destinasi favorit bagi para pendaki dan pecinta alam.
+                </p>
+            </div>
+        </section>
+
+        <!-- Berita Terbaru Section -->
+        <section class="py-16 bg-gray-100">
+            <div class="container mx-auto px-6">
+                <h3 class="text-3xl font-bold text-center mb-8 text-gray-800">Berita Terbaru</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <% berita.forEach(item => { %>
+                        <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition duration-300">
+                            <img src="https://via.placeholder.com/400x200" alt="Berita" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h4 class="text-xl font-bold mb-2 text-gray-800"><%= item.judul %></h4>
+                                <p class="text-sm text-gray-500 mb-4"><%= item.tanggal %></p>
+                                <a href="/berita/<%= item.id %>" class="text-green-700 hover:underline">Baca Selengkapnya</a>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pilih Tujuan Pendakian Section -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-6">
+                <h3 class="text-3xl font-bold text-center mb-8 text-gray-800">Pilih Tujuan Pendakian</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Gunung Merbabu -->
+                    <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition duration-300">
+                        <img src="https://via.placeholder.com/400x200" alt="Gunung Merbabu" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h4 class="text-xl font-bold mb-2 text-gray-800">Gunung Merbabu</h4>
+                            <button class="mt-4 px-4 py-2 bg-green-600 hover:bg-green-500 text-white font-semibold rounded-lg shadow-md transition duration-300">Lihat Detail</button>
+                        </div>
+                    </div>
+                    <!-- Gunung Merapi -->
+                    <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition duration-300">
+                        <img src="https://via.placeholder.com/400x200" alt="Gunung Merapi" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h4 class="text-xl font-bold mb-2 text-gray-800">Gunung Merapi</h4>
+                            <button class="mt-4 px-4 py-2 bg-green-600 hover:bg-green-500 text-white font-semibold rounded-lg shadow-md transition duration-300">Lihat Detail</button>
+                        </div>
+                    </div>
+                    <!-- Gunung Lawu -->
+                    <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition duration-300">
+                        <img src="https://via.placeholder.com/400x200" alt="Gunung Lawu" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h4 class="text-xl font-bold mb-2 text-gray-800">Gunung Lawu</h4>
+                            <button class="mt-4 px-4 py-2 bg-green-600 hover:bg-green-500 text-white font-semibold rounded-lg shadow-md transition duration-300">Lihat Detail</button>
+                        </div>
+                    </div>
+                    <!-- Gunung Sindoro -->
+                    <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition duration-300">
+                        <img src="https://via.placeholder.com/400x200" alt="Gunung Sindoro" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h4 class="text-xl font-bold mb-2 text-gray-800">Gunung Sindoro</h4>
+                            <button class="mt-4 px-4 py-2 bg-green-600 hover:bg-green-500 text-white font-semibold rounded-lg shadow-md transition duration-300">Lihat Detail</button>
+                        </div>
+                    </div>
+                    <!-- Gunung Sumbing -->
+                    <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition duration-300">
+                        <img src="https://via.placeholder.com/400x200" alt="Gunung Sumbing" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h4 class="text-xl font-bold mb-2 text-gray-800">Gunung Sumbing</h4>
+                            <button class="mt-4 px-4 py-2 bg-green-600 hover:bg-green-500 text-white font-semibold rounded-lg shadow-md transition duration-300">Lihat Detail</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-green-800 text-white py-8">
+            <div class="container mx-auto text-center">
+                <p class="text-lg">&copy; 2026 Taman Nasional Gunung Merbabu. All rights reserved.</p>
+                <div class="flex justify-center space-x-4 mt-4">
+                    <a href="#" class="hover:text-green-300 transition duration-300">Facebook</a>
+                    <a href="#" class="hover:text-green-300 transition duration-300">Instagram</a>
+                    <a href="#" class="hover:text-green-300 transition duration-300">YouTube</a>
+                </div>
+            </div>
+        </footer>
+    </div>
 </body>
 </html>
