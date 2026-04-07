@@ -60,6 +60,16 @@ router.get('/riwayat', async (req, res) => {
   }
 
   try {
+    // Get data from pemesanan table (modern payment system)
+    const [pemesanan] = await db.query(`
+      SELECT p.*, g.nama_gunung, g.lokasi, g.ketinggian
+      FROM pemesanan p
+      JOIN gunung g ON p.id_gunung = g.id
+      WHERE p.id_user = ?
+      ORDER BY p.created_at DESC
+    `, [req.session.user.id]);
+
+    // Also get data from simaksi table (legacy system)
     const [simaksi] = await db.query(`
       SELECT s.*, g.nama_gunung, g.lokasi, g.ketinggian
       FROM simaksi s
@@ -68,10 +78,59 @@ router.get('/riwayat', async (req, res) => {
       ORDER BY s.created_at DESC
     `, [req.session.user.id]);
 
-    res.render('riwayat', { simaksi, user: req.session.user });
+    // Merge and show both (pemesanan takes priority as it's more complete)
+    const combinedData = [...pemesanan, ...simaksi];
+
+    res.render('riwayat', { simaksi: combinedData, user: req.session.user });
   } catch (err) {
     console.error('Riwayat error:', err);
     res.render('riwayat', { simaksi: [], user: req.session.user, error: 'Gagal memuat riwayat' });
+  }
+});
+
+// Download E-Tiket
+router.get('/download-etiket/:kode_booking', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+
+  try {
+    const { kode_booking } = req.params;
+
+    const [pemesanan] = await db.query(`
+      SELECT p.*, g.nama_gunung, g.lokasi, g.ketinggian, u.nama AS nama_user, u.email AS email_user
+      FROM pemesanan p
+      JOIN gunung g ON p.id_gunung = g.id
+      JOIN users u ON p.id_user = u.id
+      WHERE p.kode_booking = ? AND p.id_user = ?
+    `, [kode_booking, req.session.user.id]);
+
+    if (pemesanan.length === 0) {
+      return res.status(404).render('error', { 
+        message: 'E-Tiket tidak ditemukan', 
+        user: req.session.user 
+      });
+    }
+
+    const data = pemesanan[0];
+
+    // Check if payment is verified
+    if (data.status !== 'diverifikasi') {
+      req.flash('error', 'E-Tiket hanya dapat diunduh setelah pembayaran diverifikasi.');
+      return res.redirect('/riwayat');
+    }
+
+    // Render E-Tiket as HTML
+    res.render('etiket', { 
+      user: req.session.user,
+      pemesanan: data
+    });
+  } catch (err) {
+    console.error('Download etiket error:', err);
+    res.status(500).render('error', { 
+      message: 'Terjadi kesalahan saat mengunduh E-Tiket', 
+      user: req.session.user 
+    });
   }
 });
 

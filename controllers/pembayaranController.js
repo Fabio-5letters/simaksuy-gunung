@@ -367,10 +367,29 @@ exports.verifikasiPemesanan = async (req, res) => {
       return res.redirect('/admin/pemesanan');
     }
 
+    // Update pemesanan status
     await db.query(
       `UPDATE pemesanan SET status = ?, catatan_admin = ?, updated_at = NOW() WHERE id = ?`,
       [status, catatan_admin || '', id]
     );
+
+    // Also update simaksi table for backward compatibility
+    const [pemesanan] = await db.query(
+      `SELECT id_user, id_gunung, tanggal_masuk FROM pemesanan WHERE id = ?`,
+      [id]
+    );
+
+    if (pemesanan.length > 0) {
+      const { id_user, id_gunung, tanggal_masuk } = pemesanan[0];
+      
+      // Map status: diverifikasi -> Disetujui, ditolak -> Ditolak
+      const simaksiStatus = status === 'diverifikasi' ? 'Disetujui' : 'Ditolak';
+      
+      await db.query(
+        `UPDATE simaksi SET status_pengajuan = ? WHERE id_user = ? AND id_gunung = ? AND tanggal_pendakian = ? AND status_pengajuan = 'Pending'`,
+        [simaksiStatus, id_user, id_gunung, tanggal_masuk]
+      );
+    }
 
     req.flash('success', `Pemesanan berhasil ${status === 'diverifikasi' ? 'diverifikasi' : 'ditolak'}.`);
     res.redirect('/admin/pemesanan');
