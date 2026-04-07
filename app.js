@@ -64,7 +64,10 @@ app.use('/', pembayaranRoutes);
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).render('404', { user: req.session.user || null });
+  res.status(404).render('404', {
+    user: req.session.user || null,
+    message: 'Maaf, halaman yang Anda cari tidak dapat ditemukan.'
+  });
 });
 
 // Error handler

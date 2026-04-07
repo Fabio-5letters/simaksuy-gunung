@@ -18,21 +18,30 @@ router.get('/admin', isAdmin, async (req, res) => {
     const [gunung] = await db.query('SELECT * FROM gunung');
     const [berita] = await db.query('SELECT * FROM berita');
     const [simaksi] = await db.query('SELECT s.*, u.nama, g.nama_gunung FROM simaksi s JOIN users u ON s.id_user = u.id JOIN gunung g ON s.id_gunung = g.id');
-    
+
     // Get pemesanan statistics
-    const [pemesanan] = await db.query('SELECT status FROM pemesanan');
-    const pemesananStats = {
-      total: pemesanan.length,
-      pending: pemesanan.filter(p => p.status === 'pending').length,
-      dibayar: pemesanan.filter(p => p.status === 'dibayar').length,
-      diverifikasi: pemesanan.filter(p => p.status === 'diverifikasi').length,
-      ditolak: pemesanan.filter(p => p.status === 'ditolak').length
-    };
+    let pemesananStats = { total: 0, pending: 0, dibayar: 0, diverifikasi: 0, ditolak: 0 };
+    try {
+      const [pemesanan] = await db.query('SELECT status FROM pemesanan');
+      pemesananStats = {
+        total: pemesanan.length,
+        pending: pemesanan.filter(p => p.status === 'pending').length,
+        dibayar: pemesanan.filter(p => p.status === 'dibayar').length,
+        diverifikasi: pemesanan.filter(p => p.status === 'diverifikasi').length,
+        ditolak: pemesanan.filter(p => p.status === 'ditolak').length
+      };
+    } catch (err) {
+      console.warn('⚠ Pemesanan table not available, using default stats');
+    }
 
     res.render('admin', { gunung, berita, simaksi, pemesananStats });
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
+    console.error('Admin dashboard error:', err);
+    res.status(500).render('error', {
+      user: req.session.user,
+      message: 'Terjadi kesalahan saat memuat dashboard admin',
+      error: err.message
+    });
   }
 });
 

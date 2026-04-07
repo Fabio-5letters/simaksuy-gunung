@@ -12,26 +12,42 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  
+
+  console.log('=== LOGIN ATTEMPT ===');
+  console.log('Email:', email);
+  console.log('Password:', password);
+
   // Validation
   if (!email || !password) {
+    console.log('Validation failed: Email or password empty');
     return res.render('login', { error: 'Email dan password harus diisi', success: null });
   }
 
   try {
     const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+    console.log('Query result count:', rows.length);
+
     if (rows.length === 0) {
+      console.log('User not found for email:', email);
       return res.render('login', { error: 'Email atau password salah', success: null });
     }
 
     const user = rows[0];
+    console.log('User found:', { id: user.id, nama: user.nama, email: user.email, role: user.role });
+    console.log('Stored hash:', user.password);
+
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log('Password match result:', isMatch);
+
     if (!isMatch) {
+      console.log('Password mismatch for user:', email);
       return res.render('login', { error: 'Email atau password salah', success: null });
     }
 
     req.session.user = { id: user.id, nama: user.nama, email: user.email, role: user.role };
     console.log('Login successful, session set:', req.session.user);
+    console.log('Redirecting to:', user.role === 'admin' ? '/admin' : '/beranda');
+
     if (user.role === 'admin') {
       res.redirect('/admin');
     } else {

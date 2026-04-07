@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '', // Replace with your MySQL password if needed
+  password: 'root', // Replace with your actual MySQL password
   database: 'simaksi_db',
   waitForConnections: true,
   connectionLimit: 10,
