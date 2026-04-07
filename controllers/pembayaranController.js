@@ -412,18 +412,3 @@ exports.adminDetailPemesanan = async (req, res) => {
     res.redirect('/admin/pemesanan');
   }
 };
-
-module.exports = {
-  showPembayaran: exports.showPembayaran,
-  buatPemesanan: exports.buatPemesanan,
-  konfirmasiBayar: exports.konfirmasiBayar,
-  showUploadBukti: exports.showUploadBukti,
-  uploadBukti: exports.uploadBukti,
-  showPembayaranSukses: exports.showPembayaranSukses,
-  showStatusPemesanan: exports.showStatusPemesanan,
-  riwayatPemesanan: exports.riwayatPemesanan,
-  // Admin functions
-  adminPemesanan: exports.adminPemesanan,
-  verifikasiPemesanan: exports.verifikasiPemesanan,
-  adminDetailPemesanan: exports.adminDetailPemesanan
-};

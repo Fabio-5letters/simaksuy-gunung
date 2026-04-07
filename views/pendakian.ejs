@@ -185,7 +185,6 @@
                             <input type="hidden" id="id_gunung" name="id_gunung">
                             <input type="hidden" id="nama_gunung" name="nama_gunung">
                             <input type="hidden" id="harga_per_orang" name="harga_per_orang" value="150000">
-                            <input type="hidden" id="tanggal_keluar_hidden" name="tanggal_keluar">
 
                             <div id="step1">
                                 <div class="mb-4">
@@ -408,9 +407,6 @@
                 alert('Mohon lengkapi semua data sebelum melanjutkan.');
                 return;
             }
-
-            // Set hidden fields
-            document.getElementById('tanggal_keluar_hidden').value = tanggalKeluar;
 
             const hargaPerOrang = parseInt(document.getElementById('harga_per_orang').value, 10);
             const totalBayar = hargaPerOrang * parseInt(jumlahAnggota, 10);
