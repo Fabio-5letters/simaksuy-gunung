@@ -3,15 +3,6 @@ const db = require('../db');
 
 const router = express.Router();
 
-// Debug route to check session
-router.get('/debug-session', (req, res) => {
-  res.json({
-    session: req.session,
-    user: req.session.user,
-    sessionID: req.sessionID
-  });
-});
-
 // Middleware to check if user is logged in
 function isAuthenticated(req, res, next) {
   console.log('Session check:', req.session.user);

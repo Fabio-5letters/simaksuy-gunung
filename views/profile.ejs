@@ -91,7 +91,21 @@
         <!-- Profile Content -->
         <section class="py-20 bg-white">
             <div class="container mx-auto px-6">
-                <div class="max-w-4xl mx-auto">
+                <div class="max-w-6xl mx-auto">
+                    <!-- Flash Messages -->
+                    <% if (locals.success && success.length > 0) { %>
+                        <div class="mb-8 bg-green-50 border border-green-200 text-green-700 px-6 py-4 rounded-lg flex items-center">
+                            <i class="fas fa-check-circle mr-3 text-xl"></i>
+                            <span class="font-semibold"><%= success[0] %></span>
+                        </div>
+                    <% } %>
+                    <% if (locals.error && error.length > 0) { %>
+                        <div class="mb-8 bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg flex items-center">
+                            <i class="fas fa-exclamation-circle mr-3 text-xl"></i>
+                            <span class="font-semibold"><%= error[0] %></span>
+                        </div>
+                    <% } %>
+
                     <!-- Profile Header -->
                     <div class="profile-card bg-gradient-to-r from-green-50 to-emerald-50 p-8 rounded-xl shadow-lg mb-8">
                         <div class="flex items-center space-x-6">
@@ -108,33 +122,49 @@
                         </div>
                     </div>
 
-                    <!-- Profile Details -->
+                    <!-- Profile Details & Edit Forms -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- Personal Information -->
                         <div class="profile-card bg-white p-6 rounded-xl shadow-lg">
                             <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
                                 <i class="fas fa-user-circle text-green-600 mr-3"></i>Informasi Pribadi
                             </h3>
-                            <div class="space-y-4">
+                            
+                            <!-- Edit Profile Form -->
+                            <form action="/profile/update" method="POST" class="space-y-4 mb-6 pb-6 border-b border-gray-200">
+                                <h4 class="font-semibold text-gray-700 mb-4">Edit Profile</h4>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-600">Nama Lengkap</label>
-                                    <p class="text-gray-900 font-semibold"><%= user.nama %></p>
+                                    <label class="block text-sm font-medium text-gray-600 mb-1">Nama Lengkap</label>
+                                    <input type="text" name="nama" value="<%= user.nama %>" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-600">Email</label>
-                                    <p class="text-gray-900"><%= user.email %></p>
+                                    <label class="block text-sm font-medium text-gray-600 mb-1">Email</label>
+                                    <input type="email" name="email" value="<%= user.email %>" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition">
+                                    <i class="fas fa-save mr-2"></i>Simpan Perubahan
+                                </button>
+                            </form>
+
+                            <!-- Change Password Form -->
+                            <form action="/profile/change-password" method="POST" class="space-y-4">
+                                <h4 class="font-semibold text-gray-700 mb-4">Ubah Password</h4>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600 mb-1">Password Lama</label>
+                                    <input type="password" name="password_lama" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-600">Role</label>
-                                    <span class="inline-block px-3 py-1 text-sm rounded-full <%= user.role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800' %>">
-                                        <%= user.role === 'admin' ? 'Administrator' : 'User' %>
-                                    </span>
+                                    <label class="block text-sm font-medium text-gray-600 mb-1">Password Baru</label>
+                                    <input type="password" name="password_baru" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-600">Bergabung Sejak</label>
-                                    <p class="text-gray-900">Januari 2024</p>
+                                    <label class="block text-sm font-medium text-gray-600 mb-1">Konfirmasi Password Baru</label>
+                                    <input type="password" name="konfirmasi_password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
                                 </div>
-                            </div>
+                                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+                                    <i class="fas fa-key mr-2"></i>Ubah Password
+                                </button>
+                            </form>
                         </div>
 
                         <!-- Account Statistics -->
@@ -144,20 +174,35 @@
                             </h3>
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="text-center p-4 bg-green-50 rounded-lg">
-                                    <div class="text-2xl font-bold text-green-600">0</div>
+                                    <div class="text-2xl font-bold text-green-600"><%= stats.total || 0 %></div>
                                     <p class="text-sm text-gray-600">Total Pendakian</p>
                                 </div>
                                 <div class="text-center p-4 bg-blue-50 rounded-lg">
-                                    <div class="text-2xl font-bold text-blue-600">0</div>
-                                    <p class="text-sm text-gray-600">Selesai</p>
+                                    <div class="text-2xl font-bold text-blue-600"><%= stats.diverifikasi || 0 %></div>
+                                    <p class="text-sm text-gray-600">Diverifikasi</p>
                                 </div>
                                 <div class="text-center p-4 bg-yellow-50 rounded-lg">
-                                    <div class="text-2xl font-bold text-yellow-600">0</div>
+                                    <div class="text-2xl font-bold text-yellow-600"><%= stats.pending || 0 %></div>
                                     <p class="text-sm text-gray-600">Pending</p>
                                 </div>
-                                <div class="text-center p-4 bg-purple-50 rounded-lg">
-                                    <div class="text-2xl font-bold text-purple-600">0</div>
+                                <div class="text-center p-4 bg-red-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-red-600"><%= stats.ditolak || 0 %></div>
                                     <p class="text-sm text-gray-600">Ditolak</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 pt-6 border-t border-gray-200">
+                                <div class="space-y-3">
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Role</span>
+                                        <span class="inline-block px-3 py-1 text-xs rounded-full font-semibold <%= user.role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800' %>">
+                                            <%= user.role === 'admin' ? 'Administrator' : 'User' %>
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Bergabung Sejak</span>
+                                        <span class="text-sm font-semibold"><%= new Date(user.created_at || Date.now()).toLocaleDateString('id-ID', { year: 'numeric', month: 'long' }) %></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -210,10 +255,10 @@
                     <div>
                         <h4 class="text-lg font-bold mb-4">Bantuan</h4>
                         <ul class="space-y-2 text-green-100 text-sm">
-                            <li><a href="#" class="hover:text-white transition">FAQ</a></li>
-                            <li><a href="#" class="hover:text-white transition">Panduan Pendakian</a></li>
-                            <li><a href="#" class="hover:text-white transition">Keselamatan</a></li>
-                            <li><a href="#" class="hover:text-white transition">Syarat & Ketentuan</a></li>
+                            <li><a href="/faq" class="hover:text-white transition">FAQ</a></li>
+                            <li><a href="/panduan" class="hover:text-white transition">Panduan Pendakian</a></li>
+                            <li><a href="/keselamatan" class="hover:text-white transition">Keselamatan</a></li>
+                            <li><a href="/syarat-ketentuan" class="hover:text-white transition">Syarat & Ketentuan</a></li>
                         </ul>
                     </div>
                     <div>

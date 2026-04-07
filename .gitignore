@@ -1,0 +1,65 @@
+# Environment and Security Files
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Dependencies
+node_modules/
+.jekyll-cache/
+.jekyll-metadata
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage/
+.nyc_output/
+
+# Optional npm cache directory
+.npm
+
+# Optional ESLint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database backups (if any)
+*.sql.backup
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Uploads (if needed)
+public/uploads/bukti-pembayaran/*
+!public/uploads/bukti-pembayaran/.gitkeep

@@ -106,12 +106,30 @@
                         <p class="text-gray-600">Pantau status dan riwayat semua pendaftaran pendakian Anda</p>
                     </div>
 
-                 <% if (locals.error) { %>
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-        <i class="fas fa-exclamation-triangle mr-2"></i><%= error %>
-    </div>
-<% } %>
                     <% if (simaksi && simaksi.length > 0) { %>
+                        <!-- Search Bar -->
+                        <div class="mb-6">
+                            <form action="/riwayat" method="GET" class="flex gap-2">
+                                <div class="flex-1 relative">
+                                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                    <input 
+                                        type="text" 
+                                        name="search" 
+                                        value="<%= search || '' %>" 
+                                        placeholder="Cari berdasarkan nama gunung atau kode booking..." 
+                                        class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                </div>
+                                <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
+                                    <i class="fas fa-search mr-2"></i>Cari
+                                </button>
+                                <% if (search) { %>
+                                    <a href="/riwayat" class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition">
+                                        <i class="fas fa-times mr-2"></i>Reset
+                                    </a>
+                                <% } %>
+                            </form>
+                        </div>
+
                         <!-- Statistics Cards -->
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                             <div class="bg-gradient-to-r from-yellow-400 to-orange-500 p-6 rounded-xl text-white">
@@ -155,6 +173,18 @@
                             </div>
                         </div>
 
+                        <!-- Results Info -->
+                        <div class="mb-4 flex justify-between items-center">
+                            <p class="text-sm text-gray-600">
+                                Menampilkan <%= simaksi.length %> dari <%= total %> data
+                            </p>
+                            <% if (search) { %>
+                                <p class="text-sm text-green-600">
+                                    <i class="fas fa-filter mr-1"></i>Hasil pencarian: "<%= search %>"
+                                </p>
+                            <% } %>
+                        </div>
+
                         <!-- Riwayat Table -->
                         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                             <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
@@ -193,12 +223,12 @@
                                                     <div class="text-sm text-gray-900"><%= item.jumlah_anggota %> orang</div>
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
-                                                    <% 
+                                                    <%
                                                     // Handle both simaksi and pemesanan status
                                                     let status = item.status_pengajuan || item.status;
                                                     let statusLabel = '';
                                                     let statusClass = '';
-                                                    
+
                                                     if (status === 'Pending' || status === 'pending') {
                                                       statusLabel = 'Pending';
                                                       statusClass = 'status-pending';
@@ -241,12 +271,71 @@
                                 </table>
                             </div>
                         </div>
+
+                        <!-- Pagination -->
+                        <% if (totalPages > 1) { %>
+                            <div class="mt-6 flex justify-center">
+                                <nav class="flex items-center space-x-2">
+                                    <!-- Previous Button -->
+                                    <% if (currentPage > 1) { %>
+                                        <a href="?page=<%= currentPage - 1 %>&search=<%= search || '' %>" 
+                                           class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                    <% } else { %>
+                                        <span class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-400 cursor-not-allowed">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </span>
+                                    <% } %>
+
+                                    <!-- Page Numbers -->
+                                    <% for (let i = 1; i <= totalPages; i++) { %>
+                                        <% if (i === currentPage) { %>
+                                            <span class="px-4 py-2 bg-green-600 text-white border border-green-600 rounded-lg font-semibold">
+                                                <%= i %>
+                                            </span>
+                                        <% } else if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) { %>
+                                            <a href="?page=<%= i %>&search=<%= search || '' %>" 
+                                               class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                                                <%= i %>
+                                            </a>
+                                        <% } else if (i === currentPage - 2 || i === currentPage + 2) { %>
+                                            <span class="px-2 py-2 text-gray-500">...</span>
+                                        <% } %>
+                                    <% } %>
+
+                                    <!-- Next Button -->
+                                    <% if (currentPage < totalPages) { %>
+                                        <a href="?page=<%= currentPage + 1 %>&search=<%= search || '' %>" 
+                                           class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    <% } else { %>
+                                        <span class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-400 cursor-not-allowed">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </span>
+                                    <% } %>
+                                </nav>
+                            </div>
+                        <% } %>
                     <% } else { %>
                         <!-- Empty State -->
                         <div class="text-center py-20 bg-white rounded-xl shadow-lg">
                             <i class="fas fa-mountain text-6xl text-gray-300 mb-4"></i>
-                            <h3 class="text-2xl font-bold text-gray-600 mb-2">Belum ada riwayat pendakian</h3>
-                            <p class="text-gray-500 mb-6">Anda belum pernah mendaftar pendakian. Mulai petualangan Anda sekarang!</p>
+                            <h3 class="text-2xl font-bold text-gray-600 mb-2">
+                                <% if (search) { %>
+                                    Tidak ada hasil pencarian
+                                <% } else { %>
+                                    Belum ada riwayat pendakian
+                                <% } %>
+                            </h3>
+                            <p class="text-gray-500 mb-6">
+                                <% if (search) { %>
+                                    Coba kata kunci lain atau <a href="/riwayat" class="text-green-600 hover:underline">lihat semua riwayat</a>
+                                <% } else { %>
+                                    Anda belum pernah mendaftar pendakian. Mulai petualangan Anda sekarang!
+                                <% } %>
+                            </p>
                             <a href="/pendakian" class="inline-flex items-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
                                 <i class="fas fa-plus-circle mr-2"></i>Daftar Pendakian
                             </a>
@@ -276,10 +365,10 @@
                     <div>
                         <h4 class="text-lg font-bold mb-4">Bantuan</h4>
                         <ul class="space-y-2 text-green-100 text-sm">
-                            <li><a href="#" class="hover:text-white transition">FAQ</a></li>
-                            <li><a href="#" class="hover:text-white transition">Panduan Pendakian</a></li>
-                            <li><a href="#" class="hover:text-white transition">Keselamatan</a></li>
-                            <li><a href="#" class="hover:text-white transition">Syarat & Ketentuan</a></li>
+                            <li><a href="/faq" class="hover:text-white transition">FAQ</a></li>
+                            <li><a href="/panduan" class="hover:text-white transition">Panduan Pendakian</a></li>
+                            <li><a href="/keselamatan" class="hover:text-white transition">Keselamatan</a></li>
+                            <li><a href="/syarat-ketentuan" class="hover:text-white transition">Syarat & Ketentuan</a></li>
                         </ul>
                     </div>
                     <div>

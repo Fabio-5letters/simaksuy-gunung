@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= gunung.nama_gunung %> - SIMAKSI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      * {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .navbar-gradient {
+        background: linear-gradient(135deg, #1e5631 0%, #2d7a3e 50%, #3a9f5d 100%);
+      }
+      .hero-image {
+        background: linear-gradient(135deg, rgba(30, 86, 49, 0.7), rgba(58, 159, 93, 0.7)),
+                    url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=600&fit=crop');
+        background-size: cover;
+        background-position: center;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #1e5631 0%, #3a9f5d 100%);
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(30, 86, 49, 0.3);
+      }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Navbar -->
+        <header class="navbar-gradient text-white shadow-xl sticky top-0 z-50">
+            <div class="container mx-auto flex justify-between items-center py-4 px-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-mountain text-green-700 text-lg"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold">SIMAKSI Gunung</h1>
+                </div>
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-8 font-semibold">
+                        <li><a href="/beranda" class="hover:text-green-200 transition"><i class="fas fa-home mr-1"></i>Beranda</a></li>
+                        <li><a href="/berita" class="hover:text-green-200 transition"><i class="fas fa-newspaper mr-1"></i>Berita</a></li>
+                        <li><a href="/pendakian" class="hover:text-green-200 transition"><i class="fas fa-person-hiking mr-1"></i>Pendakian</a></li>
+                        <li><a href="/kontak" class="hover:text-green-200 transition"><i class="fas fa-envelope mr-1"></i>Kontak</a></li>
+                    </ul>
+                </nav>
+                <div class="flex space-x-4">
+                    <% if (user) { %>
+                        <a href="/beranda" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition">
+                            <i class="fas fa-user mr-1"></i><%= user.nama %>
+                        </a>
+                    <% } else { %>
+                        <a href="/login" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition">Login</a>
+                    <% } %>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-image text-white py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-5xl md:text-6xl font-black mb-4"><%= gunung.nama_gunung %></h1>
+                <div class="flex items-center justify-center space-x-6 text-lg">
+                    <span class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i><%= gunung.lokasi %></span>
+                    <span class="flex items-center"><i class="fas fa-arrow-up mr-2"></i><%= gunung.ketinggian %> mdpl</span>
+                    <span class="px-4 py-2 rounded-full <%= gunung.status === 'Buka' ? 'bg-green-500' : 'bg-red-500' %> font-bold">
+                        <%= gunung.status %>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Main Content -->
+                    <div class="lg:col-span-2">
+                        <!-- Tentang Gunung -->
+                        <div class="mb-12">
+                            <h2 class="text-3xl font-black text-gray-900 mb-6 flex items-center">
+                                <i class="fas fa-info-circle text-green-600 mr-3"></i>Tentang Gunung
+                            </h2>
+                            <% if (gunung.deskripsi) { %>
+                                <div class="prose prose-lg max-w-none">
+                                    <p class="text-gray-700 leading-relaxed whitespace-pre-line"><%= gunung.deskripsi %></p>
+                                </div>
+                            <% } else { %>
+                                <p class="text-gray-600 italic">Deskripsi belum tersedia.</p>
+                            <% } %>
+                        </div>
+
+                        <!-- Berita Terkait -->
+                        <% if (berita && berita.length > 0) { %>
+                        <div class="mb-12">
+                            <h2 class="text-3xl font-black text-gray-900 mb-6 flex items-center">
+                                <i class="fas fa-newspaper text-green-600 mr-3"></i>Berita Terkait
+                            </h2>
+                            <div class="space-y-6">
+                                <% berita.forEach(item => { %>
+                                    <div class="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition">
+                                        <div class="flex items-center space-x-2 mb-3">
+                                            <i class="fas fa-calendar text-green-600"></i>
+                                            <span class="text-sm text-gray-500"><%= item.tanggal %></span>
+                                        </div>
+                                        <h3 class="text-xl font-bold mb-3 text-gray-900"><%= item.judul %></h3>
+                                        <p class="text-gray-600 mb-4 line-clamp-3"><%= item.isi_berita.substring(0, 200) %>...</p>
+                                        <a href="/berita/<%= item.id %>" class="text-green-600 hover:text-green-700 font-semibold transition">
+                                            Baca Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
+                                        </a>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        </div>
+                        <% } %>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="lg:col-span-1">
+                        <!-- Info Card -->
+                        <div class="bg-gradient-to-br from-green-500 to-green-700 text-white rounded-2xl p-6 mb-6 sticky top-24">
+                            <h3 class="text-2xl font-black mb-6">Informasi Pendakian</h3>
+                            
+                            <div class="space-y-4 mb-6">
+                                <div class="flex items-center justify-between">
+                                    <span class="flex items-center"><i class="fas fa-mountain mr-2"></i>Ketinggian</span>
+                                    <span class="font-bold"><%= gunung.ketinggian %> mdpl</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>Lokasi</span>
+                                    <span class="font-bold"><%= gunung.lokasi %></span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="flex items-center"><i class="fas fa-users mr-2"></i>Kuota Harian</span>
+                                    <span class="font-bold"><%= gunung.kuota_harian %> orang</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="flex items-center"><i class="fas fa-check-circle mr-2"></i>Status</span>
+                                    <span class="px-3 py-1 rounded-full bg-white text-green-700 font-bold text-sm"><%= gunung.status %></span>
+                                </div>
+                            </div>
+
+                            <% if (gunung.status === 'Buka') { %>
+                                <% if (user) { %>
+                                    <button onclick="daftarPendakian()" class="w-full bg-white text-green-700 font-bold py-3 rounded-lg hover:bg-green-50 transition">
+                                        <i class="fas fa-plus-circle mr-2"></i>Daftar Pendakian
+                                    </button>
+                                <% } else { %>
+                                    <a href="/login" class="block w-full bg-white text-green-700 font-bold py-3 rounded-lg hover:bg-green-50 transition text-center">
+                                        <i class="fas fa-sign-in-alt mr-2"></i>Login untuk Daftar
+                                    </a>
+                                <% } %>
+                            <% } else { %>
+                                <button disabled class="w-full bg-gray-300 text-gray-600 font-bold py-3 rounded-lg cursor-not-allowed">
+                                    <i class="fas fa-times-circle mr-2"></i>Pendakian Ditutup
+                                </button>
+                            <% } %>
+                        </div>
+
+                        <!-- Tips -->
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 rounded-r-xl p-6 mb-6">
+                            <h4 class="font-bold text-yellow-800 mb-3 flex items-center">
+                                <i class="fas fa-lightbulb mr-2"></i>Tips Pendakian
+                            </h4>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
+                                    <span>Bawa perlengkapan lengkap (sleeping bag, tenda, jas hujan)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
+                                    <span>Siapkan fisik dan mental sebelum pendakian</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
+                                    <span>Bawa makanan dan air minum yang cukup</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
+                                    <span>Jaga kebersihan dan jangan tinggalkan sampah</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="navbar-gradient text-white py-12">
+            <div class="container mx-auto px-6 text-center">
+                <p class="text-green-100">&copy; 2026 SIMAKSI - Sistem Informasi Manajemen Pendakian Gunung. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal Pendaftaran (reuse dari pendakian.ejs) -->
+    <div id="daftarModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center px-4">
+        <div class="bg-white rounded-3xl overflow-hidden max-w-2xl w-full shadow-2xl">
+            <div class="p-8 text-center">
+                <i class="fas fa-mountain text-6xl text-green-600 mb-4"></i>
+                <h3 class="text-2xl font-bold mb-4">Formulir Pendakian</h3>
+                <p class="text-gray-600 mb-6">Fitur pendaftaran akan segera tersedia. Silakan kembali lagi nanti.</p>
+                <button onclick="closeModal()" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function daftarPendakian() {
+            document.getElementById('daftarModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('daftarModal').classList.add('hidden');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('daftarModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

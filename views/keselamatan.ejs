@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keselamatan Pendakian - SIMAKSI Gunung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      * { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      .navbar-gradient { background: linear-gradient(135deg, #1e5631 0%, #2d7a3e 50%, #3a9f5d 100%); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="navbar-gradient text-white shadow-xl sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                    <i class="fas fa-mountain text-green-700 text-lg"></i>
+                </div>
+                <h1 class="text-2xl font-bold">SIMAKSI Gunung</h1>
+            </div>
+            <nav class="hidden md:block">
+                <ul class="flex space-x-8 font-semibold">
+                    <li><a href="/beranda" class="hover:text-green-200 transition">Beranda</a></li>
+                    <li><a href="/berita" class="hover:text-green-200 transition">Berita</a></li>
+                    <li><a href="/pendakian" class="hover:text-green-200 transition">Pendakian</a></li>
+                    <li><a href="/kontak" class="hover:text-green-200 transition">Kontak</a></li>
+                </ul>
+            </nav>
+            <div class="flex space-x-4">
+                <% if (user) { %>
+                    <a href="/beranda" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition"><%= user.nama %></a>
+                <% } else { %>
+                    <a href="/login" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition">Login</a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-16">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-black text-gray-900 mb-4">Panduan Keselamatan Pendakian</h1>
+                <p class="text-xl text-gray-600">Keselamatan adalah prioritas utama dalam setiap pendakian</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- Persiapan Fisik -->
+                <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-heartbeat text-green-600 text-3xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">1. Persiapan Fisik</h2>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Latihan kardio (lari, bersepeda, renang) minimal 2 minggu sebelum pendakian</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Pastikan kondisi tubuh fit dan tidak sedang sakit</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Istirahat cukup (7-8 jam) malam sebelum pendakian</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Konsumsi makanan bergizi sebelum mendaki</span></li>
+                    </ul>
+                </div>
+
+                <!-- Perlengkapan Wajib -->
+                <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-briefcase text-blue-600 text-3xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">2. Perlengkapan Wajib</h2>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><i class="fas fa-check text-blue-600 mt-1 mr-2"></i><span>Tenda dan sleeping bag yang layak</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-blue-600 mt-1 mr-2"></i><span>Jas hujan dan pakaian hangat berlapis</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-blue-600 mt-1 mr-2"></i><span>Senter/headlamp + baterai cadangan</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-blue-600 mt-1 mr-2"></i><span>P3K pribadi (plester, obat pribadi, perban)</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-blue-600 mt-1 mr-2"></i><span>Makanan & air minum ekstra (minimal 2L)</span></li>
+                    </ul>
+                </div>
+
+                <!-- Cuaca & Kondisi Alam -->
+                <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-cloud-sun-rain text-yellow-600 text-3xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">3. Cuaca & Kondisi Alam</h2>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><i class="fas fa-check text-yellow-600 mt-1 mr-2"></i><span>Cek prakiraan cuaca 1-2 hari sebelum pendakian</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-yellow-600 mt-1 mr-2"></i><span>Hindari pendakian saat ada peringatan cuaca ekstrem</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-yellow-600 mt-1 mr-2"></i><span>Waspada potensi longsor di jalur curam saat hujan</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-yellow-600 mt-1 mr-2"></i><span>Siap evakuasi mandiri jika kondisi memburuk</span></li>
+                    </ul>
+                </div>
+
+                <!-- Etika & Lingkungan -->
+                <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-leaf text-purple-600 text-3xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">4. Etika & Lingkungan</h2>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><i class="fas fa-check text-purple-600 mt-1 mr-2"></i><span><strong>Leave No Trace:</strong> Bawa turun semua sampah</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-purple-600 mt-1 mr-2"></i><span>Jangan merusak tumbuhan dan mengganggu satwa</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-purple-600 mt-1 mr-2"></i><span>Gunakan jalur resmi, jangan membuat jalur baru</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-purple-600 mt-1 mr-2"></i><span>Hargai pendaki lain dan jaga keramahan</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Emergency Contacts -->
+            <div class="bg-red-50 border-l-4 border-red-500 rounded-r-2xl p-8">
+                <h2 class="text-2xl font-bold text-red-800 mb-6 flex items-center"><i class="fas fa-phone-alt mr-3"></i>Kontak Darurat</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl p-4">
+                        <p class="font-bold text-gray-900">Basecamp Rescue</p>
+                        <p class="text-2xl font-bold text-red-600">+62 274 515 912</p>
+                        <p class="text-sm text-gray-600">Tersedia 24/7 untuk emergensi</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-4">
+                        <p class="font-bold text-gray-900">SAR Nasional</p>
+                        <p class="text-2xl font-bold text-red-600">115</p>
+                        <p class="text-sm text-gray-600">Hotline SAR Indonesia</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <p class="text-gray-600 text-lg">Ingat: <strong class="text-green-700">Keselamatan Anda adalah tanggung jawab Anda sendiri.</strong></p>
+                <p class="text-gray-500 mt-2">Persiapkan diri dengan baik dan selalu utamakan keselamatan di atas segalanya.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="navbar-gradient text-white py-12">
+        <div class="container mx-auto px-6 text-center text-green-100 text-sm">
+            <p>&copy; 2026 SIMAKSI - Sistem Informasi Manajemen Pendakian Gunung. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
