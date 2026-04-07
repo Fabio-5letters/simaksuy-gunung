@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Pendakian - SIMAKSI Gunung Merbabu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      * {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .navbar-gradient {
+        background: linear-gradient(135deg, #1e5631 0%, #2d7a3e 50%, #3a9f5d 100%);
+      }
+      .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      .status-pending {
+        background-color: #fef3c7;
+        color: #d97706;
+      }
+      .status-approved {
+        background-color: #d1fae5;
+        color: #065f46;
+      }
+      .status-rejected {
+        background-color: #fee2e2;
+        color: #dc2626;
+      }
+      .status-completed {
+        background-color: #dbeafe;
+        color: #1e40af;
+      }
+    </style>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="/css/output.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Navbar -->
+        <header class="navbar-gradient text-white shadow-xl sticky top-0 z-50">
+            <div class="container mx-auto flex justify-between items-center py-4 px-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-mountain text-green-700 text-lg"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold">SIMAKSI Gunung</h1>
+                </div>
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-8 font-semibold">
+                        <li><a href="/beranda" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-home"></i><span>Beranda</span></a></li>
+                        <li><a href="/berita" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-newspaper"></i><span>Berita</span></a></li>
+                        <li><a href="/pendakian" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-person-hiking"></i><span>Pendakian</span></a></li>
+                        <li><a href="/kontak" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-envelope"></i><span>Kontak</span></a></li>
+                    </ul>
+                </nav>
+                <div class="flex space-x-4">
+                    <% if (user) { %>
+                        <!-- User Profile Dropdown -->
+                        <div class="relative">
+                            <button id="profile-btn" class="flex items-center space-x-3 bg-white text-green-700 px-4 py-2 rounded-lg font-semibold hover:bg-green-50 transition">
+                                <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-sm"></i>
+                                </div>
+                                <span><%= user.nama %></span>
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </button>
+                            <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
+                                <div class="py-2">
+                                    <div class="px-4 py-2 border-b border-gray-100">
+                                        <p class="text-sm font-medium text-gray-900"><%= user.nama %></p>
+                                        <p class="text-xs text-gray-500"><%= user.email %></p>
+                                    </div>
+                                    <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                        <i class="fas fa-user-circle mr-2"></i>Profile Saya
+                                    </a>
+                                    <a href="/riwayat" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                        <i class="fas fa-history mr-2"></i>Riwayat Pendakian
+                                    </a>
+                                    <div class="border-t border-gray-100"></div>
+                                    <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <a href="/login" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition">Login</a>
+                    <% } %>
+                </div>
+            </div>
+        </header>
+
+        <!-- Riwayat Content -->
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="max-w-6xl mx-auto">
+                    <!-- Header -->
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-2">Riwayat Pendakian</h2>
+                        <p class="text-gray-600">Pantau status dan riwayat semua pendaftaran pendakian Anda</p>
+                    </div>
+
+                 <% if (locals.error) { %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+        <i class="fas fa-exclamation-triangle mr-2"></i><%= error %>
+    </div>
+<% } %>
+                    <% if (simaksi && simaksi.length > 0) { %>
+                        <!-- Statistics Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                            <div class="bg-gradient-to-r from-yellow-400 to-orange-500 p-6 rounded-xl text-white">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-orange-100 text-sm">Pending</p>
+                                        <p class="text-2xl font-bold"><%= simaksi.filter(s => s.status_pengajuan === 'Pending').length %></p>
+                                    </div>
+                                    <i class="fas fa-clock text-3xl opacity-80"></i>
+                                </div>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-green-400 to-green-600 p-6 rounded-xl text-white">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-green-100 text-sm">Disetujui</p>
+                                        <p class="text-2xl font-bold"><%= simaksi.filter(s => s.status_pengajuan === 'Approved').length %></p>
+                                    </div>
+                                    <i class="fas fa-check-circle text-3xl opacity-80"></i>
+                                </div>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-blue-400 to-blue-600 p-6 rounded-xl text-white">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-blue-100 text-sm">Selesai</p>
+                                        <p class="text-2xl font-bold"><%= simaksi.filter(s => s.status_pengajuan === 'Completed').length %></p>
+                                    </div>
+                                    <i class="fas fa-flag-checkered text-3xl opacity-80"></i>
+                                </div>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-red-400 to-red-600 p-6 rounded-xl text-white">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-red-100 text-sm">Ditolak</p>
+                                        <p class="text-2xl font-bold"><%= simaksi.filter(s => s.status_pengajuan === 'Rejected').length %></p>
+                                    </div>
+                                    <i class="fas fa-times-circle text-3xl opacity-80"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Riwayat Table -->
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                            <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                                <h3 class="text-lg font-semibold text-gray-900">Daftar Pendaftaran</h3>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gunung</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggota</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Daftar</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <% simaksi.forEach(item => { %>
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="flex items-center">
+                                                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                                            <i class="fas fa-mountain text-green-600"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="text-sm font-medium text-gray-900"><%= item.nama_gunung %></div>
+                                                            <div class="text-sm text-gray-500"><%= item.lokasi %></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="text-sm text-gray-900"><%= new Date(item.tanggal_pendakian).toLocaleDateString('id-ID') %></div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="text-sm text-gray-900"><%= item.jumlah_anggota %> orang</div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <% if (item.status_pengajuan === 'Pending') { %>
+                                                        <span class="status-badge status-pending">Pending</span>
+                                                    <% } else if (item.status_pengajuan === 'Approved') { %>
+                                                        <span class="status-badge status-approved">Disetujui</span>
+                                                    <% } else if (item.status_pengajuan === 'Completed') { %>
+                                                        <span class="status-badge status-completed">Selesai</span>
+                                                    <% } else if (item.status_pengajuan === 'Rejected') { %>
+                                                        <span class="status-badge status-rejected">Ditolak</span>
+                                                    <% } %>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="text-sm text-gray-900"><%= new Date(item.created_at).toLocaleDateString('id-ID') %></div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                    <% if (item.status_pengajuan === 'Approved') { %>
+                                                        <button class="text-blue-600 hover:text-blue-900 mr-3">
+                                                            <i class="fas fa-eye mr-1"></i>Lihat Detail
+                                                        </button>
+                                                    <% } else if (item.status_pengajuan === 'Pending') { %>
+                                                        <button class="text-yellow-600 hover:text-yellow-900 mr-3">
+                                                            <i class="fas fa-edit mr-1"></i>Edit
+                                                        </button>
+                                                        <button class="text-red-600 hover:text-red-900">
+                                                            <i class="fas fa-trash mr-1"></i>Batal
+                                                        </button>
+                                                    <% } %>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <!-- Empty State -->
+                        <div class="text-center py-20 bg-white rounded-xl shadow-lg">
+                            <i class="fas fa-mountain text-6xl text-gray-300 mb-4"></i>
+                            <h3 class="text-2xl font-bold text-gray-600 mb-2">Belum ada riwayat pendakian</h3>
+                            <p class="text-gray-500 mb-6">Anda belum pernah mendaftar pendakian. Mulai petualangan Anda sekarang!</p>
+                            <a href="/pendakian" class="inline-flex items-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
+                                <i class="fas fa-plus-circle mr-2"></i>Daftar Pendakian
+                            </a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="navbar-gradient text-white py-12">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                    <div>
+                        <h4 class="text-lg font-bold mb-4 flex items-center"><i class="fas fa-mountain mr-2"></i>SIMAKSI</h4>
+                        <p class="text-green-100 text-sm">Platform terpercaya untuk mendaftar pendakian gunung di Indonesia</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Navigasi</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li><a href="/beranda" class="hover:text-white transition">Beranda</a></li>
+                            <li><a href="/berita" class="hover:text-white transition">Berita</a></li>
+                            <li><a href="/pendakian" class="hover:text-white transition">Pendakian</a></li>
+                            <li><a href="/kontak" class="hover:text-white transition">Kontak</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Bantuan</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li><a href="#" class="hover:text-white transition">FAQ</a></li>
+                            <li><a href="#" class="hover:text-white transition">Panduan Pendakian</a></li>
+                            <li><a href="#" class="hover:text-white transition">Keselamatan</a></li>
+                            <li><a href="#" class="hover:text-white transition">Syarat & Ketentuan</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Hubungi Kami</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li class="flex items-center"><i class="fas fa-phone mr-2"></i>+62 274 515 912</li>
+                            <li class="flex items-center"><i class="fas fa-envelope mr-2"></i>info@simaksi.com</li>
+                            <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>Semarang, Indonesia</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-green-700 pt-8 text-center text-green-100 text-sm">
+                    <p>&copy; 2026 SIMAKSI - Sistem Informasi Manajemen Pendakian Gunung. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Profile Dropdown Script -->
+    <script>
+        // Profile dropdown functionality
+        const profileBtn = document.getElementById('profile-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+
+        if (profileBtn && profileDropdown) {
+            profileBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+
+            // Close dropdown on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

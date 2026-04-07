@@ -6,50 +6,91 @@ const router = express.Router();
 
 // Login route
 router.get('/login', (req, res) => {
-  res.render('login');
+  const success = req.query.success;
+  res.render('login', { error: null, success: success });
 });
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  
+  // Validation
+  if (!email || !password) {
+    return res.render('login', { error: 'Email dan password harus diisi', success: null });
+  }
+
   try {
     const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
     if (rows.length === 0) {
-      return res.render('login', { error: 'Invalid email or password' });
+      return res.render('login', { error: 'Email atau password salah', success: null });
     }
 
     const user = rows[0];
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.render('login', { error: 'Invalid email or password' });
+      return res.render('login', { error: 'Email atau password salah', success: null });
     }
 
-    req.session.user = { id: user.id, role: user.role };
+    req.session.user = { id: user.id, nama: user.nama, email: user.email, role: user.role };
+    console.log('Login successful, session set:', req.session.user);
     if (user.role === 'admin') {
       res.redirect('/admin');
     } else {
       res.redirect('/beranda');
     }
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
+    console.error('Login error:', err);
+    res.render('login', { error: 'Terjadi kesalahan saat login. Silakan coba lagi.', success: null });
   }
 });
 
 // Register route
 router.get('/register', (req, res) => {
-  res.render('register');
+  res.render('register', { error: null });
 });
 
 router.post('/register', async (req, res) => {
   const { nama, email, password } = req.body;
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await db.query('INSERT INTO users (nama, email, password, role) VALUES (?, ?, ?, ?)', [nama, email, hashedPassword, 'user']);
-    res.redirect('/login');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
+  
+  // Validation
+  if (!nama || !email || !password) {
+    return res.render('register', { error: 'Semua field harus diisi' });
   }
+  
+  if (password.length < 6) {
+    return res.render('register', { error: 'Password minimal 6 karakter' });
+  }
+
+  try {
+    // Check if email already exists
+    const [existingUser] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+    if (existingUser.length > 0) {
+      return res.render('register', { error: 'Email sudah terdaftar, gunakan email lain' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await db.query('INSERT INTO users (nama, email, password, role) VALUES (?, ?, ?, ?)', 
+      [nama, email, hashedPassword, 'user']);
+    
+    // Redirect to login with success message
+    res.redirect('/login?success=true');
+  } catch (err) {
+    console.error('Register error:', err);
+    // More detailed error message
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.render('register', { error: 'Email sudah terdaftar' });
+    }
+    res.render('register', { error: 'Terjadi kesalahan saat mendaftar. Silakan coba lagi.' });
+  }
+});
+
+// Logout route
+router.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).send('Server error');
+    }
+    res.redirect('/login');
+  });
 });
 
 module.exports = router;

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Pendakian - SIMAKSI Gunung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .status-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=50&h=50&fit=crop&crop=center" alt="Logo" class="w-12 h-12 rounded-full">
+                    <div>
+                        <h1 class="text-2xl font-bold text-green-700">SIMAKSI</h1>
+                        <p class="text-sm text-gray-600">Gunung</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-green-600 font-semibold transition">Beranda</a>
+                    <a href="/berita" class="text-gray-700 hover:text-green-600 font-semibold transition">Berita</a>
+                    <a href="/pendakian" class="text-gray-700 hover:text-green-600 font-semibold transition">Pendakian</a>
+                    <a href="/cuaca" class="text-gray-700 hover:text-green-600 font-semibold transition">Cuaca</a>
+                    <a href="/status" class="text-green-600 font-semibold">Status</a>
+                    <a href="/panduan" class="text-gray-700 hover:text-green-600 font-semibold transition">Panduan</a>
+                    <a href="/kontak" class="text-gray-700 hover:text-green-600 font-semibold transition">Kontak</a>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <% if (user) { %>
+                        <div class="relative">
+                            <button onclick="toggleDropdown()" class="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                                <i class="fas fa-user-circle"></i>
+                                <span class="hidden md:block"><%= user.nama %></span>
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </button>
+                            <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
+                                <div class="py-2">
+                                    <div class="px-4 py-2 border-b border-gray-100">
+                                        <p class="text-sm font-medium text-gray-900"><%= user.nama %></p>
+                                        <p class="text-xs text-gray-500"><%= user.email %></p>
+                                    </div>
+                                    <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                        <i class="fas fa-user-circle mr-2"></i>Profile Saya
+                                    </a>
+                                    <a href="/riwayat" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                        <i class="fas fa-history mr-2"></i>Riwayat Pendakian
+                                    </a>
+                                    <div class="border-t border-gray-100"></div>
+                                    <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <a href="/login" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition">Login</a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section min-h-64 flex items-center justify-center text-white py-16 px-6">
+        <div class="text-center max-w-2xl">
+            <h2 class="text-4xl md:text-5xl font-black mb-4 drop-shadow-lg">
+                <i class="fas fa-chart-line mr-3"></i>Status Pendakian
+            </h2>
+            <p class="text-xl md:text-xl drop-shadow-md">Monitor status pengajuan dan persetujuan pendakian Anda</p>
+        </div>
+    </section>
+
+    <!-- Status Pendakian Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-bold text-gray-900 mb-4">Status Pengajuan Pendakian</h3>
+                <p class="text-gray-600 text-lg">Pantau perkembangan pengajuan pendakian Anda secara real-time</p>
+            </div>
+
+          <% if (locals.error) { %>
+    <div class="max-w-2xl mx-auto mb-8">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+            <i class="fas fa-exclamation-triangle mr-2"></i><%= error %>
+        </div>
+    </div>
+<% } %>
+
+            <% if (simaksi && simaksi.length > 0) { %>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <% simaksi.forEach(item => { %>
+                        <div class="status-card rounded-xl p-6 text-white">
+                            <div class="text-center mb-6">
+                                <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-mountain text-4xl"></i>
+                                </div>
+                                <h4 class="text-xl font-bold mb-2"><%= item.nama_gunung %></h4>
+                                <p class="text-blue-100 text-sm"><%= item.lokasi %></p>
+                            </div>
+
+                            <div class="space-y-4">
+                                <!-- Tanggal Pengajuan -->
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-calendar-alt text-yellow-300 mr-3"></i>
+                                        <span class="text-sm">Tanggal Ajuan</span>
+                                    </div>
+                                    <span class="font-semibold"><%= new Date(item.created_at).toLocaleDateString('id-ID') %></span>
+                                </div>
+
+                                <!-- Tanggal Pendakian -->
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-calendar-check text-green-300 mr-3"></i>
+                                        <span class="text-sm">Tanggal Pendakian</span>
+                                    </div>
+                                    <span class="font-semibold"><%= new Date(item.tanggal_pendakian).toLocaleDateString('id-ID') %></span>
+                                </div>
+
+                                <!-- Jumlah Anggota -->
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-users text-blue-300 mr-3"></i>
+                                        <span class="text-sm">Jumlah Anggota</span>
+                                    </div>
+                                    <span class="font-semibold"><%= item.jumlah_anggota %> orang</span>
+                                </div>
+
+                                <!-- Status -->
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-info-circle text-purple-300 mr-3"></i>
+                                        <span class="text-sm">Status</span>
+                                    </div>
+                                    <span class="font-semibold">
+                                        <% if (item.status === 'pending') { %>
+                                            <span class="bg-yellow-500 text-white px-2 py-1 rounded text-xs">Menunggu</span>
+                                        <% } else if (item.status === 'approved') { %>
+                                            <span class="bg-green-500 text-white px-2 py-1 rounded text-xs">Disetujui</span>
+                                        <% } else if (item.status === 'rejected') { %>
+                                            <span class="bg-red-500 text-white px-2 py-1 rounded text-xs">Ditolak</span>
+                                        <% } else { %>
+                                            <span class="bg-gray-500 text-white px-2 py-1 rounded text-xs"><%= item.status %></span>
+                                        <% } %>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 pt-4 border-t border-white border-opacity-20">
+                                <div class="text-center">
+                                    <% if (item.status === 'approved') { %>
+                                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500 text-white">
+                                            <i class="fas fa-check-circle mr-1 text-xs"></i>
+                                            Siap untuk Pendakian
+                                        </div>
+                                    <% } else if (item.status === 'pending') { %>
+                                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-500 text-white">
+                                            <i class="fas fa-clock mr-1 text-xs"></i>
+                                            Dalam Proses Review
+                                        </div>
+                                    <% } else if (item.status === 'rejected') { %>
+                                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-500 text-white">
+                                            <i class="fas fa-times-circle mr-1 text-xs"></i>
+                                            Pengajuan Ditolak
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="text-center py-16">
+                    <div class="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-inbox text-6xl text-gray-400"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold text-gray-900 mb-4">Belum Ada Pengajuan Pendakian</h4>
+                    <p class="text-gray-600 mb-8">Anda belum mengajukan permohonan pendakian. Mulai perencanaan pendakian Anda sekarang!</p>
+                    <a href="/pendakian" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+                        <i class="fas fa-plus mr-2"></i>Ajukan Pendakian
+                    </a>
+                </div>
+            <% } %>
+
+            <!-- Status Information -->
+            <div class="mt-16 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8">
+                <h4 class="text-2xl font-bold text-center text-gray-900 mb-6">
+                    <i class="fas fa-info-circle text-blue-500 mr-2"></i>Informasi Status Pengajuan
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <div class="flex items-start">
+                            <i class="fas fa-clock text-yellow-500 text-2xl mr-4 mt-1"></i>
+                            <div>
+                                <h5 class="font-semibold text-gray-900 mb-2">Menunggu Review</h5>
+                                <p class="text-gray-600 text-sm">Pengajuan Anda sedang dalam proses review oleh admin. Biasanya memakan waktu 1-3 hari kerja.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <div class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 text-2xl mr-4 mt-1"></i>
+                            <div>
+                                <h5 class="font-semibold text-gray-900 mb-2">Disetujui</h5>
+                                <p class="text-gray-600 text-sm">Pengajuan Anda telah disetujui. Anda dapat melanjutkan persiapan pendakian sesuai jadwal.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <div class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 text-2xl mr-4 mt-1"></i>
+                            <div>
+                                <h5 class="font-semibold text-gray-900 mb-2">Ditolak</h5>
+                                <p class="text-gray-600 text-sm">Pengajuan Anda ditolak. Silakan hubungi admin untuk informasi lebih lanjut.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">SIMAKSI Gunung</h3>
+                    <p class="text-gray-400">Sistem Informasi Manajemen Pendakian Gunung untuk pengalaman mendaki yang aman dan terorganisir.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Menu Utama</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/" class="text-gray-400 hover:text-white transition">Beranda</a></li>
+                        <li><a href="/berita" class="text-gray-400 hover:text-white transition">Berita</a></li>
+                        <li><a href="/pendakian" class="text-gray-400 hover:text-white transition">Pendakian</a></li>
+                        <li><a href="/cuaca" class="text-gray-400 hover:text-white transition">Cuaca</a></li>
+                        <li><a href="/status" class="text-gray-400 hover:text-white transition">Status</a></li>
+                        <li><a href="/panduan" class="text-gray-400 hover:text-white transition">Panduan</a></li>
+                        <li><a href="/kontak" class="text-gray-400 hover:text-white transition">Kontak</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Layanan</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/riwayat" class="text-gray-400 hover:text-white transition">Riwayat Pendakian</a></li>
+                        <li><a href="/status" class="text-gray-400 hover:text-white transition">Status Pendakian</a></li>
+                        <li><a href="/panduan" class="text-gray-400 hover:text-white transition">Panduan</a></li>
+                        <li><a href="/kontak" class="text-gray-400 hover:text-white transition">Kontak</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Kontak</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <p><i class="fas fa-phone mr-2"></i>+62 123 4567 890</p>
+                        <p><i class="fas fa-envelope mr-2"></i>info@simaksigunung.id</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Jawa Tengah, Indonesia</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 SIMAKSI Gunung. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.getElementById('profile-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('profile-dropdown');
+            const button = event.target.closest('button');
+            if (!button || !button.onclick || !button.onclick.toString().includes('toggleDropdown')) {
+                if (!dropdown.contains(event.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

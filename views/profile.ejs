@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - SIMAKSI Gunung Merbabu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      * {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .navbar-gradient {
+        background: linear-gradient(135deg, #1e5631 0%, #2d7a3e 50%, #3a9f5d 100%);
+      }
+      .profile-card {
+        transition: all 0.3s ease;
+      }
+      .profile-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(30, 86, 49, 0.1);
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #1e5631 0%, #3a9f5d 100%);
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(30, 86, 49, 0.3);
+      }
+    </style>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="/css/output.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Navbar -->
+        <header class="navbar-gradient text-white shadow-xl sticky top-0 z-50">
+            <div class="container mx-auto flex justify-between items-center py-4 px-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-mountain text-green-700 text-lg"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold">SIMAKSI Gunung</h1>
+                </div>
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-8 font-semibold">
+                        <li><a href="/beranda" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-home"></i><span>Beranda</span></a></li>
+                        <li><a href="/berita" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-newspaper"></i><span>Berita</span></a></li>
+                        <li><a href="/pendakian" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-person-hiking"></i><span>Pendakian</span></a></li>
+                        <li><a href="/kontak" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-envelope"></i><span>Kontak</span></a></li>
+                    </ul>
+                </nav>
+                <div class="flex space-x-4">
+                    <% if (user) { %>
+                        <!-- User Profile Dropdown -->
+                        <div class="relative">
+                            <button id="profile-btn" class="flex items-center space-x-3 bg-white text-green-700 px-4 py-2 rounded-lg font-semibold hover:bg-green-50 transition">
+                                <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-sm"></i>
+                                </div>
+                                <span><%= user.nama %></span>
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </button>
+                            <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
+                                <div class="py-2">
+                                    <div class="px-4 py-2 border-b border-gray-100">
+                                        <p class="text-sm font-medium text-gray-900"><%= user.nama %></p>
+                                        <p class="text-xs text-gray-500"><%= user.email %></p>
+                                    </div>
+                                    <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                        <i class="fas fa-user-circle mr-2"></i>Profile Saya
+                                    </a>
+                                    <a href="/riwayat" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                        <i class="fas fa-history mr-2"></i>Riwayat Pendakian
+                                    </a>
+                                    <div class="border-t border-gray-100"></div>
+                                    <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <a href="/login" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition">Login</a>
+                    <% } %>
+                </div>
+            </div>
+        </header>
+
+        <!-- Profile Content -->
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto">
+                    <!-- Profile Header -->
+                    <div class="profile-card bg-gradient-to-r from-green-50 to-emerald-50 p-8 rounded-xl shadow-lg mb-8">
+                        <div class="flex items-center space-x-6">
+                            <div class="w-24 h-24 bg-green-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-4xl text-white"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-3xl font-bold text-gray-900"><%= user.nama %></h2>
+                                <p class="text-gray-600 text-lg"><%= user.email %></p>
+                                <p class="text-green-600 font-semibold mt-1">
+                                    <i class="fas fa-user-check mr-2"></i>Member Aktif
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Details -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Personal Information -->
+                        <div class="profile-card bg-white p-6 rounded-xl shadow-lg">
+                            <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                                <i class="fas fa-user-circle text-green-600 mr-3"></i>Informasi Pribadi
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600">Nama Lengkap</label>
+                                    <p class="text-gray-900 font-semibold"><%= user.nama %></p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600">Email</label>
+                                    <p class="text-gray-900"><%= user.email %></p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600">Role</label>
+                                    <span class="inline-block px-3 py-1 text-sm rounded-full <%= user.role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800' %>">
+                                        <%= user.role === 'admin' ? 'Administrator' : 'User' %>
+                                    </span>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-600">Bergabung Sejak</label>
+                                    <p class="text-gray-900">Januari 2024</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Statistics -->
+                        <div class="profile-card bg-white p-6 rounded-xl shadow-lg">
+                            <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                                <i class="fas fa-chart-bar text-green-600 mr-3"></i>Statistik Akun
+                            </h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center p-4 bg-green-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-green-600">0</div>
+                                    <p class="text-sm text-gray-600">Total Pendakian</p>
+                                </div>
+                                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-blue-600">0</div>
+                                    <p class="text-sm text-gray-600">Selesai</p>
+                                </div>
+                                <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-yellow-600">0</div>
+                                    <p class="text-sm text-gray-600">Pending</p>
+                                </div>
+                                <div class="text-center p-4 bg-purple-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-purple-600">0</div>
+                                    <p class="text-sm text-gray-600">Ditolak</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="mt-8">
+                        <h3 class="text-xl font-bold text-gray-900 mb-6">Aksi Cepat</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <a href="/pendakian" class="profile-card bg-white p-6 rounded-xl shadow-lg text-center hover:bg-green-50 transition">
+                                <i class="fas fa-plus-circle text-3xl text-green-600 mb-3"></i>
+                                <h4 class="font-semibold text-gray-900">Daftar Pendakian</h4>
+                                <p class="text-sm text-gray-600 mt-2">Mulai petualangan baru</p>
+                            </a>
+
+                            <a href="/riwayat" class="profile-card bg-white p-6 rounded-xl shadow-lg text-center hover:bg-blue-50 transition">
+                                <i class="fas fa-history text-3xl text-blue-600 mb-3"></i>
+                                <h4 class="font-semibold text-gray-900">Riwayat Pendakian</h4>
+                                <p class="text-sm text-gray-600 mt-2">Lihat aktivitas Anda</p>
+                            </a>
+
+                            <a href="/kontak" class="profile-card bg-white p-6 rounded-xl shadow-lg text-center hover:bg-purple-50 transition">
+                                <i class="fas fa-envelope text-3xl text-purple-600 mb-3"></i>
+                                <h4 class="font-semibold text-gray-900">Hubungi Kami</h4>
+                                <p class="text-sm text-gray-600 mt-2">Butuh bantuan?</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="navbar-gradient text-white py-12">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                    <div>
+                        <h4 class="text-lg font-bold mb-4 flex items-center"><i class="fas fa-mountain mr-2"></i>SIMAKSI</h4>
+                        <p class="text-green-100 text-sm">Platform terpercaya untuk mendaftar pendakian gunung di Indonesia</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Navigasi</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li><a href="/beranda" class="hover:text-white transition">Beranda</a></li>
+                            <li><a href="/berita" class="hover:text-white transition">Berita</a></li>
+                            <li><a href="/pendakian" class="hover:text-white transition">Pendakian</a></li>
+                            <li><a href="/kontak" class="hover:text-white transition">Kontak</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Bantuan</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li><a href="#" class="hover:text-white transition">FAQ</a></li>
+                            <li><a href="#" class="hover:text-white transition">Panduan Pendakian</a></li>
+                            <li><a href="#" class="hover:text-white transition">Keselamatan</a></li>
+                            <li><a href="#" class="hover:text-white transition">Syarat & Ketentuan</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Hubungi Kami</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li class="flex items-center"><i class="fas fa-phone mr-2"></i>+62 274 515 912</li>
+                            <li class="flex items-center"><i class="fas fa-envelope mr-2"></i>info@simaksi.com</li>
+                            <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>Semarang, Indonesia</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-green-700 pt-8 text-center text-green-100 text-sm">
+                    <p>&copy; 2026 SIMAKSI - Sistem Informasi Manajemen Pendakian Gunung. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Profile Dropdown Script -->
+    <script>
+        // Profile dropdown functionality
+        const profileBtn = document.getElementById('profile-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+
+        if (profileBtn && profileDropdown) {
+            profileBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+
+            // Close dropdown on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

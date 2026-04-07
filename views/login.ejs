@@ -1,29 +1,307 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
+  <title>Login - SIMAKSI Gunung</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .login-wrapper {
+      position: relative;
+    }
+    .login-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+      width: 100%;
+      max-width: 450px;
+      padding: 40px;
+      animation: slideUp 0.6s ease-out;
+    }
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .logo-circle {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    .logo-circle i {
+      color: white;
+      font-size: 35px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1f2937;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrapper i {
+      position: absolute;
+      left: 14px;
+      color: #667eea;
+      font-size: 16px;
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 14px 12px 45px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      background: white;
+    }
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      transform: translateY(-2px);
+    }
+    .error-box {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      border-left: 4px solid #ef4444;
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: shake 0.3s ease-out;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    .error-box i {
+      color: #dc2626;
+      font-size: 16px;
+    }
+    .error-box p {
+      color: #7f1d1d;
+      font-size: 13px;
+      font-weight: 500;
+      margin: 0;
+    }
+    .btn-login {
+      width: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-weight: 700;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+    .btn-login:active {
+      transform: translateY(0);
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 25px 0;
+      color: #d1d5db;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e5e7eb;
+    }
+    .divider span {
+      padding: 0 15px;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+    .register-link {
+      text-align: center;
+      font-size: 14px;
+      color: #6b7280;
+    }
+    .register-link a {
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .register-link a:hover {
+      opacity: 0.8;
+    }
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      cursor: pointer;
+      color: #9ca3af;
+      transition: color 0.3s ease;
+    }
+    .password-toggle:hover {
+      color: #667eea;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 h-screen flex items-center justify-center">
-  <div class="bg-white p-8 rounded shadow-md w-96">
-    <h1 class="text-2xl font-bold mb-4">Login</h1>
-    <% if (typeof error !== 'undefined') { %>
-      <p class="text-red-500 text-sm mb-4"><%= error %></p>
-    <% } %>
-    <form action="/login" method="POST">
-      <div class="mb-4">
-        <label for="email" class="block text-sm font-medium">Email</label>
-        <input type="email" id="email" name="email" class="w-full border rounded px-3 py-2" required>
+<body>
+  <div class="login-wrapper">
+    <div class="login-container">
+      <!-- Logo -->
+      <div class="logo-circle">
+        <i class="fas fa-mountain"></i>
       </div>
-      <div class="mb-4">
-        <label for="password" class="block text-sm font-medium">Password</label>
-        <input type="password" id="password" name="password" class="w-full border rounded px-3 py-2" required>
+      
+      <!-- Header -->
+      <h1>Selamat Datang</h1>
+      <p class="subtitle">Masuk untuk melanjutkan pendakian impian Anda</p>
+
+      <!-- Error Message -->
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="error-box">
+          <i class="fas fa-exclamation-circle"></i>
+          <p><%= error %></p>
+        </div>
+      <% } %>
+
+      <!-- Success Message -->
+      <% if (typeof success !== 'undefined' && success) { %>
+        <div class="success-box" style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); border-left: 4px solid #22c55e; padding: 12px 14px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; animation: slideDown 0.3s ease-out;">
+          <i class="fas fa-check-circle" style="color: #16a34a; font-size: 16px;"></i>
+          <p style="color: #166534; font-size: 13px; font-weight: 500; margin: 0;">Pendaftaran berhasil! Silakan login dengan akun Anda.</p>
+        </div>
+      <% } %>
+
+      <!-- Form -->
+      <form action="/login" method="POST" autocomplete="off">
+        <div class="form-group">
+          <label for="email"><i class="fas fa-envelope" style="margin-right: 6px;"></i>Email</label>
+          <div class="input-wrapper">
+            <i class="fas fa-envelope"></i>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              placeholder="nama@email.com"
+              required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password"><i class="fas fa-lock" style="margin-right: 6px;"></i>Password</label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock"></i>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              placeholder="••••••••"
+              required>
+            <span class="password-toggle" onclick="togglePassword()">
+              <i class="fas fa-eye" id="toggleIcon"></i>
+            </span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login">
+          <i class="fas fa-sign-in-alt"></i>
+          Masuk
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="divider">
+        <span>atau</span>
       </div>
-      <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded">Login</button>
-    </form>
-    <p class="text-sm mt-4">Belum punya akun? <a href="/register" class="text-blue-500">Daftar</a></p>
+
+      <!-- Register Link -->
+      <p class="register-link">
+        Belum punya akun? <a href="/register">Daftar Sekarang</a>
+      </p>
+    </div>
   </div>
+
+  <script>
+    function togglePassword() {
+      const input = document.getElementById('password');
+      const icon = document.getElementById('toggleIcon');
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+  </script>
 </body>
 </html>

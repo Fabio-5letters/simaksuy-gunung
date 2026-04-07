@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Pemesanan - SIMAKSI Gunung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      * { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      .gradient-header { background: linear-gradient(135deg, #1e5631 0%, #2d7a3e 50%, #3a9f5d 100%); }
+      .btn-primary { background: linear-gradient(135deg, #1e5631 0%, #3a9f5d 100%); transition: all 0.3s ease; }
+      .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(30, 86, 49, 0.3); }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+
+    <!-- Navbar -->
+    <header class="gradient-header text-white shadow-xl sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                    <i class="fas fa-mountain text-green-700 text-lg"></i>
+                </div>
+                <h1 class="text-2xl font-bold">SIMAKSI Gunung</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="/beranda" class="hover:text-green-200 transition"><i class="fas fa-home mr-1"></i>Beranda</a>
+                <a href="/riwayat-pemesanan" class="hover:text-green-200 transition"><i class="fas fa-history mr-1"></i>Riwayat</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 py-10 max-w-3xl">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <!-- Status Header -->
+            <div class="p-8 text-center
+                <% if (pemesanan.status === 'diverifikasi') { %>
+                    bg-gradient-to-r from-green-500 to-emerald-600 text-white
+                <% } else if (pemesanan.status === 'ditolak') { %>
+                    bg-gradient-to-r from-red-500 to-rose-600 text-white
+                <% } else if (pemesanan.status === 'dibayar') { %>
+                    bg-gradient-to-r from-yellow-500 to-amber-600 text-white
+                <% } else { %>
+                    bg-gradient-to-r from-gray-400 to-gray-500 text-white
+                <% } %>
+            ">
+                <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <% if (pemesanan.status === 'diverifikasi') { %>
+                        <i class="fas fa-check-circle text-4xl"></i>
+                    <% } else if (pemesanan.status === 'ditolak') { %>
+                        <i class="fas fa-times-circle text-4xl"></i>
+                    <% } else if (pemesanan.status === 'dibayar') { %>
+                        <i class="fas fa-hourglass-half text-4xl"></i>
+                    <% } else { %>
+                        <i class="fas fa-clock text-4xl"></i>
+                    <% } %>
+                </div>
+                <h2 class="text-3xl font-black mb-2">
+                    <% if (pemesanan.status === 'diverifikasi') { %>
+                        DIVERIFIKASI
+                    <% } else if (pemesanan.status === 'ditolak') { %>
+                        DITOLAK
+                    <% } else if (pemesanan.status === 'dibayar') { %>
+                        MENUNGGU VERIFIKASI
+                    <% } else { %>
+                        PENDING
+                    <% } %>
+                </h2>
+                <p class="text-white text-opacity-90">
+                    <% if (pemesanan.status === 'diverifikasi') { %>
+                        Pembayaran Anda telah diverifikasi. Selamat mendaki!
+                    <% } else if (pemesanan.status === 'ditolak') { %>
+                        Pembayaran tidak valid. Silakan hubungi admin.
+                    <% } else if (pemesanan.status === 'dibayar') { %>
+                        Bukti pembayaran sedang diverifikasi oleh admin
+                    <% } else { %>
+                        Menunggu pembayaran
+                    <% } %>
+                </p>
+            </div>
+
+            <div class="p-8">
+                <!-- Order Details -->
+                <div class="bg-gray-50 rounded-xl p-6 mb-6 border border-gray-200">
+                    <h3 class="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide flex items-center">
+                        <i class="fas fa-receipt text-green-600 mr-2"></i>Detail Pemesanan
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-gray-500">Kode Booking</p>
+                            <p class="font-mono font-bold text-green-700"><%= pemesanan.kode_booking %></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Tujuan</p>
+                            <p class="font-semibold"><%= pemesanan.nama_gunung %> (<%= pemesanan.ketinggian %> mdpl)</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Tanggal Masuk</p>
+                            <p class="font-semibold"><%= new Date(pemesanan.tanggal_masuk).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) %></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Tanggal Keluar</p>
+                            <p class="font-semibold"><%= new Date(pemesanan.tanggal_keluar).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) %></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Pintu Masuk</p>
+                            <p class="font-semibold"><%= pemesanan.pintu_masuk %></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Pintu Keluar</p>
+                            <p class="font-semibold"><%= pemesanan.pintu_keluar %></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Jumlah Anggota</p>
+                            <p class="font-semibold"><%= pemesanan.jumlah_anggota %> orang</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Total Bayar</p>
+                            <p class="font-bold text-lg text-green-700"><%= formatRupiah(pemesanan.total_bayar) %></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proof Upload (if applicable) -->
+                <% if (pemesanan.bukti_pembayaran) { %>
+                    <div class="bg-green-50 border border-green-200 rounded-xl p-5 mb-6">
+                        <h4 class="font-bold text-green-800 mb-2 flex items-center">
+                            <i class="fas fa-image mr-2"></i>Bukti Pembayaran
+                        </h4>
+                        <p class="text-sm text-green-700">File: <code class="bg-green-100 px-2 py-1 rounded"><%= pemesanan.bukti_pembayaran %></code></p>
+                        <% if (pemesanan.catatan) { %>
+                            <p class="text-sm text-green-700 mt-2">Catatan: <%= pemesanan.catatan %></p>
+                        <% } %>
+                    </div>
+                <% } else if (pemesanan.status === 'pending') { %>
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-5 mb-6 text-center">
+                        <i class="fas fa-upload text-yellow-600 text-3xl mb-3"></i>
+                        <p class="text-yellow-800 font-semibold mb-3">Anda belum mengupload bukti pembayaran</p>
+                        <a href="/upload-bukti/<%= pemesanan.kode_booking %>" class="btn-primary text-white font-bold py-3 px-6 rounded-lg inline-block">
+                            <i class="fas fa-cloud-upload-alt mr-2"></i>Upload Bukti
+                        </a>
+                    </div>
+                <% } %>
+
+                <!-- Timeline -->
+                <div class="border-l-4 border-green-500 pl-4 space-y-6 mb-6">
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-check text-white text-xs"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="font-semibold text-gray-900">Pemesanan Dibuat</p>
+                            <p class="text-sm text-gray-500"><%= new Date(pemesanan.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></p>
+                        </div>
+                    </div>
+                    <% if (pemesanan.status === 'dibayar' || pemesanan.status === 'diverifikasi' || pemesanan.status === 'ditolak') { %>
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-check text-white text-xs"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="font-semibold text-gray-900">Bukti Dibayar</p>
+                                <p class="text-sm text-gray-500">Bukti pembayaran telah diupload</p>
+                            </div>
+                        </div>
+                    <% } %>
+                    <% if (pemesanan.status === 'diverifikasi') { %>
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-check text-white text-xs"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="font-semibold text-gray-900">Diverifikasi</p>
+                                <p class="text-sm text-gray-500">Pembayaran telah diverifikasi oleh admin</p>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="/beranda" class="flex-1 btn-primary text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center text-lg">
+                        <i class="fas fa-home mr-2"></i>
+                        Ke Beranda
+                    </a>
+                    <a href="/riwayat-pemesanan" class="flex-1 bg-gray-200 text-gray-700 font-bold py-4 px-6 rounded-xl flex items-center justify-center text-lg hover:bg-gray-300 transition">
+                        <i class="fas fa-history mr-2"></i>
+                        Riwayat Pemesanan
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="gradient-header text-white py-8 mt-12">
+        <div class="container mx-auto px-6 text-center text-green-100 text-sm">
+            <p>&copy; 2026 SIMAKSI - Sistem Informasi Manajemen Pendakian Gunung</p>
+        </div>
+    </footer>
+</body>
+</html>

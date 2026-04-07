@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../db');
+const pembayaranController = require('../controllers/pembayaranController');
 
 const router = express.Router();
 
@@ -17,8 +18,18 @@ router.get('/admin', isAdmin, async (req, res) => {
     const [gunung] = await db.query('SELECT * FROM gunung');
     const [berita] = await db.query('SELECT * FROM berita');
     const [simaksi] = await db.query('SELECT s.*, u.nama, g.nama_gunung FROM simaksi s JOIN users u ON s.id_user = u.id JOIN gunung g ON s.id_gunung = g.id');
+    
+    // Get pemesanan statistics
+    const [pemesanan] = await db.query('SELECT status FROM pemesanan');
+    const pemesananStats = {
+      total: pemesanan.length,
+      pending: pemesanan.filter(p => p.status === 'pending').length,
+      dibayar: pemesanan.filter(p => p.status === 'dibayar').length,
+      diverifikasi: pemesanan.filter(p => p.status === 'diverifikasi').length,
+      ditolak: pemesanan.filter(p => p.status === 'ditolak').length
+    };
 
-    res.render('admin', { gunung, berita, simaksi });
+    res.render('admin', { gunung, berita, simaksi, pemesananStats });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -65,5 +76,16 @@ router.post('/admin/simaksi/:id', isAdmin, async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
+// ==================== PEMESANAN (PAYMENT) MANAGEMENT ====================
+
+// GET /admin/pemesanan - List all orders for admin verification
+router.get('/admin/pemesanan', isAdmin, pembayaranController.adminPemesanan);
+
+// GET /admin/pemesanan/:id - View order detail for verification
+router.get('/admin/pemesanan/:id', isAdmin, pembayaranController.adminDetailPemesanan);
+
+// POST /admin/verifikasi/:id - Verify/reject payment
+router.post('/admin/verifikasi/:id', isAdmin, pembayaranController.verifikasiPemesanan);
 
 module.exports = router;

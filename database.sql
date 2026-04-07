@@ -19,14 +19,20 @@ CREATE TABLE gunung (
     lokasi VARCHAR(100) NOT NULL,
     ketinggian INT NOT NULL,
     kuota_harian INT NOT NULL,
-    status ENUM('Buka', 'Tutup') NOT NULL
+    status ENUM('Buka', 'Tutup') NOT NULL,
+    deskripsi TEXT
 );
 
 -- Insert dummy data into gunung table
-INSERT INTO gunung (nama_gunung, lokasi, ketinggian, kuota_harian, status) VALUES
-('Rinjani', 'Lombok', 3726, 100, 'Buka'),
-('Semeru', 'Jawa Timur', 3676, 150, 'Buka'),
-('Gede', 'Jawa Barat', 2958, 200, 'Buka');
+INSERT INTO gunung (nama_gunung, lokasi, ketinggian, kuota_harian, status, deskripsi) VALUES
+('Semeru', 'Jawa Timur', 3676, 150, 'Buka', 'Gunung Semeru adalah puncak tertinggi di Pulau Jawa yang terkenal dengan kawahnya yang mempesona dan rute pendakian yang menantang.'),
+('Gede Pangrango', 'Jawa Barat', 2958, 200, 'Buka', 'Gunung Gede Pangrango menawarkan hutan tropis yang lembap, padang edelweiss, dan jalur pendakian yang indah.'),
+('Bromo', 'Jawa Timur', 2329, 120, 'Buka', 'Gunung Bromo terkenal dengan lautan pasir, bukit Teletubbies, dan pemandangan matahari terbit yang spektakuler.'),
+('Merapi', 'Jawa Tengah', 2930, 100, 'Buka', 'Gunung Merapi adalah gunung berapi aktif dengan pengalaman mendaki berapi dan pemandangan kawah yang dramatis.'),
+('Merbabu', 'Jawa Tengah', 3142, 120, 'Buka', 'Gunung Merbabu memiliki jalur pendakian yang menantang dan panorama sunrise yang memukau di puncaknya.'),
+('Slamet', 'Jawa Tengah', 3428, 100, 'Tutup', 'Gunung Slamet menawarkan panorama alam liar dan jalur pendakian panjang yang cocok bagi pendaki berpengalaman.'),
+('Lawu', 'Jawa Tengah', 3265, 80, 'Buka', 'Gunung Lawu dikenal dengan suasana sejuk, jalur hutan yang teduh, dan pemandangan puncak yang luas.'),
+('Ciremai', 'Jawa Barat', 3078, 90, 'Buka', 'Gunung Ciremai memiliki jalur pendakian yang asri dan pemandangan hutan serta lereng yang hijau.');
 
 -- Create berita table
 CREATE TABLE berita (

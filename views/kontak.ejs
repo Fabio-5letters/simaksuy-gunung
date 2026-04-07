@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontak - SIMAKSI Gunung Merbabu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      * {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .navbar-gradient {
+        background: linear-gradient(135deg, #1e5631 0%, #2d7a3e 50%, #3a9f5d 100%);
+      }
+      .contact-card {
+        transition: all 0.3s ease;
+      }
+      .contact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(30, 86, 49, 0.15);
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #1e5631 0%, #3a9f5d 100%);
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(30, 86, 49, 0.3);
+      }
+    </style>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="/css/output.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Navbar -->
+        <header class="navbar-gradient text-white shadow-xl sticky top-0 z-50">
+            <div class="container mx-auto flex justify-between items-center py-4 px-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-mountain text-green-700 text-lg"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold">SIMAKSI Gunung</h1>
+                </div>
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-8 font-semibold">
+                        <li><a href="/beranda" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-home"></i><span>Beranda</span></a></li>
+                        <li><a href="/berita" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-newspaper"></i><span>Berita</span></a></li>
+                        <li><a href="/pendakian" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-person-hiking"></i><span>Pendakian</span></a></li>
+                        <li><a href="/kontak" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-envelope"></i><span>Kontak</span></a></li>
+                    </ul>
+                </nav>
+                <div class="flex space-x-4">
+                    <% if (user) { %>
+                        <!-- User Profile Dropdown -->
+                        <div class="relative">
+                            <button id="profile-btn" class="flex items-center space-x-3 bg-white text-green-700 px-4 py-2 rounded-lg font-semibold hover:bg-green-50 transition">
+                                <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-sm"></i>
+                                </div>
+                                <span><%= user.nama %></span>
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </button>
+                            <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
+                                <div class="py-2">
+                                    <div class="px-4 py-2 border-b border-gray-100">
+                                        <p class="text-sm font-medium text-gray-900"><%= user.nama %></p>
+                                        <p class="text-xs text-gray-500"><%= user.email %></p>
+                                    </div>
+                                    <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                        <i class="fas fa-user-circle mr-2"></i>Profile Saya
+                                    </a>
+                                    <a href="/riwayat" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                        <i class="fas fa-history mr-2"></i>Riwayat Pendakian
+                                    </a>
+                                    <div class="border-t border-gray-100"></div>
+                                    <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <a href="/login" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition">Login</a>
+                    <% } %>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-20 px-6">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-black mb-4">Hubungi Kami</h2>
+                <p class="text-xl text-green-100 max-w-2xl mx-auto">Kami siap membantu Anda dengan informasi pendakian dan pertanyaan lainnya</p>
+            </div>
+        </section>
+
+        <!-- Contact Content -->
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Contact Info -->
+                    <div>
+                        <h3 class="text-3xl font-bold text-gray-900 mb-6">Informasi Kontak</h3>
+                        <div class="space-y-6">
+                            <div class="contact-card bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-phone text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-lg font-semibold text-gray-900">Telepon</h4>
+                                        <p class="text-gray-600">+62 274 515 912</p>
+                                        <p class="text-sm text-gray-500">Senin - Jumat, 08:00 - 17:00 WIB</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="contact-card bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-xl">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-envelope text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-lg font-semibold text-gray-900">Email</h4>
+                                        <p class="text-gray-600">info@simaksi.com</p>
+                                        <p class="text-sm text-gray-500">Kami akan merespons dalam 24 jam</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="contact-card bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-map-marker-alt text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-lg font-semibold text-gray-900">Alamat</h4>
+                                        <p class="text-gray-600">Jl. Gunung Merbabu No. 123<br>Semarang, Jawa Tengah 50241</p>
+                                        <p class="text-sm text-gray-500">Indonesia</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="contact-card bg-gradient-to-r from-orange-50 to-red-50 p-6 rounded-xl">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-clock text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-lg font-semibold text-gray-900">Jam Operasional</h4>
+                                        <p class="text-gray-600">Senin - Jumat: 08:00 - 17:00 WIB</p>
+                                        <p class="text-gray-600">Sabtu: 08:00 - 14:00 WIB</p>
+                                        <p class="text-gray-600">Minggu: Tutup</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div>
+                        <h3 class="text-3xl font-bold text-gray-900 mb-6">Kirim Pesan</h3>
+                        <form class="bg-gray-50 p-8 rounded-xl shadow-lg">
+                            <div class="mb-6">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Nama Lengkap</label>
+                                <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Masukkan nama lengkap">
+                            </div>
+
+                            <div class="mb-6">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                                <input type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Masukkan email Anda">
+                            </div>
+
+                            <div class="mb-6">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Subjek</label>
+                                <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Subjek pesan">
+                            </div>
+
+                            <div class="mb-6">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Pesan</label>
+                                <textarea rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Tulis pesan Anda di sini..."></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full btn-primary text-white font-bold py-3 px-6 rounded-lg transition">
+                                <i class="fas fa-paper-plane mr-2"></i>Kirim Pesan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <section class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-gray-900 mb-4">Lokasi Kami</h3>
+                    <p class="text-gray-600 text-lg">Kunjungi kantor kami di Semarang, Jawa Tengah</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-96 bg-gradient-to-br from-green-200 to-green-400 flex items-center justify-center">
+                        <div class="text-center text-white">
+                            <i class="fas fa-map-marked-alt text-6xl mb-4"></i>
+                            <h4 class="text-2xl font-bold mb-2">Peta Lokasi</h4>
+                            <p class="text-lg">Jl. Gunung Merbabu No. 123, Semarang</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="navbar-gradient text-white py-12">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                    <div>
+                        <h4 class="text-lg font-bold mb-4 flex items-center"><i class="fas fa-mountain mr-2"></i>SIMAKSI</h4>
+                        <p class="text-green-100 text-sm">Platform terpercaya untuk mendaftar pendakian gunung di Indonesia</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Navigasi</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li><a href="/beranda" class="hover:text-white transition">Beranda</a></li>
+                            <li><a href="/berita" class="hover:text-white transition">Berita</a></li>
+                            <li><a href="/pendakian" class="hover:text-white transition">Pendakian</a></li>
+                            <li><a href="/kontak" class="hover:text-white transition">Kontak</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Bantuan</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li><a href="#" class="hover:text-white transition">FAQ</a></li>
+                            <li><a href="#" class="hover:text-white transition">Panduan Pendakian</a></li>
+                            <li><a href="#" class="hover:text-white transition">Keselamatan</a></li>
+                            <li><a href="#" class="hover:text-white transition">Syarat & Ketentuan</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Hubungi Kami</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li class="flex items-center"><i class="fas fa-phone mr-2"></i>+62 274 515 912</li>
+                            <li class="flex items-center"><i class="fas fa-envelope mr-2"></i>info@simaksi.com</li>
+                            <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>Semarang, Indonesia</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-green-700 pt-8 text-center text-green-100 text-sm">
+                    <p>&copy; 2026 SIMAKSI - Sistem Informasi Manajemen Pendakian Gunung. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Profile Dropdown Script -->
+    <script>
+        // Profile dropdown functionality
+        const profileBtn = document.getElementById('profile-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+
+        if (profileBtn && profileDropdown) {
+            profileBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+
+            // Close dropdown on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
