@@ -46,7 +46,7 @@ const generalLimiter = rateLimit({
 // Stricter rate limiting for auth routes
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 8, // limit each IP to 8 login/register attempts per windowMs
+  max: 20, // limit each IP to 20 login/register attempts per windowMs (naik dari 8)
   message: 'Terlalu banyak percobaan. Silakan coba lagi dalam 15 menit.',
   standardHeaders: true,
   legacyHeaders: false

@@ -74,33 +74,52 @@ router.get('/register', (req, res) => {
 router.post('/register', async (req, res) => {
   const { nama, email, password } = req.body;
   
+  console.log('Register attempt:', { nama, email, passwordLength: password?.length });
+  
   // Validation
   if (!nama || !email || !password) {
+    console.warn('Validation failed: missing fields');
     return res.render('register', { error: 'Semua field harus diisi' });
   }
   
   if (password.length < 6) {
+    console.warn('Validation failed: password too short');
     return res.render('register', { error: 'Password minimal 6 karakter' });
   }
 
   try {
     // Check if email already exists
+    console.log('Checking if email exists:', email);
     const [existingUser] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
     if (existingUser.length > 0) {
+      console.warn('Email already registered:', email);
       return res.render('register', { error: 'Email sudah terdaftar, gunakan email lain' });
     }
 
+    console.log('Hashing password...');
     const hashedPassword = await bcrypt.hash(password, 10);
+    
+    console.log('Inserting user to database:', { nama, email });
     await db.query('INSERT INTO users (nama, email, password, role) VALUES (?, ?, ?, ?)', 
       [nama, email, hashedPassword, 'user']);
     
+    console.log('User registered successfully:', email);
     // Redirect to login with success message
     res.redirect('/login?success=true');
   } catch (err) {
-    console.error('Register error:', err);
+    console.error('Register error details:', {
+      message: err.message,
+      code: err.code,
+      errno: err.errno,
+      sqlState: err.sqlState,
+      sql: err.sql
+    });
     // More detailed error message
     if (err.code === 'ER_DUP_ENTRY') {
       return res.render('register', { error: 'Email sudah terdaftar' });
+    }
+    if (err.code === 'ER_NO_REFERENCED_ROW' || err.errno === 1452) {
+      return res.render('register', { error: 'Terjadi kesalahan database. Hubungi administrator.' });
     }
     res.render('register', { error: 'Terjadi kesalahan saat mendaftar. Silakan coba lagi.' });
   }

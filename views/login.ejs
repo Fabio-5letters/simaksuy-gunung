@@ -222,6 +222,19 @@
       <h1>Selamat Datang</h1>
       <p class="subtitle">Masuk untuk melanjutkan pendakian impian Anda</p>
 
+      <% if (success) { %>
+        <div class="success-box">
+          <i class="fas fa-check-circle"></i>
+          <p><%= success === 'true' ? 'Pendaftaran berhasil. Silakan login.' : success %></p>
+        </div>
+      <% } %>
+      <% if (error) { %>
+        <div class="error-box">
+          <i class="fas fa-exclamation-circle"></i>
+          <p><%= error %></p>
+        </div>
+      <% } %>
+
       <!-- Form -->
       <form action="/login" method="POST" autocomplete="off">
         <div class="form-group">
