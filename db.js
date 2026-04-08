@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '', // Default XAMPP - no password
+  password: 'root', // Default XAMPP - no password
   database: 'simaksi_db',
   waitForConnections: true,
   connectionLimit: 10,
