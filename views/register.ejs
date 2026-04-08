@@ -269,13 +269,6 @@
       <h1>Bergabunglah</h1>
       <p class="subtitle">Buat akun untuk memulai petualangan Anda</p>
 
-      <!-- Error Message -->
-      <% if (typeof error !== 'undefined' && error) { %>
-        <div class="error-box">
-          <i class="fas fa-exclamation-circle"></i>
-          <p><%= error %></p>
-        </div>
-      <% } %>
       <form action="/register" method="POST" autocomplete="off" id="registerForm">
         <div class="form-group">
           <label for="nama"><i class="fas fa-user" style="margin-right: 6px;"></i>Nama Lengkap</label>

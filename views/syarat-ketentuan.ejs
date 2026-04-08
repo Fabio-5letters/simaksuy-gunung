@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syarat & Ketentuan - SIMAKSI Gunung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      * { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      .navbar-gradient { background: linear-gradient(135deg, #1e5631 0%, #2d7a3e 50%, #3a9f5d 100%); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="navbar-gradient text-white shadow-xl sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                    <i class="fas fa-mountain text-green-700 text-lg"></i>
+                </div>
+                <h1 class="text-2xl font-bold">SIMAKSI Gunung</h1>
+            </div>
+            <nav class="hidden md:block">
+                <ul class="flex space-x-8 font-semibold">
+                    <li><a href="/beranda" class="hover:text-green-200 transition">Beranda</a></li>
+                    <li><a href="/berita" class="hover:text-green-200 transition">Berita</a></li>
+                    <li><a href="/pendakian" class="hover:text-green-200 transition">Pendakian</a></li>
+                    <li><a href="/kontak" class="hover:text-green-200 transition">Kontak</a></li>
+                </ul>
+            </nav>
+            <div class="flex space-x-4">
+                <% if (user) { %>
+                    <a href="/beranda" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition"><%= user.nama %></a>
+                <% } else { %>
+                    <a href="/login" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition">Login</a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-16">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-black text-gray-900 mb-4">Syarat & Ketentuan</h1>
+                <p class="text-xl text-gray-600">Baca dan pahami sebelum melakukan pendakian</p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-8 space-y-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center"><i class="fas fa-file-contract text-green-600 mr-3"></i>1. Ketentuan Umum</h2>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>SIMAKSI adalah platform resmi untuk pendaftaran pendakian gunung di Indonesia.</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Dengan mendaftar, Anda menyetujui seluruh syarat dan ketentuan yang berlaku.</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Pendaki wajib memiliki identitas diri (KTP/SIM/Paspor) yang masih berlaku.</span></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center"><i class="fas fa-ticket-alt text-green-600 mr-3"></i>2. Pendaftaran & Pembayaran</h2>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Pendaftaran dilakukan secara online melalui website SIMAKSI.</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Pembayaran dilakukan melalui sistem QRIS dalam waktu 24 jam setelah pendaftaran.</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Bukti pembayaran harus diunggah dalam format gambar (JPG, PNG, GIF) maksimal 5MB.</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Biaya pendakian tidak dapat dikembalikan setelah diverifikasi.</span></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center"><i class="fas fa-mountain text-green-600 mr-3"></i>3. Selama Pendakian</h2>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Pendaki wajib mematuhi semua aturan dan regulasi pendakian yang berlaku.</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Dilarang merusak fasilitas alam, tumbuhan, dan satwa di sepanjang jalur pendakian.</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Wajib membawa turun semua sampah yang dihasilkan selama pendakian.</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Dilarang membuat api unggun di luar area yang telah ditentukan.</span></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center"><i class="fas fa-ban text-red-600 mr-3"></i>4. Pembatalan & Pengembalian Dana</h2>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start"><i class="fas fa-times text-red-600 mt-1 mr-2"></i><span>Pendaftaran yang sudah diverifikasi <strong>tidak dapat dibatalkan</strong>.</span></li>
+                        <li class="flex items-start"><i class="fas fa-times text-red-600 mt-1 mr-2"></i><span>Dana <strong>tidak dapat dikembalikan</strong> dalam bentuk apapun.</span></li>
+                        <li class="flex items-start"><i class="fas fa-exclamation-triangle text-yellow-600 mt-1 mr-2"></i><span>Jika pendakian dibatalkan oleh pengelola (cuaca buruk, bencana alam), dana akan dikembalikan 100%.</span></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center"><i class="fas fa-shield-alt text-green-600 mr-3"></i>5. Keamanan & Keselamatan</h2>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Pendaki bertanggung jawab atas keselamatan diri sendiri selama pendakian.</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Disarankan untuk membawa asuransi pendakian pribadi.</span></li>
+                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Pengelola tidak bertanggung jawab atas kecelakaan yang terjadi di luar kelalaian pengelola.</span></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center"><i class="fas fa-gavel text-green-600 mr-3"></i>6. Sanksi</h2>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-start"><i class="fas fa-exclamation-circle text-red-600 mt-1 mr-2"></i><span>Pendaki yang melanggar aturan akan dikenakan sanksi berupa denda atau pencabutan hak pendakian sementara/permanen.</span></li>
+                        <li class="flex items-start"><i class="fas fa-exclamation-circle text-red-600 mt-1 mr-2"></i><span>Pendaki yang membuang sampah sembarangan akan dikenakan denda sesuai peraturan yang berlaku.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center text-sm text-gray-500">
+                <p>Terakhir diperbarui: 7 April 2026</p>
+                <p class="mt-2">Dengan menggunakan layanan SIMAKSI, Anda dianggap telah membaca, memahami, dan menyetujui seluruh syarat & ketentuan di atas.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="navbar-gradient text-white py-12">
+        <div class="container mx-auto px-6 text-center text-green-100 text-sm">
+            <p>&copy; 2026 SIMAKSI - Sistem Informasi Manajemen Pendakian Gunung. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

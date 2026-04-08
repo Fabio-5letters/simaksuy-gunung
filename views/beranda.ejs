@@ -38,18 +38,8 @@
     <link href="/css/output.css" rel="stylesheet">
 </head>
 <body class="bg-white">
-    <% const mountainImages = {
-        'Gunung Merbabu': 'https://source.unsplash.com/900x600/?mountain,merbabu',
-        'Gunung Merapi': 'https://source.unsplash.com/900x600/?mountain,merapi',
-        'Gunung Lawu': 'https://source.unsplash.com/900x600/?mountain,lawu',
-        'Gunung Sindoro': 'https://source.unsplash.com/900x600/?mountain,sindoro',
-        'Semeru': 'https://source.unsplash.com/900x600/?mountain,semeru',
-        'Gede Pangrango': 'https://source.unsplash.com/900x600/?mountain,gede%20pangrango',
-        'Bromo': 'https://source.unsplash.com/900x600/?mountain,bromo',
-        'Slamet': 'https://source.unsplash.com/900x600/?mountain,slamet',
-        'Ciremai': 'https://source.unsplash.com/900x600/?mountain,ciremai'
-    };
-    const defaultMountainImage = 'https://source.unsplash.com/900x600/?mountain'; %>
+    <% const defaultMountainImage = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&h=600&fit=crop'; %>
+    <% const mountainImages = gunung ? Object.fromEntries(gunung.map(g => [g.nama_gunung, g.gambar || defaultMountainImage])) : {}; %>
     <div class="min-h-screen">
         <!-- Navbar -->
         <header class="navbar-gradient text-white shadow-xl sticky top-0 z-50">
@@ -370,10 +360,10 @@
                     <div>
                         <h4 class="text-lg font-bold mb-4">Bantuan</h4>
                         <ul class="space-y-2 text-green-100 text-sm">
-                            <li><a href="#" class="hover:text-white transition">FAQ</a></li>
-                            <li><a href="#" class="hover:text-white transition">Panduan Pendakian</a></li>
-                            <li><a href="#" class="hover:text-white transition">Keselamatan</a></li>
-                            <li><a href="#" class="hover:text-white transition">Syarat & Ketentuan</a></li>
+                            <li><a href="/faq" class="hover:text-white transition">FAQ</a></li>
+                            <li><a href="/panduan" class="hover:text-white transition">Panduan Pendakian</a></li>
+                            <li><a href="/keselamatan" class="hover:text-white transition">Keselamatan</a></li>
+                            <li><a href="/syarat-ketentuan" class="hover:text-white transition">Syarat & Ketentuan</a></li>
                         </ul>
                     </div>
                     <div>
@@ -437,17 +427,25 @@
             'Slamet': 'Gunung Slamet menawarkan panorama alam liar dan jalur pendakian yang panjang. Sesuaikan dengan kemampuan fisik dan bawa bekal cukup.',
             'Ciremai': 'Gunung Ciremai memiliki rute pendakian yang sejuk dan pemandangan hutan yang rimbun. Cocok untuk pendaki yang ingin menikmati suasana alam pegunungan di Jawa Barat.'
         };
-        const mountainImages = {
-            'Gunung Merbabu': 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&h=600&fit=crop',
-            'Gunung Merapi': 'https://images.unsplash.com/photo-1547691880-8be24c97feaa?w=900&h=600&fit=crop',
-            'Gunung Lawu': 'https://images.unsplash.com/photo-1519817650390-64a93db511f0?w=900&h=600&fit=crop',
-            'Gunung Sindoro': 'https://images.unsplash.com/photo-1535947257809-aaa1f79a0e7f?w=900&h=600&fit=crop',
-            'Semeru': 'https://images.unsplash.com/photo-1516762689617-3a5bb5a2c8bb?w=900&h=600&fit=crop',
-            'Gede Pangrango': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&h=600&fit=crop',
-            'Bromo': 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=900&h=600&fit=crop',
-            'Slamet': 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&h=600&fit=crop',
-            'Ciremai': 'https://images.unsplash.com/photo-1518831952650-8f0549e89687?w=900&h=600&fit=crop'
-        };
+        
+        // Use gambar from database if available
+        function getMountainImage(gunung) {
+            if (gunung.gambar) return gunung.gambar;
+            // Fallback to hardcoded images
+            const fallbackImages = {
+                'Gunung Merbabu': 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&h=600&fit=crop',
+                'Gunung Merapi': 'https://images.unsplash.com/photo-1547691880-8be24c97feaa?w=900&h=600&fit=crop',
+                'Gunung Lawu': 'https://images.unsplash.com/photo-1519817650390-64a93db511f0?w=900&h=600&fit=crop',
+                'Gunung Sindoro': 'https://images.unsplash.com/photo-1535947257809-aaa1f79a0e7f?w=900&h=600&fit=crop',
+                'Semeru': 'https://images.unsplash.com/photo-1516762689617-3a5bb5a2c8bb?w=900&h=600&fit=crop',
+                'Gede Pangrango': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&h=600&fit=crop',
+                'Bromo': 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=900&h=600&fit=crop',
+                'Slamet': 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&h=600&fit=crop',
+                'Ciremai': 'https://images.unsplash.com/photo-1518831952650-8f0549e89687?w=900&h=600&fit=crop'
+            };
+            return fallbackImages[gunung.nama_gunung] || defaultMountainImage;
+        }
+
         const defaultMountainImage = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&h=600&fit=crop';
 
         function getGunungDescription(name) {

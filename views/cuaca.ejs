@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <nav class="hidden md:flex space-x-8">
-                    <a href="/" class="text-gray-700 hover:text-green-600 font-semibold transition">Beranda</a>
+                    <a href="/beranda" class="text-gray-700 hover:text-green-600 font-semibold transition">Beranda</a>
                     <a href="/berita" class="text-gray-700 hover:text-green-600 font-semibold transition">Berita</a>
                     <a href="/pendakian" class="text-gray-700 hover:text-green-600 font-semibold transition">Pendakian</a>
                     <a href="/cuaca" class="text-green-600 font-semibold">Cuaca</a>
@@ -127,14 +127,6 @@
                     </div>
                 </div>
             </div>
-
-            <% if (locals.error) { %>
-                <div class="max-w-2xl mx-auto mb-8">
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
-                        <i class="fas fa-exclamation-triangle mr-2"></i><%= error %>
-                    </div>
-                </div>
-            <% } %>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
                 <% gunung.forEach((item, index) => { %>
@@ -422,7 +414,7 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Menu Utama</h4>
                     <ul class="space-y-2">
-                        <li><a href="/" class="text-gray-400 hover:text-white transition">Beranda</a></li>
+                        <li><a href="/beranda" class="text-gray-400 hover:text-white transition">Beranda</a></li>
                         <li><a href="/berita" class="text-gray-400 hover:text-white transition">Berita</a></li>
                         <li><a href="/pendakian" class="text-gray-400 hover:text-white transition">Pendakian</a></li>
                         <li><a href="/cuaca" class="text-gray-400 hover:text-white transition">Cuaca</a></li>

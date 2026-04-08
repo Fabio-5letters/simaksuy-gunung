@@ -1,10 +1,8 @@
+require('dotenv').config();
 const mysql = require('mysql2');
 
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'root', // Default XAMPP - no password
-  database: 'simaksi_db',
+
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -15,15 +13,12 @@ const pool = mysql.createPool({
 pool.getConnection(function(err, connection) {
   if (err) {
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-      console.error('Database connection was closed.');
+      console.error('❌ Database connection was closed.');
     }
     if (err.code === 'ER_CON_COUNT_ERROR') {
-      console.error('Database has too many connections.');
+      console.error('❌ Database has too many connections.');
     }
-    if (err.code === 'ER_INSIDE_TRANSACTION_CONTROL') {
-      console.error('Database connection used outside of transaction');
-    }
-    console.error('Database connection error:', err);
+    console.error('❌ Database connection error:', err.message);
   } else {
     connection.release();
     console.log('✓ Database connected successfully');
