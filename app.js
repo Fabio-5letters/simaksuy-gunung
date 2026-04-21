@@ -34,25 +34,8 @@ app.use(
   })
 );
 
-// Rate limiting for all routes
-const generalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Terlalu banyak permintaan. Silakan coba lagi dalam 15 menit.',
-  standardHeaders: true,
-  legacyHeaders: false
-});
-
-// Stricter rate limiting for auth routes
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // limit each IP to 20 login/register attempts per windowMs (naik dari 8)
-  message: 'Terlalu banyak percobaan. Silakan coba lagi dalam 15 menit.',
-  standardHeaders: true,
-  legacyHeaders: false
-});
-
-app.use(generalLimiter);
+// Rate limiting disabled for development
+// Uncomment the code below to enable rate limiting in production
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -91,8 +74,8 @@ app.get('/', (req, res) => {
   res.redirect('/login');
 });
 
-// Use auth routes with rate limiting
-app.use('/', authLimiter, authRoutes);
+// Use auth routes (rate limiting disabled)
+app.use('/', authRoutes);
 
 // Use other routes
 app.use('/', userRoutes);

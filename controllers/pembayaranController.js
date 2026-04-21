@@ -13,6 +13,27 @@ function formatRupiah(amount) {
   return 'Rp ' + amount.toLocaleString('id-ID');
 }
 
+// GET /daftar/:id - Show registration form for specific mountain
+exports.showDaftar = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [gunung] = await db.query('SELECT * FROM gunung WHERE id = ?', [id]);
+
+    if (gunung.length === 0) {
+      req.flash('error', 'Gunung tidak ditemukan.');
+      return res.redirect('/pendakian');
+    }
+
+    res.render('pendaftaran', {
+      user: req.session.user,
+      gunung: gunung[0]
+    });
+  } catch (err) {
+    console.error('Show daftar error:', err);
+    res.status(500).redirect('/pendakian');
+  }
+};
+
 // GET /pembayaran/:kode_booking - Show QRIS payment page
 exports.showPembayaran = async (req, res) => {
   try {
@@ -72,6 +93,20 @@ exports.buatPemesanan = async (req, res) => {
     if (!id_gunung || !tanggal_pendakian || !tanggal_keluar ||
         !pintu_masuk || !pintu_keluar || !nomor_hp || !email || !jumlah_anggota) {
       req.flash('error', 'Mohon lengkapi semua data formulir.');
+      return res.redirect('/pendakian');
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      req.flash('error', 'Format email tidak valid.');
+      return res.redirect('/pendakian');
+    }
+
+    // Validate phone number format (basic - at least 9 digits)
+    const phoneRegex = /^\d{9,}$/;
+    if (!phoneRegex.test(nomor_hp.replace(/[^0-9]/g, ''))) {
+      req.flash('error', 'Nomor HP tidak valid (minimal 9 digit).');
       return res.redirect('/pendakian');
     }
 
@@ -219,13 +254,13 @@ exports.uploadBukti = async (req, res) => {
     const fileName = req.file.filename;
 
     const [result] = await db.query(
-      `UPDATE pemesanan SET bukti_pembayaran = ?, catatan = ?, status = 'dibayar' 
-       WHERE kode_booking = ? AND id_user = ?`,
+      `UPDATE pemesanan SET bukti_pembayaran = ?, catatan = ? 
+       WHERE kode_booking = ? AND id_user = ? AND status = 'dibayar'`,
       [fileName, catatan, kode_booking, req.session.user.id]
     );
 
     if (result.affectedRows === 0) {
-      req.flash('error', 'Pemesanan tidak ditemukan.');
+      req.flash('error', 'Pemesanan tidak ditemukan atau sudah diproses.');
       return res.redirect(`/upload-bukti/${kode_booking}`);
     }
 

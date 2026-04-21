@@ -49,13 +49,34 @@ router.get('/admin', isAdmin, async (req, res) => {
 router.post('/admin/gunung', isAdmin, async (req, res) => {
   const { nama_gunung, lokasi, ketinggian, kuota_harian, status } = req.body;
   try {
+    // Validate input
+    if (!nama_gunung || !lokasi || !ketinggian || !kuota_harian || !status) {
+      req.flash('error', 'Semua field harus diisi');
+      return res.redirect('/admin');
+    }
+
+    const tinggiNum = parseInt(ketinggian, 10);
+    const quotaNum = parseInt(kuota_harian, 10);
+
+    if (isNaN(tinggiNum) || tinggiNum < 0) {
+      req.flash('error', 'Ketinggian harus berupa angka positif');
+      return res.redirect('/admin');
+    }
+
+    if (isNaN(quotaNum) || quotaNum < 1) {
+      req.flash('error', 'Kuota harian harus berupa angka positif');
+      return res.redirect('/admin');
+    }
+
     await db.query('INSERT INTO gunung (nama_gunung, lokasi, ketinggian, kuota_harian, status) VALUES (?, ?, ?, ?, ?)', [
-      nama_gunung, lokasi, ketinggian, kuota_harian, status
+      nama_gunung, lokasi, tinggiNum, quotaNum, status
     ]);
+    req.flash('success', 'Gunung berhasil ditambahkan');
     res.redirect('/admin');
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
+    console.error('Add gunung error:', err);
+    req.flash('error', 'Terjadi kesalahan saat menambah gunung');
+    res.redirect('/admin');
   }
 });
 
@@ -63,13 +84,21 @@ router.post('/admin/gunung', isAdmin, async (req, res) => {
 router.post('/admin/berita', isAdmin, async (req, res) => {
   const { judul, isi_berita, tanggal } = req.body;
   try {
+    // Validate input
+    if (!judul || !isi_berita || !tanggal) {
+      req.flash('error', 'Semua field harus diisi');
+      return res.redirect('/admin');
+    }
+
     await db.query('INSERT INTO berita (judul, isi_berita, tanggal) VALUES (?, ?, ?)', [
       judul, isi_berita, tanggal
     ]);
+    req.flash('success', 'Berita berhasil ditambahkan');
     res.redirect('/admin');
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
+    console.error('Add berita error:', err);
+    req.flash('error', 'Terjadi kesalahan saat menambah berita');
+    res.redirect('/admin');
   }
 });
 
@@ -78,11 +107,30 @@ router.post('/admin/simaksi/:id', isAdmin, async (req, res) => {
   const { id } = req.params;
   const { status_pengajuan } = req.body;
   try {
-    await db.query('UPDATE simaksi SET status_pengajuan = ? WHERE id = ?', [status_pengajuan, id]);
+    // Validate input
+    if (!status_pengajuan) {
+      req.flash('error', 'Status harus dipilih');
+      return res.redirect('/admin');
+    }
+
+    if (!['Pending', 'Disetujui', 'Ditolak'].includes(status_pengajuan)) {
+      req.flash('error', 'Status tidak valid');
+      return res.redirect('/admin');
+    }
+
+    const [result] = await db.query('UPDATE simaksi SET status_pengajuan = ? WHERE id = ?', [status_pengajuan, id]);
+    
+    if (result.affectedRows === 0) {
+      req.flash('error', 'Pengajuan tidak ditemukan');
+      return res.redirect('/admin');
+    }
+
+    req.flash('success', 'Status pengajuan berhasil diubah');
     res.redirect('/admin');
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
+    console.error('Update simaksi error:', err);
+    req.flash('error', 'Terjadi kesalahan saat mengupdate status');
+    res.redirect('/admin');
   }
 });
 

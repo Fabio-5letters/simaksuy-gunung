@@ -29,8 +29,6 @@
         box-shadow: 0 10px 25px rgba(30, 86, 49, 0.3);
       }
     </style>
-    <link rel="stylesheet" href="/css/style.css">
-    <link href="/css/output.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
     <div class="min-h-screen">
@@ -53,7 +51,6 @@
                 </nav>
                 <div class="flex space-x-4">
                     <% if (user) { %>
-                        <!-- User Profile Dropdown -->
                         <div class="relative">
                             <button id="profile-btn" class="flex items-center space-x-3 bg-white text-green-700 px-4 py-2 rounded-lg font-semibold hover:bg-green-50 transition">
                                 <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
@@ -107,8 +104,8 @@
                                     <div class="h-56 bg-gradient-to-br from-green-400 to-green-600 overflow-hidden">
                                         <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=400&fit=crop" alt="<%= item.nama_gunung %>" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                                     </div>
-                                    <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-20 transition"></div>
-                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 text-white">
+                                    <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-20 transition pointer-events-none"></div>
+                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 text-white z-10">
                                         <div class="flex items-center justify-between">
                                             <div>
                                                 <h4 class="text-2xl font-bold"><%= item.nama_gunung %></h4>
@@ -123,9 +120,9 @@
                                             </div>
                                         </div>
                                         <% if (user) { %>
-                                            <button onclick="daftarPendakian(<%= item.id %>, '<%= item.nama_gunung %>')" class="mt-4 w-full btn-primary text-white font-semibold py-2 rounded-lg transition flex items-center justify-center">
+                                            <a href="/daftar/<%= item.id %>" class="mt-4 w-full btn-primary text-white font-semibold py-2 rounded-lg transition flex items-center justify-center">
                                                 <i class="fas fa-plus-circle mr-2"></i>Daftar Pendakian
-                                            </button>
+                                            </a>
                                         <% } else { %>
                                             <a href="/login" class="mt-4 w-full btn-primary text-white font-semibold py-2 rounded-lg transition flex items-center justify-center">
                                                 <i class="fas fa-sign-in-alt mr-2"></i>Login untuk Daftar
@@ -202,9 +199,9 @@
                                 <% } %>
 
                                 <% if (user) { %>
-                                    <button onclick="daftarPendakian(<%= item.id %>, '<%= item.nama_gunung %>')" class="mt-6 w-full btn-primary text-white font-semibold py-3 rounded-lg transition flex items-center justify-center">
+                                    <a href="/daftar/<%= item.id %>" class="mt-6 w-full btn-primary text-white font-semibold py-3 rounded-lg transition flex items-center justify-center">
                                         <i class="fas fa-plus-circle mr-2"></i>Daftar Pendakian Sekarang
-                                    </button>
+                                    </a>
                                 <% } else { %>
                                     <a href="/login" class="mt-6 w-full btn-primary text-white font-semibold py-3 rounded-lg transition flex items-center justify-center">
                                         <i class="fas fa-sign-in-alt mr-2"></i>Login untuk Daftar
@@ -217,152 +214,6 @@
             </div>
         </section>
         <% } %>
-
-        <!-- Modal Daftar Pendakian -->
-        <div id="daftarModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center px-4">
-            <div class="bg-white rounded-3xl overflow-hidden max-w-2xl w-full shadow-2xl">
-                <div class="flex flex-col lg:flex-row">
-                    <div class="lg:w-1/2 bg-green-600 text-white p-8">
-                        <div class="mb-8">
-                            <h3 class="text-3xl font-bold mb-4">Formulir Pendakian</h3>
-                            <p class="text-green-100 leading-relaxed">Isi data pendakian lengkap dan lanjutkan ke konfirmasi pembayaran.</p>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="bg-green-700 bg-opacity-20 rounded-2xl p-4">
-                                <p class="text-sm uppercase tracking-wider text-green-100">Langkah 1</p>
-                                <p class="font-semibold mt-2">Detail Pendakian</p>
-                            </div>
-                            <div class="bg-green-700 bg-opacity-20 rounded-2xl p-4">
-                                <p class="text-sm uppercase tracking-wider text-green-100">Langkah 2</p>
-                                <p class="font-semibold mt-2">Ringkasan & Pembayaran</p>
-                            </div>
-                            <div class="bg-green-700 bg-opacity-20 rounded-2xl p-4">
-                                <p class="text-sm uppercase tracking-wider text-green-100">Langkah 3</p>
-                                <p class="font-semibold mt-2">Pembayaran QRIS</p>
-                            </div>
-                            <div class="bg-green-700 bg-opacity-20 rounded-2xl p-4">
-                                <p class="text-sm uppercase tracking-wider text-green-100">Langkah 4</p>
-                                <p class="font-semibold mt-2">Unggah Bukti</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lg:w-1/2 p-8">
-                        <form id="daftarForm" action="/buat-pemesanan" method="POST">
-                            <input type="hidden" id="id_gunung" name="id_gunung">
-                            <input type="hidden" id="nama_gunung" name="nama_gunung">
-                            <input type="hidden" id="harga_per_orang" name="harga_per_orang" value="150000">
-
-                            <div id="step1">
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 text-sm font-bold mb-2">Tujuan Pendakian</label>
-                                    <input type="text" id="tujuanPendakian" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
-                                </div>
-
-                                <div class="grid grid-cols-1 gap-4">
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal Masuk</label>
-                                        <input type="date" id="tanggalMasuk" name="tanggal_pendakian" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-bold mb-2">Pintu Masuk</label>
-                                        <select id="pintuMasuk" name="pintu_masuk" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                                            <option value="">Pilih pintu masuk</option>
-                                            <option value="Cibodas">Cibodas</option>
-                                            <option value="Gunung Putri">Gunung Putri</option>
-                                            <option value="Selabintana">Selabintana</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal Keluar</label>
-                                        <input type="date" id="tanggalKeluar" name="tanggal_keluar" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-bold mb-2">Pintu Keluar</label>
-                                        <select id="pintuKeluar" name="pintu_keluar" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                                            <option value="">Pilih pintu keluar</option>
-                                            <option value="Cibodas">Cibodas</option>
-                                            <option value="Gunung Putri">Gunung Putri</option>
-                                            <option value="Selabintana">Selabintana</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-bold mb-2">Nomor HP</label>
-                                        <input type="text" id="nomorHP" name="nomor_hp" placeholder="08xxxxxxx" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-bold mb-2">E-mail</label>
-                                        <input type="email" id="emailKontak" name="email" placeholder="email@contoh.com" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 text-sm font-bold mb-2">Jumlah Anggota</label>
-                                        <input type="number" id="jumlahAnggota" name="jumlah_anggota" min="1" max="10" value="1" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                                    </div>
-                                </div>
-
-                                <div class="mt-6 flex justify-between">
-                                    <button type="button" onclick="closeModal()" class="px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition">Batal</button>
-                                    <button type="button" onclick="nextStep()" class="px-6 py-3 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700 transition">Simpan dan Lanjutkan</button>
-                                </div>
-                            </div>
-
-                            <div id="step2" class="hidden">
-                                <div class="mb-6">
-                                    <h4 class="text-2xl font-bold text-gray-900 mb-4">Ringkasan Pembayaran</h4>
-                                    <div class="bg-gray-50 p-4 rounded-xl">
-                                        <div class="mb-4">
-                                            <p class="text-sm text-gray-600">Tujuan</p>
-                                            <p id="summaryTujuan" class="font-semibold text-gray-900"></p>
-                                        </div>
-                                        <div class="mb-4 grid grid-cols-2 gap-4">
-                                            <div>
-                                                <p class="text-sm text-gray-600">Tanggal Masuk</p>
-                                                <p id="summaryTanggalMasuk" class="font-semibold text-gray-900"></p>
-                                            </div>
-                                            <div>
-                                                <p class="text-sm text-gray-600">Tanggal Keluar</p>
-                                                <p id="summaryTanggalKeluar" class="font-semibold text-gray-900"></p>
-                                            </div>
-                                        </div>
-                                        <div class="mb-4 grid grid-cols-2 gap-4">
-                                            <div>
-                                                <p class="text-sm text-gray-600">Pintu Masuk</p>
-                                                <p id="summaryPintuMasuk" class="font-semibold text-gray-900"></p>
-                                            </div>
-                                            <div>
-                                                <p class="text-sm text-gray-600">Pintu Keluar</p>
-                                                <p id="summaryPintuKeluar" class="font-semibold text-gray-900"></p>
-                                            </div>
-                                        </div>
-                                        <div class="mb-4 grid grid-cols-2 gap-4">
-                                            <div>
-                                                <p class="text-sm text-gray-600">Jumlah Anggota</p>
-                                                <p id="summaryJumlahAnggota" class="font-semibold text-gray-900"></p>
-                                            </div>
-                                            <div>
-                                                <p class="text-sm text-gray-600">Total Bayar</p>
-                                                <p id="summaryTotalBayar" class="font-semibold text-green-700"></p>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-600">Metode Pembayaran</p>
-                                            <p class="font-semibold text-gray-900">QRIS</p>
-                                            <input type="hidden" id="metodePembayaran" name="metode_pembayaran" value="QRIS">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="flex justify-between">
-                                    <button type="button" onclick="previousStep()" class="px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition">Sebelumnya</button>
-                                    <button type="submit" class="px-6 py-3 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700 transition">
-                                        <i class="fas fa-qrcode mr-2"></i>Bayar dengan QRIS
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Footer -->
         <footer class="navbar-gradient text-white py-12">
@@ -431,66 +282,6 @@
                     profileDropdown.classList.add('hidden');
                 }
             });
-        }
-
-        // Modal functionality
-        function closeModal() {
-            document.getElementById('daftarModal').classList.add('hidden');
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('daftarModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-
-        function resetModal() {
-            document.getElementById('daftarForm').reset();
-            document.getElementById('step1').classList.remove('hidden');
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('tujuanPendakian').value = '';
-        }
-
-        function daftarPendakian(gunungId, gunungName) {
-            resetModal();
-            document.getElementById('id_gunung').value = gunungId;
-            document.getElementById('nama_gunung').value = gunungName;
-            document.getElementById('tujuanPendakian').value = gunungName;
-            document.getElementById('daftarModal').classList.remove('hidden');
-        }
-
-        function nextStep() {
-            const tanggalMasuk = document.getElementById('tanggalMasuk').value;
-            const tanggalKeluar = document.getElementById('tanggalKeluar').value;
-            const pintuMasuk = document.getElementById('pintuMasuk').value;
-            const pintuKeluar = document.getElementById('pintuKeluar').value;
-            const nomorHP = document.getElementById('nomorHP').value;
-            const emailKontak = document.getElementById('emailKontak').value;
-            const jumlahAnggota = document.getElementById('jumlahAnggota').value;
-
-            if (!tanggalMasuk || !tanggalKeluar || !pintuMasuk || !pintuKeluar || !nomorHP || !emailKontak || !jumlahAnggota) {
-                return;
-            }
-
-            const hargaPerOrang = parseInt(document.getElementById('harga_per_orang').value, 10);
-            const totalBayar = hargaPerOrang * parseInt(jumlahAnggota, 10);
-
-            document.getElementById('summaryTujuan').innerText = document.getElementById('tujuanPendakian').value;
-            document.getElementById('summaryTanggalMasuk').innerText = tanggalMasuk;
-            document.getElementById('summaryTanggalKeluar').innerText = tanggalKeluar;
-            document.getElementById('summaryPintuMasuk').innerText = pintuMasuk;
-            document.getElementById('summaryPintuKeluar').innerText = pintuKeluar;
-            document.getElementById('summaryJumlahAnggota').innerText = jumlahAnggota + ' orang';
-            document.getElementById('summaryTotalBayar').innerText = 'Rp ' + totalBayar.toLocaleString('id-ID');
-
-            document.getElementById('step1').classList.add('hidden');
-            document.getElementById('step2').classList.remove('hidden');
-        }
-
-        function previousStep() {
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('step1').classList.remove('hidden');
         }
     </script>
 </body>

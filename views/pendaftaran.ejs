@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Pendakian - <%= gunung.nama_gunung %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      * { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      .gradient-header { background: linear-gradient(135deg, #1e5631 0%, #2d7a3e 50%, #3a9f5d 100%); }
+      .btn-primary { background: linear-gradient(135deg, #1e5631 0%, #3a9f5d 100%); transition: all 0.3s ease; }
+      .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(30, 86, 49, 0.3); }
+      .step-hidden { display: none !important; }
+      .step-visible { display: block !important; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+    <!-- Navbar -->
+    <header class="gradient-header text-white shadow-xl sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                    <i class="fas fa-mountain text-green-700 text-lg"></i>
+                </div>
+                <h1 class="text-2xl font-bold">SIMAKSI Gunung</h1>
+            </div>
+            <a href="/pendakian" class="text-white hover:text-green-200 transition">
+                <i class="fas fa-arrow-left mr-2"></i>Kembali ke Daftar
+            </a>
+        </div>
+    </header>
+
+    <!-- Progress Steps -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-center space-x-4">
+                <div class="flex items-center">
+                    <div id="step1-indicator" class="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center font-bold text-sm">1</div>
+                    <span class="ml-2 text-sm font-medium text-green-600">Formulir</span>
+                </div>
+                <div class="w-12 h-0.5 bg-gray-200" id="step1-line"></div>
+                <div class="flex items-center">
+                    <div id="step2-indicator" class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold text-sm">2</div>
+                    <span class="ml-2 text-sm font-medium text-gray-500">Ringkasan</span>
+                </div>
+                <div class="w-12 h-0.5 bg-gray-200"></div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold text-sm">3</div>
+                    <span class="ml-2 text-sm font-medium text-gray-500">Pembayaran</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-6 py-10 max-w-4xl">
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+            <!-- Sidebar Info -->
+            <div class="md:w-1/3 bg-green-600 text-white p-8">
+                <div class="sticky top-24">
+                    <h2 class="text-3xl font-bold mb-4"><%= gunung.nama_gunung %></h2>
+                    <p class="text-green-100 mb-6 flex items-center">
+                        <i class="fas fa-map-marker-alt mr-2"></i><%= gunung.lokasi %>
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-green-700 bg-opacity-30 p-4 rounded-2xl border border-green-500 border-opacity-30">
+                            <p class="text-xs uppercase tracking-widest text-green-200">Ketinggian</p>
+                            <p class="text-xl font-bold"><%= gunung.ketinggian %> mdpl</p>
+                        </div>
+                        <div class="bg-green-700 bg-opacity-30 p-4 rounded-2xl border border-green-500 border-opacity-30">
+                            <p class="text-xs uppercase tracking-widest text-green-200">Kuota Harian</p>
+                            <p class="text-xl font-bold"><%= gunung.kuota_harian %> Orang</p>
+                        </div>
+                        <div class="bg-green-700 bg-opacity-30 p-4 rounded-2xl border border-green-500 border-opacity-30">
+                            <p class="text-xs uppercase tracking-widest text-green-200">Biaya Pendakian</p>
+                            <p class="text-xl font-bold">Rp 150.000 / Orang</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Area -->
+            <div class="md:w-2/3 p-8 md:p-12 bg-white">
+                <form id="daftarForm" action="/buat-pemesanan" method="POST">
+                    <input type="hidden" name="id_gunung" value="<%= gunung.id %>">
+                    <input type="hidden" name="nama_gunung" value="<%= gunung.nama_gunung %>">
+                    <input type="hidden" id="harga_per_orang" name="harga_per_orang" value="150000">
+
+                    <!-- Step 1: Form Input -->
+                    <div id="step1" class="step-visible">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Informasi Pendakian</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal Masuk</label>
+                                <input type="date" id="tanggalMasuk" name="tanggal_pendakian" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none transition bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal Keluar</label>
+                                <input type="date" id="tanggalKeluar" name="tanggal_keluar" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none transition bg-white">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Pintu Masuk</label>
+                                <select name="pintu_masuk" id="pintuMasuk" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none transition bg-white">
+                                    <option value="">Pilih Pintu Masuk</option>
+                                    <option value="Cibodas">Cibodas</option>
+                                    <option value="Gunung Putri">Gunung Putri</option>
+                                    <option value="Selabintana">Selabintana</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Pintu Keluar</label>
+                                <select name="pintu_keluar" id="pintuKeluar" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none transition bg-white">
+                                    <option value="">Pilih Pintu Keluar</option>
+                                    <option value="Cibodas">Cibodas</option>
+                                    <option value="Gunung Putri">Gunung Putri</option>
+                                    <option value="Selabintana">Selabintana</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Nomor HP / WhatsApp</label>
+                            <input type="text" name="nomor_hp" id="nomorHP" value="<%= user.nomor_hp || '' %>" placeholder="08xxxxxxxxx" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none transition bg-white">
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">E-mail Konfirmasi</label>
+                            <input type="email" name="email" id="emailKontak" value="<%= user.email %>" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none transition bg-white">
+                        </div>
+
+                        <div class="mb-8">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Jumlah Anggota</label>
+                            <input type="number" name="jumlah_anggota" id="jumlahAnggota" min="1" max="20" value="1" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none transition bg-white">
+                        </div>
+
+                        <button type="button" id="btnNext" class="w-full btn-primary text-white font-bold py-4 rounded-2xl flex items-center justify-center text-lg shadow-lg hover:shadow-xl transition">
+                            Lanjutkan ke Ringkasan <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+
+                    <!-- Step 2: Summary -->
+                    <div id="step2" class="step-hidden">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Ringkasan Pendaftaran</h3>
+                        
+                        <div class="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-100">
+                            <div class="space-y-4">
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-600">Gunung Tujuan</span>
+                                    <span class="font-bold text-gray-900"><%= gunung.nama_gunung %></span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-600">Tanggal</span>
+                                    <span class="font-bold text-gray-900" id="summaryTanggal"></span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-600">Rute</span>
+                                    <span class="font-bold text-gray-900" id="summaryRute"></span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-600">Jumlah Peserta</span>
+                                    <span class="font-bold text-gray-900" id="summaryPeserta"></span>
+                                </div>
+                                <div class="flex justify-between pt-4">
+                                    <span class="text-xl font-bold text-gray-900">Total Biaya</span>
+                                    <span class="text-2xl font-black text-green-700" id="summaryTotal"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button type="button" id="btnPrev" class="flex-1 bg-gray-100 text-gray-700 font-bold py-4 rounded-2xl hover:bg-gray-200 transition">
+                                <i class="fas fa-arrow-left mr-2"></i> Kembali
+                            </button>
+                            <button type="submit" class="flex-1 btn-primary text-white font-bold py-4 rounded-2xl flex items-center justify-center">
+                                <i class="fas fa-qrcode mr-2"></i> Bayar Sekarang
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Log untuk memastikan script berjalan
+        console.log('Script pendaftaran loaded');
+
+        // Fungsi bantu untuk pindah step
+        function goToStep(stepNumber) {
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const indicator2 = document.getElementById('step2-indicator');
+            const line1 = document.getElementById('step1-line');
+
+            if (stepNumber === 2) {
+                step1.className = 'step-hidden';
+                step2.className = 'step-visible';
+                indicator2.className = 'w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center font-bold text-sm';
+                line1.className = 'w-12 h-0.5 bg-green-600';
+            } else {
+                step2.className = 'step-hidden';
+                step1.className = 'step-visible';
+                indicator2.className = 'w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold text-sm';
+                line1.className = 'w-12 h-0.5 bg-gray-200';
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Event Listener Tombol Lanjutkan
+        document.getElementById('btnNext').onclick = function() {
+            console.log('Klik Lanjutkan');
+            
+            const v = {
+                tglM: document.getElementById('tanggalMasuk').value,
+                tglK: document.getElementById('tanggalKeluar').value,
+                pM: document.getElementById('pintuMasuk').value,
+                pK: document.getElementById('pintuKeluar').value,
+                jml: document.getElementById('jumlahAnggota').value,
+                eml: document.getElementById('emailKontak').value,
+                hp: document.getElementById('nomorHP').value,
+                hrg: parseInt(document.getElementById('harga_per_orang').value) || 150000
+            };
+
+            // Validasi
+            if (!v.tglM || !v.tglK || !v.pM || !v.pK || !v.jml || !v.eml || !v.hp) {
+                alert('⚠️ Harap isi semua kolom formulir.');
+                return;
+            }
+
+            // Update Ringkasan
+            document.getElementById('summaryTanggal').innerText = v.tglM + ' s/d ' + v.tglK;
+            document.getElementById('summaryRute').innerText = v.pM + ' -> ' + v.pK;
+            document.getElementById('summaryPeserta').innerText = v.jml + ' Orang';
+            document.getElementById('summaryTotal').innerText = 'Rp ' + (v.hrg * v.jml).toLocaleString('id-ID');
+
+            goToStep(2);
+        };
+
+        // Event Listener Tombol Kembali
+        document.getElementById('btnPrev').onclick = function() {
+            goToStep(1);
+        };
+    </script>
+</body>
+</html>
