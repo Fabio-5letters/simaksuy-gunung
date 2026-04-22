@@ -3,291 +3,307 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - SIMAKSI Gunung</title>
+  <title>Masuk - SIMAKSI Pendakian</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --forest-green: #1a3c34;
+      --sunset-orange: #ff8c42;
+      --deep-orange: #e67e22;
+      --glass-bg: rgba(255, 255, 255, 0.15);
+      --glass-border: rgba(255, 255, 255, 0.2);
     }
+
+    * {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center center no-repeat;
+      background-size: cover;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-    }
-    .login-wrapper {
       position: relative;
+      overflow-x: hidden;
     }
+
+    /* Dark Overlay & Topography Pattern */
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
+      z-index: 1;
+    }
+
+    .topo-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.1;
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 Q 30 10 50 40 T 90 70 M0 30 Q 20 20 40 50 T 80 80 M20 0 Q 40 10 60 40 T 100 70' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3C/svg%3E");
+      z-index: 2;
+      pointer-events: none;
+    }
+
     .login-container {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+      position: relative;
+      z-index: 10;
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
       width: 100%;
-      max-width: 450px;
-      padding: 40px;
-      animation: slideUp 0.6s ease-out;
+      max-width: 420px;
+      padding: 48px 40px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.8s ease-out;
     }
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .logo-circle {
-      width: 70px;
-      height: 70px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 50%;
+
+    .logo-container {
+      width: 80px;
+      height: 80px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 20px;
-      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-      animation: float 3s ease-in-out infinite;
+      margin: 0 auto 24px;
+      transform: rotate(-10deg);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+
+    .login-container:hover .logo-container {
+      transform: rotate(0deg) scale(1.1);
+      background: var(--sunset-orange);
+      border-color: var(--sunset-orange);
     }
-    .logo-circle i {
+
+    .logo-container i {
       color: white;
-      font-size: 35px;
+      font-size: 36px;
     }
+
     h1 {
-      font-size: 28px;
-      font-weight: 700;
-      color: #1f2937;
+      color: white;
+      font-size: 32px;
+      font-weight: 800;
       text-align: center;
+      letter-spacing: -0.025em;
       margin-bottom: 8px;
     }
+
     .subtitle {
+      color: rgba(255, 255, 255, 0.7);
       text-align: center;
-      color: #6b7280;
-      font-size: 14px;
-      margin-bottom: 30px;
+      font-size: 15px;
+      margin-bottom: 32px;
     }
-    .form-group {
+
+    .input-group {
       margin-bottom: 20px;
     }
-    .form-group label {
+
+    .input-group label {
       display: block;
-      font-size: 13px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 14px;
       font-weight: 600;
-      color: #374151;
       margin-bottom: 8px;
+      margin-left: 4px;
     }
+
     .input-wrapper {
       position: relative;
-      display: flex;
-      align-items: center;
+      transition: all 0.3s ease;
     }
+
     .input-wrapper i {
       position: absolute;
-      left: 14px;
-      color: #667eea;
-      font-size: 16px;
-    }
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 12px 14px 12px 45px;
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      font-size: 14px;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.5);
       transition: all 0.3s ease;
-      background: white;
     }
-    input[type="email"]:focus,
-    input[type="password"]:focus {
+
+    .input-wrapper input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 12px 16px 12px 48px;
+      color: white;
+      font-size: 15px;
+      transition: all 0.3s ease;
       outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-      transform: translateY(-2px);
     }
-    .error-box {
-      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-      border-left: 4px solid #ef4444;
-      padding: 12px 14px;
-      border-radius: 10px;
-      margin-bottom: 20px;
+
+    .input-wrapper input:focus {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: var(--sunset-orange);
+      box-shadow: 0 0 0 4px rgba(255, 140, 66, 0.2);
+    }
+
+    .input-wrapper input:focus + i {
+      color: var(--sunset-orange);
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, var(--sunset-orange) 0%, var(--deep-orange) 100%);
+      color: white;
+      font-weight: 700;
+      padding: 14px;
+      border-radius: 12px;
+      margin-top: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 20px -10px rgba(255, 140, 66, 0.5);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 25px -10px rgba(255, 140, 66, 0.6);
+      filter: brightness(1.1);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 24px;
       display: flex;
       align-items: center;
       gap: 10px;
-      animation: shake 0.3s ease-out;
+      color: #fecaca;
+      font-size: 14px;
     }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
+
+    .alert-success {
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #bbf7d0;
+      font-size: 14px;
     }
-    .error-box i {
-      color: #dc2626;
-      font-size: 16px;
+
+    .footer-links {
+      margin-top: 32px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
     }
-    .error-box p {
-      color: #7f1d1d;
-      font-size: 13px;
-      font-weight: 500;
-      margin: 0;
-    }
-    .btn-login {
-      width: 100%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    .footer-links a {
       color: white;
       font-weight: 700;
-      padding: 13px;
-      border: none;
-      border-radius: 12px;
-      font-size: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .btn-login:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-    }
-    .btn-login:active {
-      transform: translateY(0);
-    }
-    .divider {
-      display: flex;
-      align-items: center;
-      margin: 25px 0;
-      color: #d1d5db;
-    }
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #e5e7eb;
-    }
-    .divider span {
-      padding: 0 15px;
-      font-size: 13px;
-      color: #9ca3af;
-    }
-    .register-link {
-      text-align: center;
-      font-size: 14px;
-      color: #6b7280;
-    }
-    .register-link a {
-      font-weight: 700;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-decoration: none;
-      cursor: pointer;
       transition: all 0.3s ease;
     }
-    .register-link a:hover {
-      opacity: 0.8;
+
+    .footer-links a:hover {
+      color: var(--sunset-orange);
+      text-decoration: underline;
     }
+
     .password-toggle {
       position: absolute;
-      right: 14px;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.5);
       cursor: pointer;
-      color: #9ca3af;
-      transition: color 0.3s ease;
+      z-index: 10;
     }
+
     .password-toggle:hover {
-      color: #667eea;
+      color: white;
     }
   </style>
 </head>
 <body>
-  <div class="login-wrapper">
-    <div class="login-container">
-      <!-- Logo -->
-      <div class="logo-circle">
-        <i class="fas fa-mountain"></i>
+  <div class="topo-pattern"></div>
+  
+  <div class="login-container">
+    <div class="logo-container">
+      <i class="fas fa-tents"></i>
+    </div>
+    
+    <h1>Siap Mendaki?</h1>
+    <p class="subtitle">Masuk ke petualangan Anda berikutnya</p>
+
+    <% if (success) { %>
+      <div class="alert-success">
+        <i class="fas fa-check-circle"></i>
+        <span><%= success === 'true' ? 'Pendaftaran berhasil. Silakan login.' : success %></span>
       </div>
-      
-      <!-- Header -->
-      <h1>Selamat Datang</h1>
-      <p class="subtitle">Masuk untuk melanjutkan pendakian impian Anda</p>
+    <% } %>
+    
+    <% if (error) { %>
+      <div class="alert-error">
+        <i class="fas fa-circle-exclamation"></i>
+        <span><%= error %></span>
+      </div>
+    <% } %>
 
-      <% if (success) { %>
-        <div class="success-box">
-          <i class="fas fa-check-circle"></i>
-          <p><%= success === 'true' ? 'Pendaftaran berhasil. Silakan login.' : success %></p>
+    <form action="/login" method="POST">
+      <div class="input-group">
+        <label for="email">E-mail Pendaki</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email" name="email" placeholder="pendaki@rimba.com" required>
         </div>
-      <% } %>
-      <% if (error) { %>
-        <div class="error-box">
-          <i class="fas fa-exclamation-circle"></i>
-          <p><%= error %></p>
+      </div>
+
+      <div class="input-group">
+        <label for="password">Kunci Keamanan</label>
+        <div class="input-wrapper">
+          <i class="fas fa-mountain-city"></i>
+          <input type="password" id="password" name="password" placeholder="••••••••" required>
+          <span class="password-toggle" onclick="togglePassword()">
+            <i class="fas fa-eye" id="toggleIcon"></i>
+          </span>
         </div>
-      <% } %>
+      </div>
 
-      <!-- Form -->
-      <form action="/login" method="POST" autocomplete="off">
-        <div class="form-group">
-          <label for="email"><i class="fas fa-envelope" style="margin-right: 6px;"></i>Email</label>
-          <div class="input-wrapper">
-            <i class="fas fa-envelope"></i>
-            <input 
-              type="email" 
-              id="email" 
-              name="email" 
-              placeholder="nama@email.com"
-              required>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="password"><i class="fas fa-lock" style="margin-right: 6px;"></i>Password</label>
-          <div class="input-wrapper">
-            <i class="fas fa-lock"></i>
-            <input 
-              type="password" 
-              id="password" 
-              name="password" 
-              placeholder="••••••••"
-              required>
-            <span class="password-toggle" onclick="togglePassword()">
-              <i class="fas fa-eye" id="toggleIcon"></i>
-            </span>
-          </div>
-        </div>
-
-        <button type="submit" class="btn-login">
-          <i class="fas fa-sign-in-alt"></i>
-          Masuk
-        </button>
-      </form>
-
-      <!-- Forgot Password Link -->
-      <div style="text-align: center; margin-top: 15px;">
-        <a href="/forgot-password" style="font-size: 13px; color: #667eea; text-decoration: none; font-weight: 600;">
-          <i class="fas fa-key" style="margin-right: 5px;"></i>Lupa Password?
+      <div style="text-align: right; margin-bottom: 24px;">
+        <a href="/forgot-password" class="text-xs font-semibold text-white hover:text-orange-400 transition">
+          Lupa Kunci?
         </a>
       </div>
 
-      <!-- Divider -->
-      <div class="divider">
-        <span>atau</span>
-      </div>
+      <button type="submit" class="btn-primary">
+        <span>MULAI PENDAKIAN</span>
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </form>
 
-      <!-- Register Link -->
-      <p class="register-link">
-        Belum punya akun? <a href="/register">Daftar Sekarang</a>
-      </p>
+    <div class="footer-links">
+      Belum punya tim? <a href="/register">Gabung Sekarang</a>
     </div>
   </div>
 
@@ -295,15 +311,12 @@
     function togglePassword() {
       const input = document.getElementById('password');
       const icon = document.getElementById('toggleIcon');
-      
       if (input.type === 'password') {
         input.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
       } else {
         input.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
       }
     }
   </script>

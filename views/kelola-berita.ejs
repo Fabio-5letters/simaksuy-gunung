@@ -1,42 +1,119 @@
-<%- include('partials/header') %>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kelola Berita - SIMAKSI Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="flex">
+    <!-- Sidebar -->
+    <aside class="w-64 sidebar min-h-screen text-white p-6 sticky top-0 h-screen overflow-y-auto" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+      <div class="mb-10">
+        <div class="flex items-center mb-2">
+          <i class="fas fa-mountain-sun text-3xl mr-3"></i>
+          <h1 class="text-2xl font-bold">SIMAKSI</h1>
+        </div>
+        <p class="text-purple-200 text-sm">Admin Panel</p>
+      </div>
+      
+      <nav class="space-y-2">
+        <a href="/admin" class="sidebar-item block px-4 py-3 rounded-lg transition hover:bg-white hover:bg-opacity-10"><i class="fas fa-chart-line mr-3"></i>Dashboard</a>
+        <a href="/admin/gunung" class="sidebar-item block px-4 py-3 rounded-lg transition hover:bg-white hover:bg-opacity-10"><i class="fas fa-mountain mr-3"></i>Kelola Gunung</a>
+        <a href="/admin/berita" class="sidebar-item block px-4 py-3 rounded-lg transition bg-white bg-opacity-20 shadow-lg"><i class="fas fa-newspaper mr-3"></i>Kelola Berita</a>
+        <a href="/admin/pendakian" class="sidebar-item block px-4 py-3 rounded-lg transition hover:bg-white hover:bg-opacity-10"><i class="fas fa-person-hiking mr-3"></i>Kelola Pendakian</a>
+        <hr class="my-4 border-purple-400">
+        <a href="/logout" class="sidebar-item block px-4 py-3 rounded-lg transition hover:bg-white hover:bg-opacity-10"><i class="fas fa-sign-out-alt mr-3"></i>Logout</a>
+      </nav>
+    </aside>
 
-<div class="container mx-auto p-4">
-  <h1 class="text-2xl font-bold mb-4">Kelola Berita</h1>
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-gray-800">Kelola Berita</h2>
+          <p class="text-gray-500">Manajemen informasi dan berita pendakian</p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <span class="text-sm font-medium text-gray-600">Admin</span>
+          <img src="https://ui-avatars.com/api/?name=Admin&background=667eea&color=fff" alt="Admin" class="w-10 h-10 rounded-full border-2 border-white shadow-sm">
+        </div>
+      </div>
 
-  <form action="/admin/berita" method="POST" class="mb-4">
-    <div class="mb-2">
-      <label for="judul" class="block text-sm font-medium text-gray-700">Judul</label>
-      <input type="text" name="judul" id="judul" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-    </div>
-    <div class="mb-2">
-      <label for="konten" class="block text-sm font-medium text-gray-700">Konten</label>
-      <textarea name="konten" id="konten" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
-    </div>
-    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah Berita</button>
-  </form>
+      <!-- Add Berita Form -->
+      <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+        <h3 class="text-xl font-semibold mb-4 flex items-center">
+          <i class="fas fa-plus-circle mr-2 text-blue-500"></i> Tambah Berita Baru
+        </h3>
+        <form action="/admin/berita" method="POST">
+          <div class="grid grid-cols-1 gap-6">
+            <div>
+              <label for="judul" class="block text-sm font-medium text-gray-700 mb-1">Judul Berita</label>
+              <input type="text" name="judul" id="judul" required placeholder="Masukkan judul berita" 
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+            </div>
+            <div>
+              <label for="konten" class="block text-sm font-medium text-gray-700 mb-1">Konten Berita</label>
+              <textarea name="konten" id="konten" rows="4" required placeholder="Tuliskan isi berita di sini..." 
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
+            </div>
+          </div>
+          <div class="mt-6 flex justify-end">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition flex items-center">
+              <i class="fas fa-save mr-2"></i> Simpan Berita
+            </button>
+          </div>
+        </form>
+      </div>
 
-  <table class="min-w-full divide-y divide-gray-200">
-    <thead>
-      <tr>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul</th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Konten</th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% berita.forEach(item => { %>
-        <tr>
-          <td class="px-6 py-4 whitespace-nowrap"><%= item.judul %></td>
-          <td class="px-6 py-4 whitespace-nowrap"><%= item.konten %></td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <form action="/admin/berita/<%= item.id %>?_method=DELETE" method="POST" class="inline">
-              <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
-            </form>
-          </td>
-        </tr>
-      <% }) %>
-    </tbody>
-  </table>
-</div>
-
-<%- include('partials/footer') %>
+      <!-- Berita List -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+          <h3 class="text-xl font-semibold">Daftar Berita</h3>
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full"><%= berita.length %> Berita</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead class="bg-gray-50 text-gray-600 uppercase text-sm font-semibold">
+              <tr>
+                <th class="px-6 py-4">Judul</th>
+                <th class="px-6 py-4">Konten</th>
+                <th class="px-6 py-4">Tanggal</th>
+                <th class="px-6 py-4 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <% if (berita && berita.length > 0) { %>
+                <% berita.forEach(item => { %>
+                  <tr class="hover:bg-gray-50 transition">
+                    <td class="px-6 py-4 font-medium text-gray-800"><%= item.judul %></td>
+                    <td class="px-6 py-4 text-gray-600 max-w-md truncate"><%= item.konten %></td>
+                    <td class="px-6 py-4 text-sm text-gray-500">
+                      <%= item.tanggal ? new Date(item.tanggal).toLocaleDateString('id-ID') : '-' %>
+                    </td>
+                    <td class="px-6 py-4">
+                      <div class="flex justify-center space-x-3">
+                        <form action="/admin/berita/<%= item.id %>?_method=DELETE" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">
+                          <button type="submit" class="text-red-500 hover:text-red-700 transition">
+                            <i class="fas fa-trash-alt"></i>
+                          </button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="4" class="px-6 py-10 text-center text-gray-500">Belum ada berita yang ditambahkan.</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

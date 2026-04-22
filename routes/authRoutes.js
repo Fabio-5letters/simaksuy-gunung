@@ -110,12 +110,21 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     
     console.log('Inserting user to database:', { nama, email });
-    await db.query('INSERT INTO users (nama, email, password, role) VALUES (?, ?, ?, ?)', 
+    const [result] = await db.query('INSERT INTO users (nama, email, password, role) VALUES (?, ?, ?, ?)', 
       [nama, email, hashedPassword, 'user']);
     
     console.log('User registered successfully:', email);
-    // Redirect to login with success message
-    res.redirect('/login?success=true');
+    
+    // Automatically log in the user
+    req.session.user = { 
+      id: result.insertId, 
+      nama: nama, 
+      email: email, 
+      role: 'user' 
+    };
+    
+    // Redirect directly to home page
+    res.redirect('/beranda');
   } catch (err) {
     console.error('Register error details:', {
       message: err.message,

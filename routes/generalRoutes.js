@@ -491,9 +491,10 @@ router.get('/status', async (req, res) => {
       FROM simaksi s
       JOIN gunung g ON s.id_gunung = g.id
       WHERE s.id_user = ?
-      ORDER BY s.created_at DESC
+      ORDER BY s.id DESC
     `, [req.session.user.id]);
 
+    console.log('User ID:', req.session.user.id, 'Data Status:', simaksi);
     res.render('status', { simaksi, user: req.session.user });
   } catch (err) {
     console.error('Status error:', err);

@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../db');
+const adminController = require('../controllers/adminController');
 const pembayaranController = require('../controllers/pembayaranController');
 
 const router = express.Router();
@@ -46,6 +47,15 @@ router.get('/admin', isAdmin, async (req, res) => {
 });
 
 // Manage Gunung
+router.get('/admin/gunung', isAdmin, async (req, res) => {
+  try {
+    const [gunung] = await db.query('SELECT * FROM gunung');
+    res.render('admin', { gunung, berita: [], simaksi: [], pemesananStats: { total: 0, pending: 0, dibayar: 0, diverifikasi: 0, ditolak: 0 } });
+  } catch (err) {
+    res.status(500).render('error', { user: req.session.user, message: 'Gagal memuat data gunung', error: err.message });
+  }
+});
+
 router.post('/admin/gunung', isAdmin, async (req, res) => {
   const { nama_gunung, lokasi, ketinggian, kuota_harian, status } = req.body;
   try {

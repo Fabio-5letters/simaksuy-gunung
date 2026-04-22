@@ -94,3 +94,36 @@ exports.createPendakian = async (req, res) => {
     });
   }
 };
+
+// Update pendakian
+exports.updatePendakian = async (req, res) => {
+  const { id } = req.params;
+  const { nama_pendakian, tanggal, status } = req.body;
+  try {
+    await db.query('UPDATE pendakian SET nama_pendakian = ?, tanggal = ?, status = ? WHERE id = ?', [nama_pendakian, tanggal, status, id]);
+    res.redirect('/admin/pendakian');
+  } catch (err) {
+    console.error('Error updating pendakian:', err);
+    res.status(500).render('error', {
+      user: req.session.user,
+      message: 'Terjadi kesalahan saat memperbarui pendakian',
+      error: err.message
+    });
+  }
+};
+
+// Delete pendakian
+exports.deletePendakian = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await db.query('DELETE FROM pendakian WHERE id = ?', [id]);
+    res.redirect('/admin/pendakian');
+  } catch (err) {
+    console.error('Error deleting pendakian:', err);
+    res.status(500).render('error', {
+      user: req.session.user,
+      message: 'Terjadi kesalahan saat menghapus pendakian',
+      error: err.message
+    });
+  }
+};
