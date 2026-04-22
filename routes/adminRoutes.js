@@ -81,26 +81,16 @@ router.post('/admin/gunung', isAdmin, async (req, res) => {
 });
 
 // Manage Berita
-router.post('/admin/berita', isAdmin, async (req, res) => {
-  const { judul, isi_berita, tanggal } = req.body;
-  try {
-    // Validate input
-    if (!judul || !isi_berita || !tanggal) {
-      req.flash('error', 'Semua field harus diisi');
-      return res.redirect('/admin');
-    }
+router.get('/admin/berita', isAdmin, adminController.getBerita);
+router.post('/admin/berita', isAdmin, adminController.createBerita);
+router.put('/admin/berita/:id', isAdmin, adminController.updateBerita);
+router.delete('/admin/berita/:id', isAdmin, adminController.deleteBerita);
 
-    await db.query('INSERT INTO berita (judul, isi_berita, tanggal) VALUES (?, ?, ?)', [
-      judul, isi_berita, tanggal
-    ]);
-    req.flash('success', 'Berita berhasil ditambahkan');
-    res.redirect('/admin');
-  } catch (err) {
-    console.error('Add berita error:', err);
-    req.flash('error', 'Terjadi kesalahan saat menambah berita');
-    res.redirect('/admin');
-  }
-});
+// Manage Pendakian
+router.get('/admin/pendakian', isAdmin, adminController.getPendakian);
+router.post('/admin/pendakian', isAdmin, adminController.createPendakian);
+router.put('/admin/pendakian/:id', isAdmin, adminController.updatePendakian);
+router.delete('/admin/pendakian/:id', isAdmin, adminController.deletePendakian);
 
 // Manage Simaksi
 router.post('/admin/simaksi/:id', isAdmin, async (req, res) => {
