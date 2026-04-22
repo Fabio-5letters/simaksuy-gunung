@@ -74,6 +74,15 @@ CREATE TABLE IF NOT EXISTS pemesanan (
     FOREIGN KEY (id_gunung) REFERENCES gunung(id) ON DELETE CASCADE
 );
 
+-- Create pendakian table (events/schedule)
+CREATE TABLE IF NOT EXISTS pendakian (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama_pendakian VARCHAR(255) NOT NULL,
+    tanggal DATE NOT NULL,
+    status ENUM('Buka', 'Tutup', 'Penuh') NOT NULL DEFAULT 'Buka',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Insert dummy data into users table if empty
 INSERT IGNORE INTO users (id, nama, email, password, role) VALUES
 (1, 'Admin', 'admin@example.com', '$2a$10$yXvzU7.Ygbn7l8bZSHXtLeEFgL5w3gB7C1K7d2hW5hK1mQ5Jq2OQq', 'admin'),
@@ -95,3 +104,8 @@ INSERT IGNORE INTO berita (id, judul, isi_berita, tanggal) VALUES
 INSERT IGNORE INTO simaksi (id, id_user, id_gunung, tanggal_pendakian, jumlah_anggota, status_pengajuan) VALUES
 (1, 2, 1, '2026-04-15', 5, 'Pending'),
 (2, 2, 2, '2026-04-20', 3, 'Disetujui');
+
+-- Insert dummy data into pendakian table if empty
+INSERT IGNORE INTO pendakian (id, nama_pendakian, tanggal, status) VALUES
+(1, 'Ekspedisi Merbabu 2026', '2026-05-10', 'Buka'),
+(2, 'Pendakian Bersama Merapi', '2026-05-15', 'Buka');
