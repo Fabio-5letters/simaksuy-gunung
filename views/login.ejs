@@ -3,273 +3,222 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Masuk - SIMAKSI Pendakian</title>
+  <title>Siap Mendaki? - SIMAKSI Gunung</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-    
-    :root {
-      --forest-green: #1a3c34;
-      --sunset-orange: #ff8c42;
-      --deep-orange: #e67e22;
-      --glass-bg: rgba(255, 255, 255, 0.15);
-      --glass-border: rgba(255, 255, 255, 0.2);
-    }
-
     * {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-
+    
     body {
-<<<<<<< HEAD
-      background: linear-gradient(135deg, #1e5631 0%, #3a9f5d 100%);
-=======
-      background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center center no-repeat;
-      background-size: cover;
->>>>>>> 9065a23594872f84280921e0d162aceda63e8cea
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop') center/cover no-repeat;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 20px;
+    }
+
+    .container-main {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 40px;
+    }
+
+    /* Form Container */
+    .login-wrapper {
       position: relative;
-      overflow-x: hidden;
-    }
-
-    /* Dark Overlay & Topography Pattern */
-    body::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
-      z-index: 1;
-    }
-
-    .topo-pattern {
-      position: absolute;
-      inset: 0;
-      opacity: 0.1;
-      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 Q 30 10 50 40 T 90 70 M0 30 Q 20 20 40 50 T 80 80 M20 0 Q 40 10 60 40 T 100 70' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3C/svg%3E");
-      z-index: 2;
-      pointer-events: none;
+      z-index: 10;
     }
 
     .login-container {
-<<<<<<< HEAD
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(10px);
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(30, 86, 49, 0.3);
-=======
-      position: relative;
-      z-index: 10;
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
       border-radius: 24px;
->>>>>>> 9065a23594872f84280921e0d162aceda63e8cea
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
       width: 100%;
       max-width: 420px;
       padding: 48px 40px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: fadeIn 0.8s ease-out;
+      animation: slideUp 0.6s ease-out;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-<<<<<<< HEAD
-    .logo-circle {
-      width: 70px;
-      height: 70px;
-      background: linear-gradient(135deg, #1e5631 0%, #3a9f5d 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px;
-      box-shadow: 0 10px 25px rgba(30, 86, 49, 0.3);
-      animation: float 3s ease-in-out infinite;
-=======
-
-    .logo-container {
-      width: 80px;
-      height: 80px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 24px;
-      transform: rotate(-10deg);
-      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
->>>>>>> 9065a23594872f84280921e0d162aceda63e8cea
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    .login-container:hover .logo-container {
-      transform: rotate(0deg) scale(1.1);
-      background: var(--sunset-orange);
-      border-color: var(--sunset-orange);
-    }
-
-    .logo-container i {
-      color: white;
-      font-size: 36px;
-    }
-
-    h1 {
-      color: white;
-      font-size: 32px;
-      font-weight: 800;
+    .logo-section {
       text-align: center;
-      letter-spacing: -0.025em;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      color: rgba(255, 255, 255, 0.7);
-      text-align: center;
-      font-size: 15px;
       margin-bottom: 32px;
     }
 
-    .input-group {
+    .logo-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #1e5631 0%, #3a9f5d 100%);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 8px 20px rgba(30, 86, 49, 0.2);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .logo-icon i {
+      color: white;
+      font-size: 32px;
+    }
+
+    .logo-section h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+
+    .logo-section p {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    /* Form Elements */
+    .form-group {
       margin-bottom: 20px;
     }
 
-    .input-group label {
+    .form-group label {
       display: block;
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
+      color: #374151;
       margin-bottom: 8px;
-      margin-left: 4px;
     }
 
     .input-wrapper {
       position: relative;
-      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
     }
 
     .input-wrapper i {
       position: absolute;
-<<<<<<< HEAD
       left: 14px;
       color: #1e5631;
       font-size: 16px;
+      pointer-events: none;
     }
-    input[type="email"],
-    input[type="password"] {
+
+    .input-wrapper input {
       width: 100%;
       padding: 12px 14px 12px 45px;
       border: 2px solid #e5e7eb;
       border-radius: 12px;
       font-size: 14px;
-=======
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: rgba(255, 255, 255, 0.5);
->>>>>>> 9065a23594872f84280921e0d162aceda63e8cea
       transition: all 0.3s ease;
+      background: white;
     }
 
-    .input-wrapper input {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 12px 16px 12px 48px;
-      color: white;
-      font-size: 15px;
-      transition: all 0.3s ease;
-      outline: none;
-<<<<<<< HEAD
-      border-color: #1e5631;
-      box-shadow: 0 0 0 3px rgba(30, 86, 49, 0.1);
-      transform: translateY(-2px);
-=======
->>>>>>> 9065a23594872f84280921e0d162aceda63e8cea
+    .input-wrapper input::placeholder {
+      color: #d1d5db;
     }
 
     .input-wrapper input:focus {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: var(--sunset-orange);
-      box-shadow: 0 0 0 4px rgba(255, 140, 66, 0.2);
-    }
-
-    .input-wrapper input:focus + i {
-      color: var(--sunset-orange);
-    }
-
-    .btn-primary {
-      width: 100%;
-      background: linear-gradient(135deg, var(--sunset-orange) 0%, var(--deep-orange) 100%);
-      color: white;
-      font-weight: 700;
-      padding: 14px;
-      border-radius: 12px;
-      margin-top: 12px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      box-shadow: 0 10px 20px -10px rgba(255, 140, 66, 0.5);
-    }
-
-    .btn-primary:hover {
+      outline: none;
+      border-color: #1e5631;
+      box-shadow: 0 0 0 3px rgba(30, 86, 49, 0.1);
       transform: translateY(-2px);
-      box-shadow: 0 15px 25px -10px rgba(255, 140, 66, 0.6);
-      filter: brightness(1.1);
     }
 
-    .btn-primary:active {
-      transform: translateY(0);
+    .eye-toggle {
+      position: absolute;
+      right: 14px;
+      cursor: pointer;
+      color: #9ca3af;
+      background: none;
+      border: none;
+      font-size: 16px;
+      padding: 0;
+      transition: color 0.3s ease;
     }
 
-    .alert-error {
-      background: rgba(239, 68, 68, 0.2);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      padding: 12px;
-      border-radius: 12px;
-      margin-bottom: 24px;
+    .eye-toggle:hover {
+      color: #1e5631;
+    }
+
+    .error-box {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      border-left: 4px solid #ef4444;
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
       gap: 10px;
-      color: #fecaca;
-      font-size: 14px;
+      animation: shake 0.3s ease-out;
     }
 
-    .alert-success {
-      background: rgba(34, 197, 94, 0.2);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      padding: 12px;
-      border-radius: 12px;
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #bbf7d0;
-      font-size: 14px;
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
     }
 
-    .footer-links {
-      margin-top: 32px;
-      text-align: center;
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 14px;
+    .error-box i {
+      color: #dc2626;
+      font-size: 16px;
+      flex-shrink: 0;
     }
-<<<<<<< HEAD
+
     .error-box p {
       color: #7f1d1d;
       font-size: 13px;
       font-weight: 500;
       margin: 0;
     }
+
+    .success-box {
+      background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+      border-left: 4px solid #22c55e;
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .success-box i {
+      color: #15803d;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .success-box p {
+      color: #166534;
+      font-size: 13px;
+      font-weight: 500;
+      margin: 0;
+    }
+
     .btn-login {
       width: 100%;
       background: linear-gradient(135deg, #1e5631 0%, #3a9f5d 100%);
@@ -286,20 +235,44 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      box-shadow: 0 4px 15px rgba(30, 86, 49, 0.2);
     }
+
     .btn-login:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(30, 86, 49, 0.3);
+      box-shadow: 0 8px 25px rgba(30, 86, 49, 0.3);
     }
+
     .btn-login:active {
       transform: translateY(0);
     }
+
+    .forgot-password {
+      display: flex;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .forgot-password a {
+      color: #1e5631;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .forgot-password a:hover {
+      color: #3a9f5d;
+      text-decoration: underline;
+    }
+
     .divider {
       display: flex;
       align-items: center;
-      margin: 25px 0;
-      color: #d1d5db;
+      margin: 20px 0;
+      gap: 12px;
     }
+
     .divider::before,
     .divider::after {
       content: '';
@@ -307,173 +280,225 @@
       height: 1px;
       background: #e5e7eb;
     }
-    .divider span {
-      padding: 0 15px;
-      font-size: 13px;
+
+    .divider-text {
       color: #9ca3af;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
     }
-    .register-link {
+
+    .footer-links {
       text-align: center;
+      margin-top: 20px;
       font-size: 14px;
       color: #6b7280;
     }
-    .register-link a {
-      font-weight: 700;
-      background: linear-gradient(135deg, #1e5631 0%, #3a9f5d 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-decoration: none;
-      cursor: pointer;
-=======
 
     .footer-links a {
-      color: white;
-      font-weight: 700;
->>>>>>> 9065a23594872f84280921e0d162aceda63e8cea
-      transition: all 0.3s ease;
+      color: #1e5631;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
     }
 
     .footer-links a:hover {
-      color: var(--sunset-orange);
-      text-decoration: underline;
+      color: #3a9f5d;
     }
 
-    .password-toggle {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: rgba(255, 255, 255, 0.5);
-      cursor: pointer;
+    /* Benefits Section */
+    .benefits-section {
+      position: relative;
       z-index: 10;
+      width: 100%;
+      max-width: 1000px;
     }
 
-    .password-toggle:hover {
-<<<<<<< HEAD
-      color: #1e5631;
-=======
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .benefit-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+      animation: fadeInUp 0.6s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .benefit-card:nth-child(1) { animation-delay: 0.1s; }
+    .benefit-card:nth-child(2) { animation-delay: 0.2s; }
+    .benefit-card:nth-child(3) { animation-delay: 0.3s; }
+    .benefit-card:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .benefit-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #1e5631 0%, #3a9f5d 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 28px;
       color: white;
->>>>>>> 9065a23594872f84280921e0d162aceda63e8cea
+    }
+
+    .benefit-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+
+    .benefit-text {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.5;
     }
   </style>
 </head>
 <body>
-  <div class="topo-pattern"></div>
-  
-  <div class="login-container">
-    <div class="logo-container">
-      <i class="fas fa-tents"></i>
+  <div class="container-main">
+    <!-- Login Form -->
+    <div class="login-wrapper">
+      <div class="login-container">
+        <div class="logo-section">
+          <div class="logo-icon">
+            <i class="fas fa-mountain"></i>
+          </div>
+          <h1>Siap Mendaki?</h1>
+          <p>Masuk untuk memulai petualanganmu</p>
+        </div>
+
+        <% if (error && error.length > 0) { %>
+          <div class="error-box">
+            <i class="fas fa-exclamation-circle"></i>
+            <p><%= error %></p>
+          </div>
+        <% } %>
+
+        <% if (success && success.length > 0) { %>
+          <div class="success-box">
+            <i class="fas fa-check-circle"></i>
+            <p><%= success %></p>
+          </div>
+        <% } %>
+
+        <form action="/login" method="POST">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <div class="input-wrapper">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="email" name="email" placeholder="Email" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="password" name="password" placeholder="Password" required>
+              <button type="button" class="eye-toggle" onclick="togglePassword()">
+                <i class="fas fa-eye-slash" id="eye-icon"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-login">
+            <i class="fas fa-sign-in-alt"></i>
+            Masuk
+          </button>
+
+          <div class="forgot-password">
+            <a href="/forgot-password">Lupa Password?</a>
+          </div>
+        </form>
+
+        <div class="divider">
+          <span class="divider-text">atau</span>
+        </div>
+
+        <div class="footer-links">
+          Belum punya akun? <a href="/register">Daftar Sekarang →</a>
+        </div>
+      </div>
     </div>
-    
-    <h1>Siap Mendaki?</h1>
-    <p class="subtitle">Masuk ke petualangan Anda berikutnya</p>
 
-    <% if (success) { %>
-      <div class="alert-success">
-        <i class="fas fa-check-circle"></i>
-        <span><%= success === 'true' ? 'Pendaftaran berhasil. Silakan login.' : success %></span>
-      </div>
-    <% } %>
-    
-    <% if (error) { %>
-      <div class="alert-error">
-        <i class="fas fa-circle-exclamation"></i>
-        <span><%= error %></span>
-      </div>
-    <% } %>
-
-    <form action="/login" method="POST">
-      <div class="input-group">
-        <label for="email">E-mail Pendaki</label>
-        <div class="input-wrapper">
-          <i class="fas fa-envelope"></i>
-          <input type="email" id="email" name="email" placeholder="pendaki@rimba.com" required>
-        </div>
-      </div>
-
-      <div class="input-group">
-        <label for="password">Kunci Keamanan</label>
-        <div class="input-wrapper">
-          <i class="fas fa-mountain-city"></i>
-          <input type="password" id="password" name="password" placeholder="••••••••" required>
-          <span class="password-toggle" onclick="togglePassword()">
-            <i class="fas fa-eye" id="toggleIcon"></i>
-          </span>
-        </div>
-      </div>
-
-<<<<<<< HEAD
-      <!-- Form -->
-      <form action="/login" method="POST" autocomplete="off">
-        <div class="form-group">
-          <label for="email"><i class="fas fa-envelope" style="margin-right: 6px;"></i>Email</label>
-          <div class="input-wrapper">
-            <i class="fas fa-envelope"></i>
-            <input 
-              type="email" 
-              id="email" 
-              name="email" 
-              placeholder="nama@email.com"
-              required>
+    <!-- Benefits Section -->
+    <div class="benefits-section">
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="fas fa-shield-alt"></i>
           </div>
+          <div class="benefit-title">Aman</div>
+          <div class="benefit-text">Data terlindungi dengan enkripsi tingkat tinggi</div>
         </div>
 
-        <div class="form-group">
-          <label for="password"><i class="fas fa-lock" style="margin-right: 6px;"></i>Password</label>
-          <div class="input-wrapper">
-            <i class="fas fa-lock"></i>
-            <input 
-              type="password" 
-              id="password" 
-              name="password" 
-              placeholder="••••••••"
-              required>
-            <span class="password-toggle" onclick="togglePassword()">
-              <i class="fas fa-eye" id="toggleIcon"></i>
-            </span>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="fas fa-users"></i>
           </div>
+          <div class="benefit-title">Komunitas</div>
+          <div class="benefit-text">Bergabung dengan ribuan pendaki lainnya</div>
         </div>
 
-        <button type="submit" class="btn-login">
-          <i class="fas fa-sign-in-alt"></i>
-          Masuk
-        </button>
-      </form>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <div class="benefit-title">Alami</div>
+          <div class="benefit-text">Jaga alam, lestarikan untuk generasi mendatang</div>
+        </div>
 
-      <!-- Forgot Password Link -->
-      <div style="text-align: center; margin-top: 15px;">
-        <a href="/forgot-password" style="font-size: 13px; color: #1e5631; text-decoration: none; font-weight: 600;">
-          <i class="fas fa-key" style="margin-right: 5px;"></i>Lupa Password?
-=======
-      <div style="text-align: right; margin-bottom: 24px;">
-        <a href="/forgot-password" class="text-xs font-semibold text-white hover:text-orange-400 transition">
-          Lupa Kunci?
->>>>>>> 9065a23594872f84280921e0d162aceda63e8cea
-        </a>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <div class="benefit-title">Ribuan Lokasi</div>
+          <div class="benefit-text">Temukan destinasi pendakian terbaik di Indonesia</div>
+        </div>
       </div>
-
-      <button type="submit" class="btn-primary">
-        <span>MULAI PENDAKIAN</span>
-        <i class="fas fa-arrow-right"></i>
-      </button>
-    </form>
-
-    <div class="footer-links">
-      Belum punya tim? <a href="/register">Gabung Sekarang</a>
     </div>
   </div>
 
   <script>
     function togglePassword() {
-      const input = document.getElementById('password');
-      const icon = document.getElementById('toggleIcon');
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eye-icon');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
       } else {
-        input.type = 'password';
-        icon.classList.replace('fa-eye-slash', 'fa-eye');
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
       }
     }
   </script>
