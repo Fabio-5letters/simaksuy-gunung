@@ -97,8 +97,11 @@ app.use('/', authLimiter, authRoutes);
 // Use other routes
 app.use('/', userRoutes);
 app.use('/', adminRoutes);
+// generalRoutes dan pembayaranRoutes butuh dependency eksternal & koneksi API;
+// biarkan agar server bisa start meski service tertentu gagal.
 app.use('/', generalRoutes);
 app.use('/', pembayaranRoutes);
+
 
 // 404 handler
 app.use((req, res) => {

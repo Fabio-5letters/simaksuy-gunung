@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const db = require('../db');
+const { getWeatherForMultipleMountains, getCurrentUpdateTime } = require('../utils/weatherService');
 
 const router = express.Router();
 
@@ -425,10 +426,38 @@ router.get('/cuaca', async (req, res) => {
   try {
     const [gunung] = await db.query('SELECT * FROM gunung');
 
-    res.render('cuaca', { gunung, user: req.session.user });
+    // Default coordinates for mountains (can be extended in database)
+    const mountainCoordinates = {
+      'Gunung Merbabu': { lat: -7.4514, lon: 110.3968 },
+      'Gunung Merapi': { lat: -7.5425, lon: 110.4427 },
+      'Gunung Lawu': { lat: -7.6225, lon: 111.1892 },
+      'Gunung Sindoro': { lat: -7.1992, lon: 109.9772 },
+      'Semeru': { lat: -8.1084, lon: 112.9439 },
+      'Gede Pangrango': { lat: -6.7753, lon: 107.0221 },
+      'Bromo': { lat: -7.9427, lon: 112.9527 },
+      'Slamet': { lat: -7.2419, lon: 109.2075 },
+      'Ciremai': { lat: -6.8892, lon: 108.3542 }
+    };
+
+    // Prepare mountains with coordinates
+    const mountainsWithCoords = gunung.map(g => ({
+      ...g,
+      latitude: mountainCoordinates[g.nama_gunung]?.lat || -7.5,
+      longitude: mountainCoordinates[g.nama_gunung]?.lon || 110.5
+    }));
+
+    // Get real-time weather data for all mountains
+    const weatherData = await getWeatherForMultipleMountains(mountainsWithCoords);
+    const lastUpdate = getCurrentUpdateTime();
+
+    res.render('cuaca', { 
+      gunung: weatherData, 
+      user: req.session.user,
+      lastUpdate
+    });
   } catch (err) {
     console.error('Cuaca error:', err);
-    res.render('cuaca', { gunung: [], user: req.session.user, error: 'Gagal memuat data cuaca' });
+    res.render('cuaca', { gunung: [], user: req.session.user, error: 'Gagal memuat data cuaca', lastUpdate: '' });
   }
 });
 

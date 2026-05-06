@@ -115,10 +115,6 @@
                                     <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=300&fit=crop" alt="Berita" class="w-full h-full object-cover opacity-80">
                                 </div>
                                 <div class="p-6">
-                                    <div class="flex items-center space-x-2 mb-3">
-                                        <i class="fas fa-calendar text-green-600 text-sm"></i>
-                                        <p class="text-sm text-gray-500"><%= item.tanggal %></p>
-                                    </div>
                                     <h3 class="text-xl font-bold mb-3 text-gray-900 line-clamp-2"><%= item.judul %></h3>
                                     <p class="text-gray-600 text-sm mb-4 line-clamp-3"><%= item.isi_berita.substring(0, 150) %>...</p>
                                     <a href="/berita/<%= item.id %>" class="inline-flex items-center text-green-600 hover:text-green-700 font-semibold transition">

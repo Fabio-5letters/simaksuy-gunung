@@ -102,7 +102,7 @@
             <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white mb-12">
                 <div class="text-center mb-6">
                     <h4 class="text-2xl font-bold mb-2">Ringkasan Cuaca Hari Ini</h4>
-                    <p class="text-blue-100">Update terakhir: <%= new Date().toLocaleString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %></p>
+                    <p class="text-blue-100">Update terakhir: <%= lastUpdate %></p>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                     <div class="text-center">
@@ -135,14 +135,13 @@
                         <div class="bg-gradient-to-r from-green-600 to-green-700 text-white p-6">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h4 class="text-xl font-bold"><%= item.nama_gunung %></h4>
-                                    <p class="text-green-100 text-sm"><i class="fas fa-map-marker-alt mr-1"></i><%= item.lokasi %></p>
+                                    <h4 class="text-xl font-bold"><%= item.mountain %></h4>
+                                    <p class="text-green-100 text-sm"><i class="fas fa-map-marker-alt mr-1"></i><%= item.mountain %></p>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-3xl font-bold">
-                                        <% const temps = [22, 18, 25, 20, 23, 19, 24, 21];
-                                           const temp = temps[index % temps.length]; %>
-                                        <%= temp %>°C
+                                    <div class="text-4xl font-bold flex items-center gap-2">
+                                        <%= item.temperature %>°C
+                                        <i class="<%= item.icon %> text-2xl"></i>
                                     </div>
                                     <div class="text-sm text-green-100">Suhu saat ini</div>
                                 </div>
@@ -161,15 +160,15 @@
                                     <div class="space-y-1 text-sm">
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">Minimum:</span>
-                                            <span class="font-semibold"><%= temp - 5 %>°C</span>
+                                            <span class="font-semibold"><%= item.tempMin %>°C</span>
                                         </div>
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">Maksimum:</span>
-                                            <span class="font-semibold"><%= temp + 8 %>°C</span>
+                                            <span class="font-semibold"><%= item.tempMax %>°C</span>
                                         </div>
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">Terasa seperti:</span>
-                                            <span class="font-semibold"><%= temp - 2 %>°C</span>
+                                            <span class="font-semibold"><%= item.feelsLike %>°C</span>
                                         </div>
                                     </div>
                                 </div>
@@ -183,27 +182,15 @@
                                     <div class="space-y-1 text-sm">
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">Kecepatan:</span>
-                                            <span class="font-semibold">
-                                                <% const winds = [8, 12, 6, 15, 10, 7, 9, 11];
-                                                   const wind = winds[index % winds.length]; %>
-                                                <%= wind %> km/h
-                                            </span>
+                                            <span class="font-semibold"><%= item.windSpeed %> km/h</span>
                                         </div>
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">Arah:</span>
-                                            <span class="font-semibold">
-                                                <% const directions = ['Barat Laut', 'Timur', 'Selatan', 'Barat Daya', 'Utara', 'Timur Laut', 'Selatan', 'Barat'];
-                                                   const direction = directions[index % directions.length]; %>
-                                                <%= direction %>
-                                            </span>
+                                            <span class="font-semibold"><%= item.windDirection %></span>
                                         </div>
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">Kelembaban:</span>
-                                            <span class="font-semibold">
-                                                <% const humidities = [75, 68, 82, 71, 79, 73, 77, 69];
-                                                   const humidity = humidities[index % humidities.length]; %>
-                                                <%= humidity %>%
-                                            </span>
+                                            <span class="font-semibold"><%= item.humidity %>%</span>
                                         </div>
                                     </div>
                                 </div>
@@ -213,32 +200,32 @@
                             <div class="bg-gray-50 rounded-lg p-4 mb-6">
                                 <div class="flex items-center justify-between mb-3">
                                     <div class="flex items-center">
-                                        <i class="fas fa-cloud text-2xl text-gray-600 mr-3"></i>
+                                        <i class="<%= item.icon %> text-2xl text-gray-600 mr-3"></i>
                                         <div>
                                             <p class="font-semibold text-gray-900">Kondisi Cuaca</p>
-                                            <p class="text-sm text-gray-600">
-                                                <% const conditions = ['Cerah Berawan', 'Berawan Tebal', 'Hujan Ringan', 'Cerah', 'Mendung', 'Hujan Sedang', 'Berawan', 'Cerah Berawan'];
-                                                   const condition = conditions[index % conditions.length]; %>
-                                                <%= condition %>
-                                            </p>
+                                            <p class="text-sm text-gray-600"><%= item.condition %></p>
                                         </div>
                                     </div>
                                     <div class="text-right">
                                         <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
-                                            <% const statuses = ['bg-green-500', 'bg-yellow-500', 'bg-orange-500', 'bg-green-500', 'bg-blue-500', 'bg-red-500', 'bg-green-500', 'bg-green-500'];
-                                               const status = statuses[index % statuses.length]; %>
-                                            <%= status %> text-white">
+                                            <% let statusClass = 'bg-green-500';
+                                               if (item.windSpeed > 20 || item.condition.includes('Badai') || item.condition.includes('Hujan Deras')) {
+                                                   statusClass = 'bg-red-500';
+                                               } else if (item.condition.includes('Hujan Sedang')) {
+                                                   statusClass = 'bg-orange-500';
+                                               } else if (item.condition.includes('Berawan Tebal') || item.windSpeed > 15) {
+                                                   statusClass = 'bg-yellow-500';
+                                               } %>
+                                            <%= statusClass %> text-white">
                                             <i class="fas fa-circle mr-1 text-xs"></i>
-                                            <% if (status.includes('green')) { %>
+                                            <% if (statusClass === 'bg-green-500') { %>
                                                 Aman Pendakian
-                                            <% } else if (status.includes('yellow')) { %>
+                                            <% } else if (statusClass === 'bg-yellow-500') { %>
                                                 Waspada
-                                            <% } else if (status.includes('orange')) { %>
+                                            <% } else if (statusClass === 'bg-orange-500') { %>
                                                 Siaga
-                                            <% } else if (status.includes('red')) { %>
-                                                Bahaya
                                             <% } else { %>
-                                                Normal
+                                                Bahaya
                                             <% } %>
                                         </div>
                                     </div>
@@ -247,31 +234,19 @@
                                 <!-- Additional Weather Info -->
                                 <div class="grid grid-cols-3 gap-4 text-center">
                                     <div>
-                                        <i class="fas fa-sun text-yellow-500 text-lg mb-1"></i>
-                                        <p class="text-xs text-gray-600">UV Index</p>
-                                        <p class="font-semibold">
-                                            <% const uvs = ['Sedang', 'Tinggi', 'Rendah', 'Sedang', 'Tinggi', 'Rendah', 'Sedang', 'Tinggi'];
-                                               const uv = uvs[index % uvs.length]; %>
-                                            <%= uv %>
-                                        </p>
-                                    </div>
-                                    <div>
                                         <i class="fas fa-eye text-blue-500 text-lg mb-1"></i>
                                         <p class="text-xs text-gray-600">Visibilitas</p>
-                                        <p class="font-semibold">
-                                            <% const visibilities = ['10 km', '8 km', '12 km', '9 km', '11 km', '7 km', '13 km', '6 km'];
-                                               const visibility = visibilities[index % visibilities.length]; %>
-                                            <%= visibility %>
-                                        </p>
+                                        <p class="font-semibold"><%= item.visibility %> km</p>
                                     </div>
                                     <div>
                                         <i class="fas fa-tachometer-alt text-purple-500 text-lg mb-1"></i>
                                         <p class="text-xs text-gray-600">Tekanan</p>
-                                        <p class="font-semibold">
-                                            <% const pressures = ['1013 hPa', '1015 hPa', '1012 hPa', '1014 hPa', '1011 hPa', '1016 hPa', '1010 hPa', '1017 hPa'];
-                                               const pressure = pressures[index % pressures.length]; %>
-                                            <%= pressure %>
-                                        </p>
+                                        <p class="font-semibold"><%= item.pressure %> hPa</p>
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-cloud text-gray-500 text-lg mb-1"></i>
+                                        <p class="text-xs text-gray-600">Awan</p>
+                                        <p class="font-semibold"><%= item.clouds %>%</p>
                                     </div>
                                 </div>
                             </div>
@@ -284,9 +259,7 @@
                                         <span class="font-semibold text-gray-900">Matahari Terbit</span>
                                     </div>
                                     <span class="font-semibold">
-                                        <% const sunrises = ['05:45', '05:42', '05:48', '05:43', '05:47', '05:41', '05:49', '05:44'];
-                                           const sunrise = sunrises[index % sunrises.length]; %>
-                                        <%= sunrise %> WIB
+                                        <%= item.sunrise.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) %> WIB
                                     </span>
                                 </div>
                                 <div class="flex items-center justify-between mt-2">
@@ -295,9 +268,7 @@
                                         <span class="font-semibold text-gray-900">Matahari Terbenam</span>
                                     </div>
                                     <span class="font-semibold">
-                                        <% const sunsets = ['17:52', '17:55', '17:50', '17:54', '17:51', '17:56', '17:49', '17:53'];
-                                           const sunset = sunsets[index % sunsets.length]; %>
-                                        <%= sunset %> WIB
+                                        <%= item.sunset.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) %> WIB
                                     </span>
                                 </div>
                             </div>

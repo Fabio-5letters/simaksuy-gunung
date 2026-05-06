@@ -5,8 +5,8 @@ const path = require('path');
 // Connect without specifying database first
 const connection = mysql.createConnection({
   host: 'localhost',
-  user: 'root',
-  password: '' // Update if you have a password
+  user: 'root', // Update if you have a different username  
+  password: 'root' // Update if you have a password
 });
 
 function initializeDatabase() {
