@@ -117,7 +117,10 @@ router.get('/kontak', (req, res) => {
 
 // Submit kontak
 router.post('/kontak', async (req, res) => {
-  const { nama, email, subjek, pesan } = req.body;
+  const nama = req.body.nama?.trim() || '';
+  const email = req.body.email?.trim() || '';
+  const subjek = req.body.subjek?.trim() || '';
+  const pesan = req.body.pesan?.trim() || '';
   
   // Validate input
   if (!nama || !email || !subjek || !pesan) {
@@ -127,16 +130,35 @@ router.post('/kontak', async (req, res) => {
     });
   }
 
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.render('kontak', { 
+      user: req.session.user,
+      error: 'Format email tidak valid'
+    });
+  }
+
+  // Validate minimum message length
+  if (pesan.length < 10) {
+    return res.render('kontak', { 
+      user: req.session.user,
+      error: 'Pesan minimal 10 karakter'
+    });
+  }
+
   // TODO: Implement email sending to admin
   // For now, just log the message
   console.log('\n📧 Pesan Kontak Baru:');
   console.log(`Dari: ${nama} (${email})`);
   console.log(`Subjek: ${subjek}`);
-  console.log(`Pesan: ${pesan}\n`);
+  console.log(`Pesan: ${pesan}`);
+  console.log(`Waktu: ${new Date().toLocaleString('id-ID')}\n`);
 
   res.render('kontak', { 
     user: req.session.user,
-    success: 'Pesan Anda berhasil dikirim! Kami akan segera menghubungi Anda.'
+    success: 'Pesan Anda berhasil dikirim! Kami akan segera menghubungi Anda.',
+    error: null
   });
 });
 
@@ -193,11 +215,19 @@ router.post('/profile/update', async (req, res) => {
     return res.redirect('/login');
   }
 
-  const { nama, email } = req.body;
+  const nama = req.body.nama?.trim() || '';
+  const email = req.body.email?.trim() || '';
 
   // Validate input
   if (!nama || !email) {
     req.flash('error', 'Nama dan email harus diisi');
+    return res.redirect('/profile');
+  }
+
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    req.flash('error', 'Format email tidak valid');
     return res.redirect('/profile');
   }
 
@@ -238,7 +268,9 @@ router.post('/profile/change-password', async (req, res) => {
     return res.redirect('/login');
   }
 
-  const { password_lama, password_baru, konfirmasi_password } = req.body;
+  const password_lama = req.body.password_lama?.trim() || '';
+  const password_baru = req.body.password_baru?.trim() || '';
+  const konfirmasi_password = req.body.konfirmasi_password?.trim() || '';
   const bcrypt = require('bcryptjs');
 
   // Validate input
@@ -257,12 +289,27 @@ router.post('/profile/change-password', async (req, res) => {
     return res.redirect('/profile');
   }
 
+  if (password_baru.length > 255) {
+    req.flash('error', 'Password terlalu panjang (maksimal 255 karakter)');
+    return res.redirect('/profile');
+  }
+
+  if (password_lama === password_baru) {
+    req.flash('error', 'Password baru harus berbeda dengan password lama');
+    return res.redirect('/profile');
+  }
+
   try {
     // Get current user password
     const [users] = await db.query(
       'SELECT password FROM users WHERE id = ?',
       [req.session.user.id]
     );
+
+    if (users.length === 0) {
+      req.flash('error', 'User tidak ditemukan');
+      return res.redirect('/profile');
+    }
 
     const isMatch = await bcrypt.compare(password_lama, users[0].password);
 
@@ -309,9 +356,9 @@ router.get('/riwayat', async (req, res) => {
     if (search) {
       const searchPattern = `%${search}%`;
       whereClause += ' AND (g.nama_gunung LIKE ? OR p.kode_booking LIKE ?)';
-      whereClauseSimaksi += ' AND (g.nama_gunung LIKE ? OR s.kode_booking LIKE ?)';
+      whereClauseSimaksi += ' AND g.nama_gunung LIKE ?';
       params.push(searchPattern, searchPattern);
-      paramsSimaksi.push(searchPattern, searchPattern);
+      paramsSimaksi.push(searchPattern);
     }
 
     // Get total count for pagination
@@ -473,9 +520,10 @@ router.get('/status', async (req, res) => {
       FROM simaksi s
       JOIN gunung g ON s.id_gunung = g.id
       WHERE s.id_user = ?
-      ORDER BY s.created_at DESC
+      ORDER BY s.id DESC
     `, [req.session.user.id]);
 
+    console.log('User ID:', req.session.user.id, 'Data Status:', simaksi);
     res.render('status', { simaksi, user: req.session.user });
   } catch (err) {
     console.error('Status error:', err);

@@ -52,6 +52,9 @@ function isAuthenticated(req, res, next) {
 
 // ==================== ROUTES ====================
 
+// GET /daftar/:id - Show registration form
+router.get('/daftar/:id', isAuthenticated, pembayaranController.showDaftar);
+
 // POST /buat-pemesanan - Create new booking (replaces old POST /simaksi)
 router.post('/buat-pemesanan', isAuthenticated, pembayaranController.buatPemesanan);
 

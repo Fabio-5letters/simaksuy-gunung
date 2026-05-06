@@ -63,3 +63,16 @@ CREATE TABLE simaksi (
 INSERT INTO simaksi (id_user, id_gunung, tanggal_pendakian, jumlah_anggota, status_pengajuan) VALUES
 (2, 1, '2026-04-10', 4, 'Pending'),
 (2, 2, '2026-04-15', 3, 'Disetujui');
+
+-- Create pendakian table
+CREATE TABLE pendakian (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama_pendakian VARCHAR(255) NOT NULL,
+    tanggal DATE NOT NULL,
+    status ENUM('aktif', 'nonaktif') NOT NULL
+);
+
+-- Insert dummy data into pendakian table
+INSERT INTO pendakian (nama_pendakian, tanggal, status) VALUES
+('Pendakian Gunung Semeru', '2026-04-15', 'aktif'),
+('Pendakian Gunung Merbabu', '2026-04-20', 'nonaktif');

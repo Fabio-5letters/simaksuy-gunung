@@ -31,7 +31,8 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const email = req.body.email?.trim() || '';
+  const password = req.body.password?.trim() || '';
 
   // Validation
   if (!email || !password) {
@@ -72,7 +73,9 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-  const { nama, email, password } = req.body;
+  const nama = req.body.nama?.trim() || '';
+  const email = req.body.email?.trim() || '';
+  const password = req.body.password?.trim() || '';
   
   console.log('Register attempt:', { nama, email, passwordLength: password?.length });
   
@@ -85,6 +88,13 @@ router.post('/register', async (req, res) => {
   if (password.length < 6) {
     console.warn('Validation failed: password too short');
     return res.render('register', { error: 'Password minimal 6 karakter' });
+  }
+
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    console.warn('Validation failed: invalid email format');
+    return res.render('register', { error: 'Format email tidak valid' });
   }
 
   try {
@@ -100,12 +110,21 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     
     console.log('Inserting user to database:', { nama, email });
-    await db.query('INSERT INTO users (nama, email, password, role) VALUES (?, ?, ?, ?)', 
+    const [result] = await db.query('INSERT INTO users (nama, email, password, role) VALUES (?, ?, ?, ?)', 
       [nama, email, hashedPassword, 'user']);
     
     console.log('User registered successfully:', email);
-    // Redirect to login with success message
-    res.redirect('/login?success=true');
+    
+    // Automatically log in the user
+    req.session.user = { 
+      id: result.insertId, 
+      nama: nama, 
+      email: email, 
+      role: 'user' 
+    };
+    
+    // Redirect directly to home page
+    res.redirect('/beranda');
   } catch (err) {
     console.error('Register error details:', {
       message: err.message,
@@ -142,11 +161,17 @@ router.get('/forgot-password', (req, res) => {
 
 // Forgot Password route - process form
 router.post('/forgot-password', async (req, res) => {
-  const { email } = req.body;
+  const email = req.body.email?.trim() || '';
 
   // Validation
   if (!email) {
     return res.render('forgot-password', { error: 'Email harus diisi', success: null });
+  }
+
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.render('forgot-password', { error: 'Format email tidak valid', success: null });
   }
 
   try {
@@ -234,7 +259,8 @@ router.get('/reset-password/:token', async (req, res) => {
 // Reset Password route - process form
 router.post('/reset-password/:token', async (req, res) => {
   const { token } = req.params;
-  const { password, konfirmasi_password } = req.body;
+  const password = req.body.password?.trim() || '';
+  const konfirmasi_password = req.body.konfirmasi_password?.trim() || '';
 
   // Validation
   if (!password || !konfirmasi_password) {
@@ -258,6 +284,15 @@ router.post('/reset-password/:token', async (req, res) => {
   if (password.length < 6) {
     return res.render('reset-password', { 
       error: 'Password minimal 6 karakter', 
+      success: null,
+      validToken: true,
+      token: token 
+    });
+  }
+
+  if (password.length > 255) {
+    return res.render('reset-password', { 
+      error: 'Password terlalu panjang (maksimal 255 karakter)', 
       success: null,
       validToken: true,
       token: token 

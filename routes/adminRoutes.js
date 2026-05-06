@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../db');
+const adminController = require('../controllers/adminController');
 const pembayaranController = require('../controllers/pembayaranController');
 
 const router = express.Router();
@@ -12,7 +13,29 @@ function isAdmin(req, res, next) {
   res.redirect('/login');
 }
 
-// Admin dashboard
+// ==================== MANAGE GUNUNG ====================
+router.get('/admin/gunung', isAdmin, adminController.getGunung);
+router.post('/admin/gunung', isAdmin, adminController.createGunung);
+router.delete('/admin/gunung/:id', isAdmin, adminController.deleteGunung);
+
+// ==================== MANAGE BERITA ====================
+router.get('/admin/berita', isAdmin, adminController.getBerita);
+router.post('/admin/berita', isAdmin, adminController.createBerita);
+router.put('/admin/berita/:id', isAdmin, adminController.updateBerita);
+router.delete('/admin/berita/:id', isAdmin, adminController.deleteBerita);
+
+// ==================== MANAGE PENDAKIAN ====================
+router.get('/admin/pendakian', isAdmin, adminController.getPendakian);
+router.post('/admin/pendakian', isAdmin, adminController.createPendakian);
+router.put('/admin/pendakian/:id', isAdmin, adminController.updatePendakian);
+router.delete('/admin/pendakian/:id', isAdmin, adminController.deletePendakian);
+
+// ==================== PEMESANAN (PAYMENT) MANAGEMENT ====================
+router.get('/admin/pemesanan', isAdmin, pembayaranController.adminPemesanan);
+router.get('/admin/pemesanan/:id', isAdmin, pembayaranController.adminDetailPemesanan);
+router.post('/admin/verifikasi/:id', isAdmin, pembayaranController.verifikasiPemesanan);
+
+// ==================== ADMIN DASHBOARD (LAST PRIORITY) ====================
 router.get('/admin', isAdmin, async (req, res) => {
   try {
     const [gunung] = await db.query('SELECT * FROM gunung');
@@ -45,56 +68,23 @@ router.get('/admin', isAdmin, async (req, res) => {
   }
 });
 
-// Manage Gunung
-router.post('/admin/gunung', isAdmin, async (req, res) => {
-  const { nama_gunung, lokasi, ketinggian, kuota_harian, status } = req.body;
-  try {
-    await db.query('INSERT INTO gunung (nama_gunung, lokasi, ketinggian, kuota_harian, status) VALUES (?, ?, ?, ?, ?)', [
-      nama_gunung, lokasi, ketinggian, kuota_harian, status
-    ]);
-    res.redirect('/admin');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
-  }
-});
-
-// Manage Berita
-router.post('/admin/berita', isAdmin, async (req, res) => {
-  const { judul, isi_berita, tanggal } = req.body;
-  try {
-    await db.query('INSERT INTO berita (judul, isi_berita, tanggal) VALUES (?, ?, ?)', [
-      judul, isi_berita, tanggal
-    ]);
-    res.redirect('/admin');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
-  }
-});
-
-// Manage Simaksi
+// Manage Simaksi (Legacy / Single Update)
 router.post('/admin/simaksi/:id', isAdmin, async (req, res) => {
   const { id } = req.params;
   const { status_pengajuan } = req.body;
   try {
-    await db.query('UPDATE simaksi SET status_pengajuan = ? WHERE id = ?', [status_pengajuan, id]);
+    if (!status_pengajuan) {
+      req.flash('error', 'Status harus dipilih');
+      return res.redirect('/admin');
+    }
+    const [result] = await db.query('UPDATE simaksi SET status_pengajuan = ? WHERE id = ?', [status_pengajuan, id]);
+    req.flash('success', 'Status pengajuan berhasil diubah');
     res.redirect('/admin');
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
+    console.error('Update simaksi error:', err);
+    req.flash('error', 'Terjadi kesalahan saat mengupdate status');
+    res.redirect('/admin');
   }
 });
-
-// ==================== PEMESANAN (PAYMENT) MANAGEMENT ====================
-
-// GET /admin/pemesanan - List all orders for admin verification
-router.get('/admin/pemesanan', isAdmin, pembayaranController.adminPemesanan);
-
-// GET /admin/pemesanan/:id - View order detail for verification
-router.get('/admin/pemesanan/:id', isAdmin, pembayaranController.adminDetailPemesanan);
-
-// POST /admin/verifikasi/:id - Verify/reject payment
-router.post('/admin/verifikasi/:id', isAdmin, pembayaranController.verifikasiPemesanan);
 
 module.exports = router;

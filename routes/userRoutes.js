@@ -34,6 +34,24 @@ router.post('/simaksi', isAuthenticated, async (req, res) => {
   try {
     // Validate input
     if (!id_gunung || !tanggal_pendakian || !jumlah_anggota) {
+      req.flash('error', 'Semua field harus diisi.');
+      return res.redirect('/beranda');
+    }
+
+    // Validate tanggal_pendakian is in the future
+    const pendakianDate = new Date(tanggal_pendakian);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (pendakianDate < today) {
+      req.flash('error', 'Tanggal pendakian harus di masa depan.');
+      return res.redirect('/beranda');
+    }
+
+    // Validate jumlah_anggota
+    const jumlah = parseInt(jumlah_anggota, 10);
+    if (jumlah < 1 || jumlah > 20) {
+      req.flash('error', 'Jumlah anggota harus antara 1-20 orang.');
       return res.redirect('/beranda');
     }
 
@@ -41,12 +59,14 @@ router.post('/simaksi', isAuthenticated, async (req, res) => {
       req.session.user.id,
       id_gunung,
       tanggal_pendakian,
-      jumlah_anggota,
+      jumlah,
       'Pending'
     ]);
+    req.flash('success', 'Pengajuan pendakian berhasil dibuat.');
     res.redirect('/beranda');
   } catch (err) {
     console.error('Simaksi error:', err);
+    req.flash('error', 'Terjadi kesalahan saat membuat pengajuan.');
     res.redirect('/beranda');
   }
 });
