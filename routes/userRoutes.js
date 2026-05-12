@@ -13,13 +13,18 @@ function isAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
-// User dashboard
-router.get('/beranda', isAuthenticated, async (req, res) => {
+// User dashboard (Public Access)
+router.get('/beranda', async (req, res) => {
   console.log('Accessing beranda, session:', req.session.user);
   try {
     const [gunung] = await db.query('SELECT * FROM gunung');
     const [berita] = await db.query('SELECT * FROM berita ORDER BY tanggal DESC LIMIT 3');
-    const [simaksi] = await db.query('SELECT s.*, g.nama_gunung FROM simaksi s JOIN gunung g ON s.id_gunung = g.id WHERE s.id_user = ?', [req.session.user.id]);
+    
+    let simaksi = [];
+    if (req.session.user && req.session.user.role === 'user') {
+      const [userSimaksi] = await db.query('SELECT s.*, g.nama_gunung FROM simaksi s JOIN gunung g ON s.id_gunung = g.id WHERE s.id_user = ?', [req.session.user.id]);
+      simaksi = userSimaksi;
+    }
 
     res.render('beranda', { gunung, berita, simaksi, user: req.session.user });
   } catch (err) {
