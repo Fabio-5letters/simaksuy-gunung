@@ -71,7 +71,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Routes
 app.get('/', (req, res) => {
-  res.redirect('/login');
+  res.redirect('/beranda');
 });
 
 // Use auth routes (rate limiting disabled)

@@ -317,10 +317,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 p-6 text-right">
-                    <button onclick="closeDetailModal()" class="px-6 py-3 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700 transition">
+                <div class="bg-gray-50 p-6 flex justify-end space-x-3">
+                    <button onclick="closeDetailModal()" class="px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition">
                         Tutup
                     </button>
+                    <a id="btnDaftarModal" href="#" class="px-8 py-3 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700 transition">
+                        Daftar Sekarang
+                    </a>
                 </div>
             </div>
         </div>
@@ -461,6 +464,24 @@
             document.getElementById('detailQuota').innerText = `${item.kuota_harian} orang`;
             document.getElementById('detailStatus').innerText = item.status;
             document.getElementById('detailDescription').innerText = item.deskripsi || getGunungDescription(item.nama_gunung);
+            
+            // Update Daftar Button
+            const btnDaftar = document.getElementById('btnDaftarModal');
+            if (btnDaftar) {
+                if (item.status === 'Buka') {
+                    btnDaftar.href = `/daftar/${item.id}`;
+                    btnDaftar.innerText = 'Daftar Sekarang';
+                    btnDaftar.classList.remove('hidden');
+                    btnDaftar.classList.replace('bg-gray-400', 'bg-green-600');
+                    btnDaftar.style.pointerEvents = 'auto';
+                } else {
+                    btnDaftar.innerText = 'Ditutup';
+                    btnDaftar.classList.add('bg-gray-400');
+                    btnDaftar.classList.remove('bg-green-600');
+                    btnDaftar.style.pointerEvents = 'none';
+                }
+            }
+            
             document.getElementById('detailModal').classList.remove('hidden');
         }
 
