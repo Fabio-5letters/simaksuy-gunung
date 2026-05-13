@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Berita - SIMAKSI Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+    * { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .sidebar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="flex">
+    <aside class="sidebar w-64 min-h-screen text-white p-6 sticky top-0 h-screen overflow-y-auto">
+        <div class="mb-10">
+            <div class="flex items-center space-x-3 mb-1">
+                <i class="fas fa-mountain-sun text-3xl"></i>
+                <h1 class="text-2xl font-bold tracking-tight">SIMAKSI</h1>
+            </div>
+            <p class="text-purple-200 text-xs uppercase tracking-widest font-semibold">Admin Panel</p>
+        </div>
+        <nav class="space-y-2">
+            <a href="/admin" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition"><i class="fas fa-chart-pie mr-3"></i>Dashboard</a>
+            <a href="/admin/gunung" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition"><i class="fas fa-mountain mr-3"></i>Kelola Gunung</a>
+            <a href="/admin/berita" class="block px-4 py-3 rounded-xl bg-white/20 transition"><i class="fas fa-newspaper mr-3"></i>Kelola Berita</a>
+            <a href="/admin/pendakian" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition"><i class="fas fa-calendar-alt mr-3"></i>Kelola Pendakian</a>
+            <hr class="my-6 border-purple-400 opacity-30">
+            <a href="/logout" class="block px-4 py-3 rounded-xl hover:bg-red-500 transition text-red-100"><i class="fas fa-sign-out-alt mr-3"></i>Keluar</a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-8">
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-8">
+          <a href="/admin/berita" class="text-purple-600 font-bold hover:underline mb-4 inline-block">
+            <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar
+          </a>
+          <h2 class="text-3xl font-bold text-gray-800 tracking-tight">Edit Berita</h2>
+          <p class="text-gray-500 font-medium">Perbarui informasi dan pengumuman publik</p>
+        </div>
+
+        <div class="bg-white rounded-[32px] shadow-xl overflow-hidden border border-gray-100">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-8 text-white">
+                <h3 class="text-2xl font-black tracking-tight flex items-center">
+                    <i class="fas fa-edit mr-3"></i> FORM EDIT BERITA
+                </h3>
+            </div>
+            <form action="/admin/berita/update/<%= item.id %>" method="POST" class="p-8">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Judul Berita</label>
+                        <input type="text" name="judul" value="<%= item.judul %>" required 
+                            class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 font-bold text-gray-700 focus:border-purple-500 focus:outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Konten Berita</label>
+                        <textarea name="konten" rows="8" required 
+                            class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 font-medium text-gray-700 focus:border-purple-500 focus:outline-none transition resize-none"><%= item.isi_berita || item.konten %></textarea>
+                    </div>
+                </div>
+                <div class="mt-10 flex justify-end">
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-black py-4 px-12 rounded-2xl shadow-xl shadow-purple-100 transition transform hover:-translate-y-1 active:translate-y-0">
+                        <i class="fas fa-save mr-2"></i> UPDATE BERITA SEKARANG
+                    </button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

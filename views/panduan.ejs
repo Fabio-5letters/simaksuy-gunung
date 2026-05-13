@@ -3,54 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Panduan - SIMAKSI Gunung</title>
+    <title>Download Panduan - SIMAKSI Gunung Merbabu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .panduan-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
+      * {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .navbar-gradient {
+        background: linear-gradient(135deg, #1e5631 0%, #2d7a3e 50%, #3a9f5d 100%);
+      }
+      .hero-section {
+        background: linear-gradient(rgba(30, 86, 49, 0.7), rgba(30, 86, 49, 0.7)), url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop');
+        background-size: cover;
+        background-position: center;
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(30, 86, 49, 0.15);
+      }
+      .btn-cta {
+        background: linear-gradient(135deg, #1e5631 0%, #3a9f5d 100%);
+        transition: all 0.3s ease;
+      }
+      .btn-cta:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(30, 86, 49, 0.3);
+      }
+      .panduan-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+      }
     </style>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="/css/output.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <header class="bg-white shadow-lg sticky top-0 z-40">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-4">
-                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=50&h=50&fit=crop&crop=center" alt="Logo" class="w-12 h-12 rounded-full">
-                    <div>
-                        <h1 class="text-2xl font-bold text-green-700">SIMAKSI</h1>
-                        <p class="text-sm text-gray-600">Gunung</p>
+<body class="bg-white">
+    <div class="min-h-screen">
+        <!-- Navbar -->
+        <header class="navbar-gradient text-white shadow-xl sticky top-0 z-50">
+            <div class="container mx-auto flex justify-between items-center py-4 px-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-mountain text-green-700 text-lg"></i>
                     </div>
+                    <h1 class="text-2xl font-bold">SIMAKSI Gunung</h1>
                 </div>
-                <nav class="hidden md:flex space-x-8">
-                    <a href="/beranda" class="text-gray-700 hover:text-green-600 font-semibold transition">Beranda</a>
-                    <a href="/berita" class="text-gray-700 hover:text-green-600 font-semibold transition">Berita</a>
-                    <a href="/pendakian" class="text-gray-700 hover:text-green-600 font-semibold transition">Pendakian</a>
-                    <a href="/cuaca" class="text-gray-700 hover:text-green-600 font-semibold transition">Cuaca</a>
-                    <a href="/status" class="text-gray-700 hover:text-green-600 font-semibold transition">Status</a>
-                    <a href="/panduan" class="text-green-600 font-semibold">Panduan</a>
-                    <a href="/kontak" class="text-gray-700 hover:text-green-600 font-semibold transition">Kontak</a>
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-8 font-semibold">
+                        <li><a href="/" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-home"></i><span>Beranda</span></a></li>
+                        <li><a href="/berita" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-newspaper"></i><span>Berita</span></a></li>
+                        <li><a href="/pendakian" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-person-hiking"></i><span>Pendakian</span></a></li>
+                        <li><a href="/cuaca" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-cloud-sun"></i><span>Cuaca</span></a></li>
+                        <li><a href="/status" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-chart-line"></i><span>Status</span></a></li>
+                        <li><a href="/panduan" class="text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-download"></i><span>Panduan</span></a></li>
+                        <li><a href="/kontak" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-envelope"></i><span>Kontak</span></a></li>
+                    </ul>
                 </nav>
-                <div class="flex items-center space-x-4">
+                <div class="flex space-x-4">
                     <% if (user) { %>
+                        <!-- User Profile Dropdown -->
                         <div class="relative">
-                            <button onclick="toggleDropdown()" class="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                                <i class="fas fa-user-circle"></i>
-                                <span class="hidden md:block"><%= user.nama %></span>
+                            <button id="profile-btn" class="flex items-center space-x-3 bg-white text-green-700 px-4 py-2 rounded-lg font-semibold hover:bg-green-50 transition">
+                                <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-sm"></i>
+                                </div>
+                                <span><%= user.nama %></span>
                                 <i class="fas fa-chevron-down text-sm"></i>
                             </button>
                             <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
@@ -73,344 +94,334 @@
                             </div>
                         </div>
                     <% } else { %>
-                        <a href="/login" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition">Login</a>
+                        <a href="/login" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition">Login</a>
                     <% } %>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <!-- Hero Section -->
-    <section class="hero-section min-h-64 flex items-center justify-center text-white py-16 px-6">
-        <div class="text-center max-w-2xl">
-            <h2 class="text-4xl md:text-5xl font-black mb-4 drop-shadow-lg">
-                <i class="fas fa-download mr-3"></i>Download Panduan
-            </h2>
-            <p class="text-xl md:text-xl drop-shadow-md">Unduh panduan lengkap untuk pendakian yang aman dan terorganisir</p>
-        </div>
-    </section>
-
-    <!-- Panduan Section -->
-    <section class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-12">
-                <h3 class="text-3xl font-bold text-gray-900 mb-4">Panduan Pendakian</h3>
-                <p class="text-gray-600 text-lg">Dapatkan panduan lengkap untuk mempersiapkan pendakian yang aman dan menyenangkan</p>
+        <!-- Hero Section -->
+        <section class="hero-section min-h-96 flex items-center justify-center text-white py-20 px-6">
+            <div class="text-center max-w-2xl">
+                <h2 class="text-5xl md:text-6xl font-black mb-6 drop-shadow-lg">Download Panduan</h2>
+                <p class="text-xl md:text-2xl mb-8 drop-shadow-md">Unduh panduan lengkap untuk mempersiapkan pendakian yang aman, terorganisir, dan berkesan</p>
             </div>
+        </section>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Panduan Keselamatan -->
-                <div class="panduan-card rounded-xl p-6 text-white">
-                    <div class="text-center mb-6">
-                        <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-shield-alt text-4xl"></i>
-                        </div>
-                        <h4 class="text-xl font-bold mb-2">Panduan Keselamatan</h4>
-                        <p class="text-blue-100 text-sm">Protokol keselamatan dan prosedur darurat</p>
-                    </div>
-
-                    <div class="space-y-4 mb-6">
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Prosedur evakuasi darurat</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Pertolongan pertama</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Persiapan fisik dan mental</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Penggunaan peralatan safety</span>
-                        </div>
-                    </div>
-
-                    <div class="text-center">
-                        <a href="/faq" class="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition w-full text-center block">
-                            <i class="fas fa-info-circle mr-2"></i>Lihat Panduan
-                        </a>
-                    </div>
+        <!-- Panduan Section -->
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-4xl font-bold text-gray-900 mb-4">Panduan Pendakian</h3>
+                    <p class="text-gray-600 text-lg">Akses berbagai dokumen penting untuk referensi pendakian Anda</p>
                 </div>
 
-                <!-- Panduan Teknis -->
-                <div class="panduan-card rounded-xl p-6 text-white">
-                    <div class="text-center mb-6">
-                        <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-cogs text-4xl"></i>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Panduan Keselamatan -->
+                    <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 p-8">
+                        <div class="text-center mb-6">
+                            <div class="w-20 h-20 bg-green-100 text-green-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-shield-alt text-4xl"></i>
+                            </div>
+                            <h4 class="text-2xl font-bold mb-2 text-gray-900">Panduan Keselamatan</h4>
+                            <p class="text-gray-500 text-sm">Protokol keselamatan dan prosedur darurat</p>
                         </div>
-                        <h4 class="text-xl font-bold mb-2">Panduan Teknis</h4>
-                        <p class="text-blue-100 text-sm">Teknik pendakian dan navigasi</p>
-                    </div>
 
-                    <div class="space-y-4 mb-6">
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Teknik pendakian dasar</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Penggunaan peta dan kompas</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Setup tenda dan bivak</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Manajemen logistik</span>
-                        </div>
-                    </div>
-
-                    <div class="text-center">
-                        <button onclick="downloadFile('panduan-teknis.pdf')" class="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition w-full">
-                            <i class="fas fa-download mr-2"></i>Download PDF
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Panduan Peralatan -->
-                <div class="panduan-card rounded-xl p-6 text-white">
-                    <div class="text-center mb-6">
-                        <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-hiking text-4xl"></i>
-                        </div>
-                        <h4 class="text-xl font-bold mb-2">Panduan Peralatan</h4>
-                        <p class="text-blue-100 text-sm">Daftar peralatan dan checklist</p>
-                    </div>
-
-                    <div class="space-y-4 mb-6">
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Peralatan wajib dan opsional</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Checklist persiapan</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Perawatan peralatan</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Tips pemilihan gear</span>
-                        </div>
-                    </div>
-
-                    <div class="text-center">
-                        <button onclick="downloadFile('panduan-peralatan.pdf')" class="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition w-full">
-                            <i class="fas fa-download mr-2"></i>Download PDF
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Panduan Fisik -->
-                <div class="panduan-card rounded-xl p-6 text-white">
-                    <div class="text-center mb-6">
-                        <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-dumbbell text-4xl"></i>
-                        </div>
-                        <h4 class="text-xl font-bold mb-2">Panduan Fisik</h4>
-                        <p class="text-blue-100 text-sm">Persiapan kondisi fisik</p>
-                    </div>
-
-                    <div class="space-y-4 mb-6">
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Program latihan fisik</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Nutrisi dan hidrasi</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Teknik pernapasan</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Adaptasi ketinggian</span>
-                        </div>
-                    </div>
-
-                    <div class="text-center">
-                        <button onclick="downloadFile('panduan-fisik.pdf')" class="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition w-full">
-                            <i class="fas fa-download mr-2"></i>Download PDF
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Panduan Medis -->
-                <div class="panduan-card rounded-xl p-6 text-white">
-                    <div class="text-center mb-6">
-                        <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-medkit text-4xl"></i>
-                        </div>
-                        <h4 class="text-xl font-bold mb-2">Panduan Medis</h4>
-                        <p class="text-blue-100 text-sm">Kesehatan dan pertolongan pertama</p>
-                    </div>
-
-                    <div class="space-y-4 mb-6">
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Obat-obatan wajib</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Penanganan hipotermia</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Penyakit ketinggian</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Komunikasi darurat</span>
-                        </div>
-                    </div>
-
-                    <div class="text-center">
-                        <button onclick="downloadFile('panduan-medis.pdf')" class="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition w-full">
-                            <i class="fas fa-download mr-2"></i>Download PDF
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Panduan Etika -->
-                <div class="panduan-card rounded-xl p-6 text-white">
-                    <div class="text-center mb-6">
-                        <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-leaf text-4xl"></i>
-                        </div>
-                        <h4 class="text-xl font-bold mb-2">Panduan Etika</h4>
-                        <p class="text-blue-100 text-sm">Etika pendakian dan pelestarian alam</p>
-                    </div>
-
-                    <div class="space-y-4 mb-6">
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Leave No Trace</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Pelestarian lingkungan</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Etika berpendakian</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-300 mr-3"></i>
-                            <span class="text-sm">Tanggung jawab sosial</span>
-                        </div>
-                    </div>
-
-                    <div class="text-center">
-                        <button onclick="downloadFile('panduan-etika.pdf')" class="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition w-full">
-                            <i class="fas fa-download mr-2"></i>Download PDF
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Download Information -->
-            <div class="mt-16 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-8">
-                <h4 class="text-2xl font-bold text-center text-gray-900 mb-6">
-                    <i class="fas fa-info-circle text-green-500 mr-2"></i>Informasi Download
-                </h4>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-lg p-6 shadow-sm">
-                        <div class="flex items-start">
-                            <i class="fas fa-file-pdf text-red-500 text-2xl mr-4 mt-1"></i>
-                            <div>
-                                <h5 class="font-semibold text-gray-900 mb-2">Format File</h5>
-                                <p class="text-gray-600 text-sm">Semua panduan tersedia dalam format PDF yang dapat dibaca di berbagai perangkat.</p>
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Prosedur evakuasi darurat</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Pertolongan pertama</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Persiapan fisik dan mental</span>
                             </div>
                         </div>
+
+                        <div class="text-center">
+                            <a href="/faq" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold inline-block w-full">
+                                <i class="fas fa-info-circle mr-2"></i>Lihat Panduan
+                            </a>
+                        </div>
                     </div>
-                    <div class="bg-white rounded-lg p-6 shadow-sm">
-                        <div class="flex items-start">
-                            <i class="fas fa-clock text-blue-500 text-2xl mr-4 mt-1"></i>
-                            <div>
-                                <h5 class="font-semibold text-gray-900 mb-2">Update Berkala</h5>
-                                <p class="text-gray-600 text-sm">Panduan diperbaharui secara berkala sesuai dengan perkembangan standar keselamatan.</p>
+
+                    <!-- Panduan Teknis -->
+                    <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 p-8">
+                        <div class="text-center mb-6">
+                            <div class="w-20 h-20 bg-green-100 text-green-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-cogs text-4xl"></i>
+                            </div>
+                            <h4 class="text-2xl font-bold mb-2 text-gray-900">Panduan Teknis</h4>
+                            <p class="text-gray-500 text-sm">Teknik pendakian dan navigasi</p>
+                        </div>
+
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Teknik pendakian dasar</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Penggunaan peta dan kompas</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Setup tenda dan bivak</span>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button onclick="downloadFile('panduan-teknis.pdf')" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold w-full">
+                                <i class="fas fa-download mr-2"></i>Download PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Panduan Peralatan -->
+                    <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 p-8">
+                        <div class="text-center mb-6">
+                            <div class="w-20 h-20 bg-green-100 text-green-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-hiking text-4xl"></i>
+                            </div>
+                            <h4 class="text-2xl font-bold mb-2 text-gray-900">Panduan Peralatan</h4>
+                            <p class="text-gray-500 text-sm">Daftar peralatan dan checklist</p>
+                        </div>
+
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Peralatan wajib dan opsional</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Checklist persiapan</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Perawatan peralatan</span>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button onclick="downloadFile('panduan-peralatan.pdf')" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold w-full">
+                                <i class="fas fa-download mr-2"></i>Download PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Panduan Fisik -->
+                    <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 p-8">
+                        <div class="text-center mb-6">
+                            <div class="w-20 h-20 bg-green-100 text-green-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-dumbbell text-4xl"></i>
+                            </div>
+                            <h4 class="text-2xl font-bold mb-2 text-gray-900">Panduan Fisik</h4>
+                            <p class="text-gray-500 text-sm">Persiapan kondisi fisik</p>
+                        </div>
+
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Program latihan fisik</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Nutrisi dan hidrasi</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Adaptasi ketinggian</span>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button onclick="downloadFile('panduan-fisik.pdf')" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold w-full">
+                                <i class="fas fa-download mr-2"></i>Download PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Panduan Medis -->
+                    <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 p-8">
+                        <div class="text-center mb-6">
+                            <div class="w-20 h-20 bg-green-100 text-green-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-medkit text-4xl"></i>
+                            </div>
+                            <h4 class="text-2xl font-bold mb-2 text-gray-900">Panduan Medis</h4>
+                            <p class="text-gray-500 text-sm">Kesehatan dan pertolongan pertama</p>
+                        </div>
+
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Obat-obatan wajib</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Penanganan hipotermia</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Penyakit ketinggian</span>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button onclick="downloadFile('panduan-medis.pdf')" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold w-full">
+                                <i class="fas fa-download mr-2"></i>Download PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Panduan Etika -->
+                    <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 p-8">
+                        <div class="text-center mb-6">
+                            <div class="w-20 h-20 bg-green-100 text-green-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-leaf text-4xl"></i>
+                            </div>
+                            <h4 class="text-2xl font-bold mb-2 text-gray-900">Panduan Etika</h4>
+                            <p class="text-gray-500 text-sm">Etika pendakian dan pelestarian alam</p>
+                        </div>
+
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Leave No Trace</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Pelestarian lingkungan</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <span class="text-sm">Etika berpendakian</span>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button onclick="downloadFile('panduan-etika.pdf')" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold w-full">
+                                <i class="fas fa-download mr-2"></i>Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download Information -->
+                <div class="mt-20 bg-gradient-to-r from-green-50 to-emerald-50 rounded-3xl p-10 shadow-inner">
+                    <h4 class="text-3xl font-bold text-center text-green-900 mb-8">
+                        <i class="fas fa-info-circle text-green-600 mr-2"></i>Informasi Download
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-white rounded-2xl p-8 shadow-sm">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fas fa-file-pdf text-red-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h5 class="text-xl font-bold text-gray-900 mb-2">Format File</h5>
+                                    <p class="text-gray-600">Semua panduan tersedia dalam format PDF yang dapat dibaca di berbagai perangkat (Smartphone, Tablet, Laptop).</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-8 shadow-sm">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fas fa-clock text-blue-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h5 class="text-xl font-bold text-gray-900 mb-2">Update Berkala</h5>
+                                    <p class="text-gray-600">Panduan diperbaharui secara berkala sesuai dengan perkembangan standar keselamatan dan regulasi terbaru.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <h3 class="text-xl font-bold mb-4">SIMAKSI Gunung</h3>
-                    <p class="text-gray-400">Sistem Informasi Manajemen Pendakian Gunung untuk pengalaman mendaki yang aman dan terorganisir.</p>
+        <!-- Footer -->
+        <footer class="navbar-gradient text-white py-12">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                    <div>
+                        <h4 class="text-lg font-bold mb-4 flex items-center"><i class="fas fa-mountain mr-2"></i>SIMAKSI</h4>
+                        <p class="text-green-100 text-sm">Platform terpercaya untuk mendaftar pendakian gunung di Indonesia</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Navigasi</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li><a href="/" class="hover:text-white transition">Beranda</a></li>
+                            <li><a href="/berita" class="hover:text-white transition">Berita</a></li>
+                            <li><a href="/pendakian" class="hover:text-white transition">Pendakian</a></li>
+                            <li><a href="/kontak" class="hover:text-white transition">Kontak</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Bantuan</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li><a href="/faq" class="hover:text-white transition">FAQ</a></li>
+                            <li><a href="/panduan" class="hover:text-white transition">Panduan Pendakian</a></li>
+                            <li><a href="/keselamatan" class="hover:text-white transition">Keselamatan</a></li>
+                            <li><a href="/syarat-ketentuan" class="hover:text-white transition">Syarat & Ketentuan</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Hubungi Kami</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li class="flex items-center"><i class="fas fa-phone mr-2"></i>+62 274 515 912</li>
+                            <li class="flex items-center"><i class="fas fa-envelope mr-2"></i>info@simaksi.com</li>
+                            <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>Semarang, Indonesia</li>
+                        </ul>
+                    </div>
                 </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Menu Utama</h4>
-                    <ul class="space-y-2">
-                        <li><a href="/beranda" class="text-gray-400 hover:text-white transition">Beranda</a></li>
-                        <li><a href="/berita" class="text-gray-400 hover:text-white transition">Berita</a></li>
-                        <li><a href="/pendakian" class="text-gray-400 hover:text-white transition">Pendakian</a></li>
-                        <li><a href="/cuaca" class="text-gray-400 hover:text-white transition">Cuaca</a></li>
-                        <li><a href="/status" class="text-gray-400 hover:text-white transition">Status</a></li>
-                        <li><a href="/panduan" class="text-gray-400 hover:text-white transition">Panduan</a></li>
-                        <li><a href="/kontak" class="text-gray-400 hover:text-white transition">Kontak</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Layanan</h4>
-                    <ul class="space-y-2">
-                        <li><a href="/riwayat" class="text-gray-400 hover:text-white transition">Riwayat Pendakian</a></li>
-                        <li><a href="/status" class="text-gray-400 hover:text-white transition">Status Pendakian</a></li>
-                        <li><a href="/panduan" class="text-gray-400 hover:text-white transition">Panduan</a></li>
-                        <li><a href="/kontak" class="text-gray-400 hover:text-white transition">Kontak</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Kontak</h4>
-                    <div class="space-y-2 text-gray-400">
-                        <p><i class="fas fa-phone mr-2"></i>+62 123 4567 890</p>
-                        <p><i class="fas fa-envelope mr-2"></i>info@simaksigunung.id</p>
-                        <p><i class="fas fa-map-marker-alt mr-2"></i>Jawa Tengah, Indonesia</p>
+                <div class="border-t border-green-700 pt-8 text-center text-green-100 text-sm">
+                    <p>&copy; 2026 SIMAKSI - Sistem Informasi Manajemen Pendakian Gunung. All rights reserved.</p>
+                    <div class="flex justify-center space-x-4 mt-4">
+                        <a href="#" class="hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="hover:text-white transition"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="hover:text-white transition"><i class="fab fa-twitter"></i></a>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 SIMAKSI Gunung. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
+    <!-- Profile Dropdown Script -->
     <script>
-        function toggleDropdown() {
-            const dropdown = document.getElementById('profile-dropdown');
-            dropdown.classList.toggle('hidden');
+        // Profile dropdown functionality
+        const profileBtn = document.getElementById('profile-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+
+        if (profileBtn && profileDropdown) {
+            profileBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+
+            // Close dropdown on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
         }
 
         function downloadFile(filename) {
-            // In real implementation, this would redirect to download
-            console.log(`Download ${filename} akan dimulai.`);
-            // window.location.href = `/download/${filename}`;
+            // Redirect to download route
+            window.location.href = `/download/${filename}`;
         }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('profile-dropdown');
-            const button = event.target.closest('button');
-            if (!button || !button.onclick || !button.onclick.toString().includes('toggleDropdown')) {
-                if (!dropdown.contains(event.target)) {
-                    dropdown.classList.add('hidden');
-                }
-            }
-        });
     </script>
 </body>
 </html>

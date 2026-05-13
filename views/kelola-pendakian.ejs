@@ -140,9 +140,12 @@
                       <% } %>
                     </td>
                     <td class="px-8 py-5">
-                      <div class="flex justify-center">
-                        <form action="/admin/pendakian/<%= item.id %>?_method=DELETE" method="POST" onsubmit="return confirm('Hapus jadwal ini?')">
-                          <button type="submit" class="w-10 h-10 bg-red-50 text-red-500 rounded-xl flex items-center justify-center hover:bg-red-500 hover:text-white transition">
+                      <div class="flex justify-center space-x-3">
+                        <button onclick='showEditModal(<%= JSON.stringify(item) %>)' class="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center hover:bg-blue-500 hover:text-white transition shadow-sm">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <form action="/admin/pendakian/delete/<%= item.id %>" method="POST" onsubmit="return confirm('Hapus jadwal ini?')">
+                          <button type="submit" class="w-10 h-10 bg-red-50 text-red-500 rounded-xl flex items-center justify-center hover:bg-red-500 hover:text-white transition shadow-sm">
                             <i class="fas fa-trash-alt"></i>
                           </button>
                         </form>
@@ -166,5 +169,79 @@
       </div>
     </main>
   </div>
+
+  <!-- Edit Pendakian Modal -->
+  <div id="editModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-[32px] shadow-2xl w-full max-w-2xl overflow-hidden animate-slideUp border border-gray-100">
+      <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-8 text-white flex justify-between items-center">
+        <div>
+          <h3 class="text-2xl font-black tracking-tight flex items-center">
+            <i class="fas fa-edit mr-3"></i> EDIT JADWAL
+          </h3>
+          <p class="text-purple-100 text-xs font-bold uppercase tracking-widest mt-1">Sesuaikan Agenda Mendaki</p>
+        </div>
+        <button onclick="closeEditModal()" class="w-12 h-12 bg-white/10 hover:bg-white/20 rounded-2xl flex items-center justify-center transition">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      <form id="editForm" method="POST" class="p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="md:col-span-2">
+            <label for="edit_nama" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Nama Acara</label>
+            <input type="text" name="nama_pendakian" id="edit_nama" required 
+              class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 font-bold text-gray-700 focus:border-purple-500 focus:outline-none transition">
+          </div>
+          <div>
+            <label for="edit_tanggal" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Tanggal Pelaksanaan</label>
+            <input type="date" name="tanggal" id="edit_tanggal" required 
+              class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 font-bold text-gray-700 focus:border-purple-500 focus:outline-none transition">
+          </div>
+          <div>
+            <label for="edit_status" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Status Pendaftaran</label>
+            <select name="status" id="edit_status" required class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 font-bold text-gray-700 focus:border-purple-500 focus:outline-none transition appearance-none cursor-pointer">
+              <option value="Buka">Buka</option>
+              <option value="Tutup">Tutup</option>
+              <option value="Penuh">Penuh</option>
+            </select>
+          </div>
+        </div>
+        <div class="mt-10 flex justify-end space-x-4">
+          <button type="button" onclick="closeEditModal()" class="px-8 py-4 bg-gray-100 text-gray-500 font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-gray-200 transition">
+            Batal
+          </button>
+          <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-black py-4 px-10 rounded-2xl shadow-xl shadow-purple-100 transition transform hover:-translate-y-1 active:translate-y-0">
+            <i class="fas fa-save mr-2"></i> UPDATE JADWAL
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function showEditModal(item) {
+      document.getElementById('editForm').action = `/admin/pendakian/update/${item.id}`;
+      document.getElementById('edit_nama').value = item.nama_pendakian;
+      
+      if (item.tanggal) {
+        const date = new Date(item.tanggal);
+        const formattedDate = date.toISOString().split('T')[0];
+        document.getElementById('edit_tanggal').value = formattedDate;
+      }
+      
+      document.getElementById('edit_status').value = item.status;
+      document.getElementById('editModal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+      document.getElementById('editModal').classList.add('hidden');
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('editModal');
+      if (event.target == modal) {
+        closeEditModal();
+      }
+    }
+  </script>
 </body>
 </html>
