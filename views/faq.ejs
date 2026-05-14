@@ -3,90 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ - SIMAKSI Gunung</title>
+    <title>FAQ - SIMAKSI Gunung Merbabu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-      * { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-      .navbar-gradient { background: linear-gradient(135deg, #1e5631 0%, #2d7a3e 50%, #3a9f5d 100%); }
-      .faq-item { border-left: 4px solid #1e5631; }
-      .faq-item:hover { background-color: #f0fdf4; }
+      * {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .navbar-gradient {
+        background: linear-gradient(135deg, #1e5631 0%, #2d7a3e 50%, #3a9f5d 100%);
+      }
+      .faq-item {
+        border-left: 4px solid #1e5631;
+        transition: all 0.3s ease;
+      }
+      .faq-item:hover {
+        background-color: #f0fdf4;
+        transform: translateX(10px);
+        box-shadow: 0 10px 20px rgba(30, 86, 49, 0.05);
+      }
     </style>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="/css/output.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50">
-    <header class="navbar-gradient text-white shadow-xl sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center py-4 px-6">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                    <i class="fas fa-mountain text-green-700 text-lg"></i>
-                </div>
-                <h1 class="text-2xl font-bold">SIMAKSI Gunung</h1>
-            </div>
-            <nav class="hidden md:block">
-                <ul class="flex space-x-8 font-semibold">
-                    <li><a href="/beranda" class="hover:text-green-200 transition">Beranda</a></li>
-                    <li><a href="/berita" class="hover:text-green-200 transition">Berita</a></li>
-                    <li><a href="/pendakian" class="hover:text-green-200 transition">Pendakian</a></li>
-                    <li><a href="/kontak" class="hover:text-green-200 transition">Kontak</a></li>
-                </ul>
-            </nav>
-            <div class="flex space-x-4">
-                <% if (user) { %>
-                    <a href="/beranda" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition"><%= user.nama %></a>
-                <% } else { %>
-                    <a href="/login" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition">Login</a>
-                <% } %>
-            </div>
-        </div>
-    </header>
-
-    <section class="py-16">
-        <div class="container mx-auto px-6 max-w-4xl">
-            <div class="text-center mb-12">
-                <h1 class="text-4xl font-black text-gray-900 mb-4">Pertanyaan yang Sering Diajukan (FAQ)</h1>
-                <p class="text-xl text-gray-600">Temukan jawaban untuk pertanyaan umum tentang pendakian gunung</p>
-            </div>
-
-            <div class="space-y-4">
-                <% const faqs = [
-                    { q: "Apa itu SIMAKSI?", a: "SIMAKSI (Sistem Informasi Manajemen Pendakian Gunung) adalah platform online untuk mendaftar pendakian gunung di Indonesia. Sistem ini memungkinkan pendaki untuk mendaftar, membayar, dan mendapatkan e-tiket secara digital." },
-                    { q: "Bagaimana cara mendaftar pendakian?", a: "1) Login ke akun Anda, 2) Pilih gunung tujuan di halaman Pendakian, 3) Isi formulir pendaftaran (tanggal, jumlah anggota, dll), 4) Lakukan pembayaran melalui QRIS, 5) Upload bukti transfer, 6) Tunggu verifikasi admin." },
-                    { q: "Berapa biaya pendakian?", a: "Biaya pendakian bervariasi tergantung gunung. Saat ini tarif standar adalah Rp 150.000 per orang. Biaya ini mencakup tiket masuk, asuransi, dan kontribusi untuk perawatan jalur pendakian." },
-                    { q: "Apakah bisa membatalkan pendaftaran?", a: "Pendaftaran yang sudah diverifikasi tidak dapat dibatalkan atau dikembalikan. Pastikan Anda sudah siap sebelum melakukan pembayaran." },
-                    { q: "Berapa lama proses verifikasi?", a: "Proses verifikasi biasanya memakan waktu 1-3 hari kerja setelah Anda mengunggah bukti pembayaran. Anda akan mendapat notifikasi melalui email." },
-                    { q: "Apa yang harus dibawa saat pendakian?", a: "Wajib membawa: KTP/SIM, E-Tiket (cetak atau digital), perlengkapan mendaki (tenda, sleeping bag, jas hujan), makanan & air minum, P3K, dan sampah harus dibawa turun kembali." },
-                    { q: "Apakah ada batas usia untuk pendakian?", a: "Tidak ada batasan usia resmi, namun pendaki di bawah 17 tahun harus didampingi orang dewasa. Disarankan kondisi fisik prima sebelum mendaki." },
-                    { q: "Bagaimana jika cuaca buruk saat pendakian?", a: "Jika cuaca buruk, pendakian mungkin ditunda atau dibatalkan demi keselamatan. Admin akan menghubungi Anda untuk penjadwalan ulang atau pengembalian dana." },
-                    { q: "Apakah boleh mendaki saat hujan?", a: "Boleh, namun tetap waspada. Jalur menjadi licin dan potensi longsor meningkat. Pastikan perlengkapan waterproofing lengkap dan pertimbangkan untuk menunda jika cuaca ekstrem." },
-                    { q: "Bagaimana cara menghubungi admin?", a: "Anda bisa menghubungi kami melalui halaman Kontak, email ke info@simaksi.com, atau telepon ke +62 274 515 912 pada jam kerja (Senin-Jumat, 08.00-17.00)." }
-                ]; %>
-
-                <% faqs.forEach((faq, index) => { %>
-                    <div class="faq-item bg-white rounded-r-xl p-6 shadow-md">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2 flex items-start">
-                            <span class="bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0"><%= index + 1 %></span>
-                            <%= faq.q %>
-                        </h3>
-                        <p class="text-gray-700 ml-11 leading-relaxed"><%= faq.a %></p>
+<body class="bg-gray-50 min-h-screen">
+    <div class="flex flex-col min-h-screen">
+        <!-- Navbar -->
+        <header class="navbar-gradient text-white shadow-xl sticky top-0 z-50">
+            <div class="container mx-auto flex justify-between items-center py-4 px-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-mountain text-green-700 text-lg"></i>
                     </div>
-                <% }); %>
+                    <h1 class="text-2xl font-bold">SIMAKSI Gunung</h1>
+                </div>
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-8 font-semibold">
+                        <li><a href="/" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-home"></i><span>Beranda</span></a></li>
+                        <li><a href="/berita" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-newspaper"></i><span>Berita</span></a></li>
+                        <li><a href="/pendakian" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-person-hiking"></i><span>Pendakian</span></a></li>
+                        <li><a href="/cuaca" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-cloud-sun"></i><span>Cuaca</span></a></li>
+                        <li><a href="/status" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-chart-line"></i><span>Status</span></a></li>
+                        <li><a href="/panduan" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-download"></i><span>Panduan</span></a></li>
+                        <li><a href="/kontak" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-envelope"></i><span>Kontak</span></a></li>
+                    </ul>
+                </nav>
+                <div class="flex space-x-4">
+                    <% if (user) { %>
+                        <div class="relative">
+                            <button id="profile-btn" class="flex items-center space-x-3 bg-white text-green-700 px-4 py-2 rounded-lg font-semibold hover:bg-green-50 transition">
+                                <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-sm"></i>
+                                </div>
+                                <span><%= user.nama %></span>
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </button>
+                            <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
+                                <div class="py-2">
+                                    <div class="px-4 py-2 border-b border-gray-100">
+                                        <p class="text-sm font-medium text-gray-900"><%= user.nama %></p>
+                                        <p class="text-xs text-gray-500"><%= user.email %></p>
+                                    </div>
+                                    <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                        <i class="fas fa-user-circle mr-2"></i>Profile Saya
+                                    </a>
+                                    <a href="/riwayat" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                        <i class="fas fa-history mr-2"></i>Riwayat Pendakian
+                                    </a>
+                                    <div class="border-t border-gray-100"></div>
+                                    <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <a href="/login" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition">Login</a>
+                    <% } %>
+                </div>
             </div>
+        </header>
 
-            <div class="mt-12 bg-green-50 rounded-2xl p-8 text-center">
-                <i class="fas fa-question-circle text-green-600 text-5xl mb-4"></i>
-                <h3 class="text-2xl font-bold text-gray-900 mb-4">Masih Punya Pertanyaan?</h3>
-                <p class="text-gray-600 mb-6">Jangan ragu untuk menghubungi kami jika ada yang ingin ditanyakan</p>
-                <a href="/kontak" class="inline-flex items-center bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition">
-                    <i class="fas fa-envelope mr-2"></i>Hubungi Kami
-                </a>
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-16 px-6">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-black mb-4">FAQ</h2>
+                <p class="text-xl text-green-100 max-w-2xl mx-auto">Temukan jawaban untuk pertanyaan yang paling sering diajukan seputar layanan SIMAKSI</p>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <footer class="navbar-gradient text-white py-12">
-        <div class="container mx-auto px-6 text-center text-green-100 text-sm">
-            <p>&copy; 2026 SIMAKSI - Sistem Informasi Manajemen Pendakian Gunung. All rights reserved.</p>
-        </div>
-    </footer>
+        <!-- FAQ Content -->
+        <section class="py-16 flex-grow">
+            <div class="container mx-auto px-6 max-w-4xl">
+                <div class="space-y-6">
+                    <% const faqs = [
+                        { q: "Apa itu SIMAKSI?", a: "SIMAKSI (Sistem Informasi Manajemen Pendakian Gunung) adalah platform online resmi untuk mendaftar pendakian gunung di Indonesia secara digital dan terorganisir." },
+                        { q: "Bagaimana cara mendaftar pendakian?", a: "Login ke akun Anda, pilih gunung di menu Pendakian, isi data perjalanan, lakukan pembayaran QRIS, dan unggah bukti transfer. Setelah diverifikasi, Anda akan menerima E-Tiket." },
+                        { q: "Berapa lama proses verifikasi pembayaran?", a: "Proses verifikasi biasanya memakan waktu maksimal 24 jam di hari kerja. Anda dapat memantau statusnya di menu Status atau Riwayat." },
+                        { q: "Apakah dana bisa dikembalikan jika batal?", a: "Sesuai Syarat & Ketentuan, dana yang sudah dibayarkan tidak dapat dikembalikan (non-refundable), kecuali jika pendakian dibatalkan oleh pihak pengelola." },
+                        { q: "Apa yang harus dibawa saat pendakian?", a: "Wajib membawa identitas asli (KTP/SIM), bukti E-Tiket, perlengkapan mendaki standar keamanan, serta logistik yang cukup." },
+                        { q: "Apakah ada batasan kuota pendakian?", a: "Ya, setiap gunung memiliki kuota harian terbatas demi menjaga kelestarian alam dan kenyamanan pendaki. Pastikan cek ketersediaan sebelum mendaftar." }
+                    ]; %>
+
+                    <% faqs.forEach((faq, index) => { %>
+                        <div class="faq-item bg-white rounded-r-2xl p-8 shadow-md">
+                            <h3 class="text-xl font-black text-gray-900 mb-4 flex items-start">
+                                <span class="bg-green-600 text-white rounded-xl w-10 h-10 flex items-center justify-center mr-4 flex-shrink-0 shadow-lg"><%= index + 1 %></span>
+                                <%= faq.q %>
+                            </h3>
+                            <p class="text-gray-600 ml-14 leading-relaxed font-medium"><%= faq.a %></p>
+                        </div>
+                    <% }); %>
+                </div>
+
+                <div class="mt-16 bg-gradient-to-br from-green-50 to-emerald-100 rounded-3xl p-12 text-center shadow-inner border border-green-100">
+                    <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                        <i class="fas fa-headset text-3xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-3xl font-black text-gray-900 mb-4">Masih Butuh Bantuan?</h3>
+                    <p class="text-gray-600 mb-8 max-w-md mx-auto font-medium">Tim dukungan kami siap membantu Anda 24/7 untuk setiap pertanyaan atau kendala teknis.</p>
+                    <a href="/kontak" class="inline-flex items-center bg-green-600 text-white px-10 py-4 rounded-2xl font-black hover:bg-green-700 transition shadow-xl shadow-green-100">
+                        <i class="fas fa-envelope mr-3 text-xl"></i>Hubungi Kami
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="navbar-gradient text-white py-12">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                    <div>
+                        <h4 class="text-lg font-bold mb-4 flex items-center"><i class="fas fa-mountain mr-2"></i>SIMAKSI</h4>
+                        <p class="text-green-100 text-sm">Platform terpercaya untuk mendaftar pendakian gunung di Indonesia</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Navigasi</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li><a href="/" class="hover:text-white transition">Beranda</a></li>
+                            <li><a href="/berita" class="hover:text-white transition">Berita</a></li>
+                            <li><a href="/pendakian" class="hover:text-white transition">Pendakian</a></li>
+                            <li><a href="/kontak" class="hover:text-white transition">Kontak</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Bantuan</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li><a href="/faq" class="hover:text-white transition">FAQ</a></li>
+                            <li><a href="/panduan" class="hover:text-white transition">Panduan Pendakian</a></li>
+                            <li><a href="/keselamatan" class="hover:text-white transition">Keselamatan</a></li>
+                            <li><a href="/syarat-ketentuan" class="hover:text-white transition">Syarat & Ketentuan</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Hubungi Kami</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li class="flex items-center"><i class="fas fa-phone mr-2"></i>+62 274 515 912</li>
+                            <li class="flex items-center"><i class="fas fa-envelope mr-2"></i>info@simaksi.com</li>
+                            <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>Semarang, Indonesia</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-green-700 pt-8 text-center text-green-100 text-sm">
+                    <p>&copy; 2026 SIMAKSI - Sistem Informasi Manajemen Pendakian Gunung. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Script -->
+    <script>
+        const profileBtn = document.getElementById('profile-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+
+        if (profileBtn && profileDropdown) {
+            profileBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+        }
+    </script>
 </body>
 </html>

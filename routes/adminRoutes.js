@@ -15,20 +15,24 @@ function isAdmin(req, res, next) {
 
 // ==================== MANAGE GUNUNG ====================
 router.get('/admin/gunung', isAdmin, adminController.getGunung);
+router.get('/admin/gunung/edit/:id', isAdmin, adminController.editGunung);
 router.post('/admin/gunung', isAdmin, adminController.createGunung);
-router.delete('/admin/gunung/:id', isAdmin, adminController.deleteGunung);
+router.post('/admin/gunung/update/:id', isAdmin, adminController.updateGunung);
+router.post('/admin/gunung/delete/:id', isAdmin, adminController.deleteGunung);
 
 // ==================== MANAGE BERITA ====================
 router.get('/admin/berita', isAdmin, adminController.getBerita);
+router.get('/admin/berita/edit/:id', isAdmin, adminController.editBerita);
 router.post('/admin/berita', isAdmin, adminController.createBerita);
-router.put('/admin/berita/:id', isAdmin, adminController.updateBerita);
-router.delete('/admin/berita/:id', isAdmin, adminController.deleteBerita);
+router.post('/admin/berita/update/:id', isAdmin, adminController.updateBerita);
+router.post('/admin/berita/delete/:id', isAdmin, adminController.deleteBerita);
 
 // ==================== MANAGE PENDAKIAN ====================
 router.get('/admin/pendakian', isAdmin, adminController.getPendakian);
+router.get('/admin/pendakian/edit/:id', isAdmin, adminController.editPendakian);
 router.post('/admin/pendakian', isAdmin, adminController.createPendakian);
-router.put('/admin/pendakian/:id', isAdmin, adminController.updatePendakian);
-router.delete('/admin/pendakian/:id', isAdmin, adminController.deletePendakian);
+router.post('/admin/pendakian/update/:id', isAdmin, adminController.updatePendakian);
+router.post('/admin/pendakian/delete/:id', isAdmin, adminController.deletePendakian);
 
 // ==================== PEMESANAN (PAYMENT) MANAGEMENT ====================
 router.get('/admin/pemesanan', isAdmin, pembayaranController.adminPemesanan);

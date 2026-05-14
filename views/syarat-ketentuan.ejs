@@ -3,116 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syarat & Ketentuan - SIMAKSI Gunung</title>
+    <title>Syarat & Ketentuan - SIMAKSI Gunung Merbabu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-      * { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-      .navbar-gradient { background: linear-gradient(135deg, #1e5631 0%, #2d7a3e 50%, #3a9f5d 100%); }
+      * {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .navbar-gradient {
+        background: linear-gradient(135deg, #1e5631 0%, #2d7a3e 50%, #3a9f5d 100%);
+      }
+      .terms-section {
+        border-bottom: 1px solid #f3f4f6;
+        padding-bottom: 2rem;
+        margin-bottom: 2rem;
+      }
+      .terms-section:last-child {
+        border-bottom: none;
+      }
     </style>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="/css/output.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50">
-    <header class="navbar-gradient text-white shadow-xl sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center py-4 px-6">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                    <i class="fas fa-mountain text-green-700 text-lg"></i>
+<body class="bg-gray-50 min-h-screen">
+    <div class="flex flex-col min-h-screen">
+        <!-- Navbar -->
+        <header class="navbar-gradient text-white shadow-xl sticky top-0 z-50">
+            <div class="container mx-auto flex justify-between items-center py-4 px-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-mountain text-green-700 text-lg"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold">SIMAKSI Gunung</h1>
                 </div>
-                <h1 class="text-2xl font-bold">SIMAKSI Gunung</h1>
-            </div>
-            <nav class="hidden md:block">
-                <ul class="flex space-x-8 font-semibold">
-                    <li><a href="/beranda" class="hover:text-green-200 transition">Beranda</a></li>
-                    <li><a href="/berita" class="hover:text-green-200 transition">Berita</a></li>
-                    <li><a href="/pendakian" class="hover:text-green-200 transition">Pendakian</a></li>
-                    <li><a href="/kontak" class="hover:text-green-200 transition">Kontak</a></li>
-                </ul>
-            </nav>
-            <div class="flex space-x-4">
-                <% if (user) { %>
-                    <a href="/beranda" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition"><%= user.nama %></a>
-                <% } else { %>
-                    <a href="/login" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition">Login</a>
-                <% } %>
-            </div>
-        </div>
-    </header>
-
-    <section class="py-16">
-        <div class="container mx-auto px-6 max-w-4xl">
-            <div class="text-center mb-12">
-                <h1 class="text-4xl font-black text-gray-900 mb-4">Syarat & Ketentuan</h1>
-                <p class="text-xl text-gray-600">Baca dan pahami sebelum melakukan pendakian</p>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-lg p-8 space-y-8">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center"><i class="fas fa-file-contract text-green-600 mr-3"></i>1. Ketentuan Umum</h2>
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>SIMAKSI adalah platform resmi untuk pendaftaran pendakian gunung di Indonesia.</span></li>
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Dengan mendaftar, Anda menyetujui seluruh syarat dan ketentuan yang berlaku.</span></li>
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Pendaki wajib memiliki identitas diri (KTP/SIM/Paspor) yang masih berlaku.</span></li>
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-8 font-semibold">
+                        <li><a href="/" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-home"></i><span>Beranda</span></a></li>
+                        <li><a href="/berita" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-newspaper"></i><span>Berita</span></a></li>
+                        <li><a href="/pendakian" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-person-hiking"></i><span>Pendakian</span></a></li>
+                        <li><a href="/cuaca" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-cloud-sun"></i><span>Cuaca</span></a></li>
+                        <li><a href="/status" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-chart-line"></i><span>Status</span></a></li>
+                        <li><a href="/panduan" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-download"></i><span>Panduan</span></a></li>
+                        <li><a href="/kontak" class="hover:text-green-200 transition duration-300 flex items-center space-x-2"><i class="fas fa-envelope"></i><span>Kontak</span></a></li>
                     </ul>
-                </div>
-
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center"><i class="fas fa-ticket-alt text-green-600 mr-3"></i>2. Pendaftaran & Pembayaran</h2>
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Pendaftaran dilakukan secara online melalui website SIMAKSI.</span></li>
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Pembayaran dilakukan melalui sistem QRIS dalam waktu 24 jam setelah pendaftaran.</span></li>
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Bukti pembayaran harus diunggah dalam format gambar (JPG, PNG, GIF) maksimal 5MB.</span></li>
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Biaya pendakian tidak dapat dikembalikan setelah diverifikasi.</span></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center"><i class="fas fa-mountain text-green-600 mr-3"></i>3. Selama Pendakian</h2>
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Pendaki wajib mematuhi semua aturan dan regulasi pendakian yang berlaku.</span></li>
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Dilarang merusak fasilitas alam, tumbuhan, dan satwa di sepanjang jalur pendakian.</span></li>
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Wajib membawa turun semua sampah yang dihasilkan selama pendakian.</span></li>
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Dilarang membuat api unggun di luar area yang telah ditentukan.</span></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center"><i class="fas fa-ban text-red-600 mr-3"></i>4. Pembatalan & Pengembalian Dana</h2>
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-start"><i class="fas fa-times text-red-600 mt-1 mr-2"></i><span>Pendaftaran yang sudah diverifikasi <strong>tidak dapat dibatalkan</strong>.</span></li>
-                        <li class="flex items-start"><i class="fas fa-times text-red-600 mt-1 mr-2"></i><span>Dana <strong>tidak dapat dikembalikan</strong> dalam bentuk apapun.</span></li>
-                        <li class="flex items-start"><i class="fas fa-exclamation-triangle text-yellow-600 mt-1 mr-2"></i><span>Jika pendakian dibatalkan oleh pengelola (cuaca buruk, bencana alam), dana akan dikembalikan 100%.</span></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center"><i class="fas fa-shield-alt text-green-600 mr-3"></i>5. Keamanan & Keselamatan</h2>
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Pendaki bertanggung jawab atas keselamatan diri sendiri selama pendakian.</span></li>
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Disarankan untuk membawa asuransi pendakian pribadi.</span></li>
-                        <li class="flex items-start"><i class="fas fa-check text-green-600 mt-1 mr-2"></i><span>Pengelola tidak bertanggung jawab atas kecelakaan yang terjadi di luar kelalaian pengelola.</span></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center"><i class="fas fa-gavel text-green-600 mr-3"></i>6. Sanksi</h2>
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-start"><i class="fas fa-exclamation-circle text-red-600 mt-1 mr-2"></i><span>Pendaki yang melanggar aturan akan dikenakan sanksi berupa denda atau pencabutan hak pendakian sementara/permanen.</span></li>
-                        <li class="flex items-start"><i class="fas fa-exclamation-circle text-red-600 mt-1 mr-2"></i><span>Pendaki yang membuang sampah sembarangan akan dikenakan denda sesuai peraturan yang berlaku.</span></li>
-                    </ul>
+                </nav>
+                <div class="flex space-x-4">
+                    <% if (user) { %>
+                        <div class="relative">
+                            <button id="profile-btn" class="flex items-center space-x-3 bg-white text-green-700 px-4 py-2 rounded-lg font-semibold hover:bg-green-50 transition">
+                                <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white text-sm">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span><%= user.nama %></span>
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </button>
+                            <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
+                                <div class="py-2">
+                                    <div class="px-4 py-2 border-b border-gray-100">
+                                        <p class="text-sm font-medium text-gray-900"><%= user.nama %></p>
+                                        <p class="text-xs text-gray-500"><%= user.email %></p>
+                                    </div>
+                                    <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                        <i class="fas fa-user-circle mr-2"></i>Profile Saya
+                                    </a>
+                                    <a href="/riwayat" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                        <i class="fas fa-history mr-2"></i>Riwayat Pendakian
+                                    </a>
+                                    <div class="border-t border-gray-100"></div>
+                                    <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <a href="/login" class="bg-white text-green-700 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition">Login</a>
+                    <% } %>
                 </div>
             </div>
+        </header>
 
-            <div class="mt-8 text-center text-sm text-gray-500">
-                <p>Terakhir diperbarui: 7 April 2026</p>
-                <p class="mt-2">Dengan menggunakan layanan SIMAKSI, Anda dianggap telah membaca, memahami, dan menyetujui seluruh syarat & ketentuan di atas.</p>
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-16 px-6">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-black mb-4">Syarat & Ketentuan</h2>
+                <p class="text-xl text-green-100 max-w-2xl mx-auto">Harap baca dan pahami seluruh poin di bawah ini sebelum melakukan pendaftaran pendakian</p>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <footer class="navbar-gradient text-white py-12">
-        <div class="container mx-auto px-6 text-center text-green-100 text-sm">
-            <p>&copy; 2026 SIMAKSI - Sistem Informasi Manajemen Pendakian Gunung. All rights reserved.</p>
-        </div>
-    </footer>
+        <!-- Terms Content -->
+        <section class="py-20 flex-grow bg-white">
+            <div class="container mx-auto px-6 max-w-4xl">
+                <div class="bg-white rounded-3xl shadow-2xl border border-gray-100 p-10 md:p-16">
+                    <div class="terms-section">
+                        <h3 class="text-2xl font-black text-gray-900 mb-6 flex items-center">
+                            <i class="fas fa-file-contract text-green-600 mr-4"></i>1. Ketentuan Umum
+                        </h3>
+                        <ul class="space-y-3 text-gray-600 font-medium">
+                            <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i>Setiap pendaki wajib memiliki akun SIMAKSI yang terdaftar dengan data identitas asli.</li>
+                            <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i>Pendaftaran dilakukan maksimal H-2 sebelum hari keberangkatan.</li>
+                            <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i>Pendaki di bawah umur wajib menyertakan surat izin orang tua dan didampingi wali.</li>
+                        </ul>
+                    </div>
+
+                    <div class="terms-section">
+                        <h3 class="text-2xl font-black text-gray-900 mb-6 flex items-center">
+                            <i class="fas fa-money-bill-wave text-green-600 mr-4"></i>2. Pembayaran & Konfirmasi
+                        </h3>
+                        <ul class="space-y-3 text-gray-600 font-medium">
+                            <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i>Pembayaran dilakukan via QRIS resmi yang tertera pada sistem.</li>
+                            <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i>Wajib mengunggah bukti transfer yang jelas dan dapat dibaca.</li>
+                            <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i>Pemesanan otomatis batal jika tidak ada pembayaran dalam waktu 24 jam.</li>
+                        </ul>
+                    </div>
+
+                    <div class="terms-section">
+                        <h3 class="text-2xl font-black text-gray-900 mb-6 flex items-center">
+                            <i class="fas fa-ban text-red-600 mr-4"></i>3. Pembatalan & Refund
+                        </h3>
+                        <ul class="space-y-3 text-gray-600 font-medium">
+                            <li class="flex items-start"><i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>Tiket yang sudah diverifikasi tidak dapat dibatalkan atau dipindahtangankan.</li>
+                            <li class="flex items-start"><i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>Tidak ada pengembalian dana (refund) untuk pembatalan sepihak dari pendaki.</li>
+                            <li class="flex items-start"><i class="fas fa-info-circle text-blue-500 mt-1 mr-3"></i>Pengembalian dana hanya berlaku jika jalur ditutup total oleh pengelola karena force majeure.</li>
+                        </ul>
+                    </div>
+
+                    <div class="terms-section">
+                        <h3 class="text-2xl font-black text-gray-900 mb-6 flex items-center">
+                            <i class="fas fa-gavel text-green-600 mr-4"></i>4. Larangan & Sanksi
+                        </h3>
+                        <ul class="space-y-3 text-gray-600 font-medium">
+                            <li class="flex items-start"><i class="fas fa-exclamation-triangle text-amber-500 mt-1 mr-3"></i>Dilarang keras membuang sampah sembarangan (denda Rp 500.000 atau lebih).</li>
+                            <li class="flex items-start"><i class="fas fa-exclamation-triangle text-amber-500 mt-1 mr-3"></i>Dilarang mengambil atau merusak flora dan fauna di kawasan taman nasional.</li>
+                            <li class="flex items-start"><i class="fas fa-exclamation-triangle text-amber-500 mt-1 mr-3"></i>Pelanggaran berat dapat mengakibatkan blacklist permanen dari seluruh gunung di Indonesia.</li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-12 p-8 bg-gray-50 rounded-2xl border border-gray-100 italic text-sm text-gray-500 text-center">
+                        "Dengan menekan tombol daftar, Anda dianggap telah membaca, memahami, dan menyetujui seluruh syarat & ketentuan yang berlaku di atas demi kelestarian alam dan keselamatan bersama."
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Terakhir diperbarui: 13 Mei 2026</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="navbar-gradient text-white py-12">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                    <div>
+                        <h4 class="text-lg font-bold mb-4 flex items-center"><i class="fas fa-mountain mr-2"></i>SIMAKSI</h4>
+                        <p class="text-green-100 text-sm">Platform terpercaya untuk mendaftar pendakian gunung di Indonesia</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Navigasi</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li><a href="/" class="hover:text-white transition">Beranda</a></li>
+                            <li><a href="/berita" class="hover:text-white transition">Berita</a></li>
+                            <li><a href="/pendakian" class="hover:text-white transition">Pendakian</a></li>
+                            <li><a href="/kontak" class="hover:text-white transition">Kontak</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Bantuan</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li><a href="/faq" class="hover:text-white transition">FAQ</a></li>
+                            <li><a href="/panduan" class="hover:text-white transition">Panduan Pendakian</a></li>
+                            <li><a href="/keselamatan" class="hover:text-white transition">Keselamatan</a></li>
+                            <li><a href="/syarat-ketentuan" class="hover:text-white transition">Syarat & Ketentuan</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Hubungi Kami</h4>
+                        <ul class="space-y-2 text-green-100 text-sm">
+                            <li class="flex items-center"><i class="fas fa-phone mr-2"></i>+62 274 515 912</li>
+                            <li class="flex items-center"><i class="fas fa-envelope mr-2"></i>info@simaksi.com</li>
+                            <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>Semarang, Indonesia</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-green-700 pt-8 text-center text-green-100 text-sm">
+                    <p>&copy; 2026 SIMAKSI - Sistem Informasi Manajemen Pendakian Gunung. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Script -->
+    <script>
+        const profileBtn = document.getElementById('profile-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+
+        if (profileBtn && profileDropdown) {
+            profileBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    profileDropdown.classList.add('hidden');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
