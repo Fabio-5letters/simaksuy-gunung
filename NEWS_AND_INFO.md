@@ -46,7 +46,7 @@
 
 | Gunung | Ketinggian | Lokasi | Deskripsi |
 |--------|-----------|--------|-----------|
-| **Merbabu** | 3,142 mdpl | Semarang, Jawa Tengah | ✓ Deskripsi lengkap tentang padang alpine, jalur pendakian (Selo, Wekas, Suwanting), sunrise spektakuler |
+| **Merbabu** | 3,142 mdpl | Boyolali, Jawa Tengah | ✓ Deskripsi lengkap tentang padang alpine, jalur pendakian (Selo, Wekas, Suwanting), sunrise spektakuler |
 | **Merapi** | 2,911 mdpl | Yogyakarta, Jawa Tengah | ✓ Deskripsi aktivitas vulkanik, status siaga, kawah aktif, pendakian untuk berpengalaman |
 | **Lawu** | 3,265 mdpl | Karanganyar, Jawa Tengah | ✓ Deskripsi tempat spiritual, petilasan, jalur (Cemoro Sewu, Kandang, Candi Cetho), sunrise & lautan awan |
 | **Sindoro** | 3,136 mdpl | Wonosobo, Jawa Tengah | ✓ Deskripsi kaldera puncak, jalur (Kledung, Sigedang), vegetasi alami, panorama Sumbing |

@@ -6,7 +6,7 @@ const path = require('path');
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root', // Update if you have a different username  
-  password: 'root' // Update if you have a password
+  password: '' // Update if you have a password
 });
 
 function initializeDatabase() {

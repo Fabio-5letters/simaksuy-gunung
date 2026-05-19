@@ -90,7 +90,7 @@ INSERT IGNORE INTO users (id, nama, email, password, role) VALUES
 
 -- Insert dummy data into gunung table if empty
 INSERT IGNORE INTO gunung (id, nama_gunung, lokasi, ketinggian, kuota_harian, status) VALUES
-(1, 'Gunung Merbabu', 'Semarang, Jawa Tengah', 3142, 100, 'Buka'),
+(1, 'Gunung Merbabu', 'Jakarta, Indonesia', 3142, 100, 'Buka'),
 (2, 'Gunung Merapi', 'Yogyakarta, Jawa Tengah', 2911, 150, 'Buka'),
 (3, 'Gunung Lawu', 'Karanganyar, Jawa Tengah', 3265, 80, 'Buka'),
 (4, 'Gunung Sindoro', 'Wonosobo, Jawa Tengah', 3136, 120, 'Buka');
