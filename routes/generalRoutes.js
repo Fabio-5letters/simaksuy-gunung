@@ -548,7 +548,7 @@ router.get('/syarat-ketentuan', (req, res) => {
 
 // Keselamatan page
 router.get('/keselamatan', (req, res) => {
-  res.render('keselamatan', { user: req.session.user });
+  res.redirect('/panduan/keselamatan');
 });
 
 // Download file panduan
@@ -573,6 +573,179 @@ router.get('/download/:filename', (req, res) => {
   } else {
     res.status(404).render('error', { message: 'File panduan tidak ditemukan', user: req.session.user });
   }
+});
+
+// Tambahkan rute untuk halaman detail panduan
+router.get('/panduan/:slug', (req, res) => {
+    const slug = req.params.slug;
+    const panduan = {
+        keselamatan: {
+            title: 'Panduan Keselamatan',
+            description: 'Prosedur keselamatan dan protokol darurat untuk memastikan keamanan setiap pendaki di medan pegunungan.',
+            icon: 'fa-shield-alt',
+            headerImage: 'https://images.unsplash.com/photo-1551632432-c735e7a030be?auto=format&fit=crop&q=80&w=800',
+            sections: [
+                {
+                    title: 'Prosedur Darurat (S.T.O.P)',
+                    items: [
+                        { title: 'Sit (Duduk)', desc: 'Duduklah dengan tenang jika Anda merasa tersesat atau dalam bahaya.', icon: 'fa-chair' },
+                        { title: 'Think (Berpikir)', desc: 'Pikirkan kembali rute yang Anda lalui dan opsi yang tersedia.', icon: 'fa-brain' },
+                        { title: 'Observe (Amati)', desc: 'Amati lingkungan sekitar untuk mencari tanda-tanda jalur atau bahaya.', icon: 'fa-eye' },
+                        { title: 'Plan (Rencana)', desc: 'Buat rencana tindakan yang logis, utamakan tetap di tempat jika malam tiba.', icon: 'fa-clipboard-list' }
+                    ]
+                },
+                {
+                    title: 'Manajemen Bahaya',
+                    items: [
+                        { title: 'Cuaca Ekstrem', desc: 'Waspadai badai petir dan angin kencang di punggungan terbuka.', icon: 'fa-bolt' },
+                        { title: 'Medan Terjal', desc: 'Hati-hati pada jalur berbatu yang licin setelah hujan.', icon: 'fa-mountain' },
+                        { title: 'Sinyal Darurat', desc: 'Gunakan peluit atau cermin untuk memberikan tanda jika diperlukan.', icon: 'fa-bullhorn' }
+                    ]
+                }
+            ]
+        },
+        medis: {
+            title: 'Panduan Medis',
+            description: 'Informasi kesehatan penting, penanganan penyakit ketinggian, dan protokol pertolongan pertama di gunung.',
+            icon: 'fa-medkit',
+            headerImage: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800',
+            sections: [
+                {
+                    title: 'Penyakit Ketinggian (AMS)',
+                    items: [
+                        { title: 'Gejala Awal', desc: 'Sakit kepala, mual, dan kehilangan nafsu makan.', icon: 'fa-dizzy' },
+                        { title: 'Aklimatisasi', desc: 'Lakukan pendakian secara bertahap untuk menyesuaikan tubuh.', icon: 'fa-lungs' },
+                        { title: 'Penanganan', desc: 'Turun ke ketinggian yang lebih rendah jika gejala memberat.', icon: 'fa-arrow-down' }
+                    ]
+                },
+                {
+                    title: 'Hipotermia & Dehidrasi',
+                    items: [
+                        { title: 'Hipotermia', desc: 'Jaga tubuh tetap kering dan gunakan pakaian berlapis.', icon: 'fa-snowflake' },
+                        { title: 'Hidrasi Rutin', desc: 'Minum air secara berkala meskipun tidak merasa haus.', icon: 'fa-tint' },
+                        { title: 'P3K Kit', desc: 'Pastikan membawa thermal blanket dan obat-obatan pribadi.', icon: 'fa-first-aid' }
+                    ]
+                }
+            ]
+        },
+        teknis: {
+            title: 'Panduan Teknis',
+            description: 'Teknik pendakian, navigasi darat, dan keterampilan lapangan untuk mendukung efisiensi perjalanan Anda.',
+            icon: 'fa-cogs',
+            headerImage: 'https://images.unsplash.com/photo-1533240332313-0db49b459ad6?auto=format&fit=crop&q=80&w=800',
+            sections: [
+                {
+                    title: 'Teknik Berjalan & Bernapas',
+                    items: [
+                        { title: 'Langkah Irama', desc: 'Gunakan langkah pendek yang konsisten untuk menjaga detak jantung.', icon: 'fa-walking' },
+                        { title: 'Teknik Bernapas', desc: 'Bernapaslah secara ritmis melalui hidung dan mulut.', icon: 'fa-wind' },
+                        { title: 'Rest Step', desc: 'Teknik mengunci lutut sejenak untuk mengistirahatkan otot kaki.', icon: 'fa-pause' }
+                    ]
+                },
+                {
+                    title: 'Navigasi Darat',
+                    items: [
+                        { title: 'Orientasi Peta', desc: 'Menyamakan arah peta dengan medan sebenarnya.', icon: 'fa-map' },
+                        { title: 'Penggunaan Kompas', desc: 'Membidik arah (azimuth) untuk menentukan rute.', icon: 'fa-compass' },
+                        { title: 'Tanda Alam', desc: 'Gunakan lumut atau posisi matahari sebagai navigasi cadangan.', icon: 'fa-sun' }
+                    ]
+                }
+            ]
+        },
+        peralatan: {
+            title: 'Panduan Peralatan',
+            description: 'Pemilihan alat yang tepat dan sistem packing yang efisien untuk pendakian yang nyaman dan aman.',
+            icon: 'fa-hiking',
+            headerImage: 'https://images.unsplash.com/photo-1445307806294-bff7f67ff225?auto=format&fit=crop&q=80&w=800',
+            sections: [
+                {
+                    title: 'Sistem Pakaian (Layering)',
+                    items: [
+                        { title: 'Base Layer', desc: 'Pakaian tipis yang cepat kering untuk menyerap keringat.', icon: 'fa-tshirt' },
+                        { title: 'Mid Layer', desc: 'Jaket fleece atau down untuk menjaga suhu tubuh tetap hangat.', icon: 'fa-cloud' },
+                        { title: 'Outer Layer', desc: 'Jaket windproof/waterproof untuk pelindung cuaca.', icon: 'fa-shield-virus' }
+                    ]
+                },
+                {
+                    title: 'Manajemen Carrier',
+                    items: [
+                        { title: 'Packing Seimbang', desc: 'Letakkan barang terberat di tengah dekat punggung.', icon: 'fa-box' },
+                        { title: 'Akses Cepat', desc: 'Simpan jas hujan dan P3K di bagian yang mudah dijangkau.', icon: 'fa-bolt' },
+                        { title: 'Waterproofing', desc: 'Gunakan dry bag atau trash bag di dalam carrier.', icon: 'fa-water' }
+                    ]
+                }
+            ]
+        },
+        fisik: {
+            title: 'Panduan Fisik',
+            description: 'Persiapan kondisi fisik jangka panjang dan pemenuhan nutrisi untuk performa maksimal di ketinggian.',
+            icon: 'fa-dumbbell',
+            headerImage: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&q=80&w=800',
+            sections: [
+                {
+                    title: 'Program Latihan Fisik',
+                    items: [
+                        { title: 'Kardiovaskular', desc: 'Lari, berenang, atau bersepeda minimal 30 menit.', icon: 'fa-heartbeat' },
+                        { title: 'Latihan Kekuatan', desc: 'Fokus pada otot kaki (squat/lunges) dan punggung.', icon: 'fa-dumbbell' },
+                        { title: 'Latihan Beban', desc: 'Berjalan dengan carrier berisi beban untuk adaptasi.', icon: 'fa-weight-hanging' }
+                    ]
+                },
+                {
+                    title: 'Nutrisi & Pemulihan',
+                    items: [
+                        { title: 'Karbohidrat Kompleks', desc: 'Konsumsi nasi merah atau gandum sebelum mendaki.', icon: 'fa-bread-slice' },
+                        { title: 'Elektrolit', desc: 'Cukupi asupan garam untuk mencegah kram otot.', icon: 'fa-flask' },
+                        { title: 'Istirahat Cukup', desc: 'Pastikan tidur 7-8 jam seminggu sebelum pendakian.', icon: 'fa-bed' }
+                    ]
+                }
+            ]
+        },
+        etika: {
+            title: 'Panduan Etika',
+            description: 'Prinsip kelestarian alam dan kode etik berpendakian untuk menjaga keasrian gunung bagi generasi mendatang.',
+            icon: 'fa-leaf',
+            headerImage: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=800',
+            sections: [
+                {
+                    title: 'Leave No Trace (LNT)',
+                    items: [
+                        { title: 'Kelola Sampah', desc: 'Bawa pulang semua sampah, termasuk sisa makanan.', icon: 'fa-trash' },
+                        { title: 'Tanpa Jejak', desc: 'Jangan membuat api unggun atau menggali parit.', icon: 'fa-fire-extinguisher' },
+                        { title: 'Hormati Flora-Fauna', desc: 'Jangan memetik bunga atau memberi makan satwa liar.', icon: 'fa-paw' }
+                    ]
+                },
+                {
+                    title: 'Etika Sosial',
+                    items: [
+                        { title: 'Papasan di Jalur', desc: 'Dahulukan pendaki yang sedang berjalan naik.', icon: 'fa-exchange-alt' },
+                        { title: 'Kearifan Lokal', desc: 'Hormati adat istiadat dan larangan warga sekitar.', icon: 'fa-landmark' },
+                        { title: 'Suasana Tenang', desc: 'Hindari kebisingan musik agar tidak mengganggu pendaki lain.', icon: 'fa-volume-mute' }
+                    ]
+                }
+            ]
+        }
+    };
+
+    const allPanduan = Object.keys(panduan).map(k => ({ 
+        slug: k, 
+        title: panduan[k].title, 
+        icon: panduan[k].icon 
+    }));
+
+    if (panduan[slug]) {
+        res.render('panduan-detail', {
+            title: panduan[slug].title,
+            description: panduan[slug].description,
+            icon: panduan[slug].icon,
+            headerImage: panduan[slug].headerImage,
+            sections: panduan[slug].sections,
+            slug: slug,
+            user: req.session.user,
+            allPanduan: allPanduan
+        });
+    } else {
+        res.status(404).render('404', { title: 'Panduan Tidak Ditemukan', user: req.session.user });
+    }
 });
 
 module.exports = router;

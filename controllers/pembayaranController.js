@@ -24,9 +24,13 @@ exports.showDaftar = async (req, res) => {
       return res.redirect('/pendakian');
     }
 
+    const data = gunung[0];
+    // Split pintu_jalur string into array
+    const pintuJalur = data.pintu_jalur ? data.pintu_jalur.split(',').map(p => p.trim()) : [];
+
     res.render('pendaftaran', {
       user: req.session.user,
-      gunung: gunung[0]
+      gunung: { ...data, pintuJalur }
     });
   } catch (err) {
     console.error('Show daftar error:', err);
@@ -74,6 +78,10 @@ exports.showPembayaran = async (req, res) => {
 
 // POST /buat-pemesanan - Create new booking (replaces POST /simaksi for payment flow)
 exports.buatPemesanan = async (req, res) => {
+  console.log('--- BUAT PEMESANAN ---');
+  console.log('Body:', req.body);
+  console.log('User:', req.session.user);
+
   const {
     id_gunung,
     nama_gunung,
@@ -89,53 +97,19 @@ exports.buatPemesanan = async (req, res) => {
   } = req.body;
 
   try {
-    // Validate required fields
-    if (!id_gunung || !tanggal_pendakian || !tanggal_keluar ||
-        !pintu_masuk || !pintu_keluar || !nomor_hp || !email || !jumlah_anggota) {
-      req.flash('error', 'Mohon lengkapi semua data formulir.');
+    // Basic validation
+    if (!id_gunung || !tanggal_pendakian || !tanggal_keluar || !pintu_masuk || !pintu_keluar) {
+      console.log('❌ Validasi gagal: Data wajib ada yang kosong');
+      req.flash('error', 'Mohon lengkapi data rute dan tanggal.');
       return res.redirect('/pendakian');
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      req.flash('error', 'Format email tidak valid.');
-      return res.redirect('/pendakian');
-    }
-
-    // Validate phone number format (basic - at least 9 digits)
-    const phoneRegex = /^\d{9,}$/;
-    if (!phoneRegex.test(nomor_hp.replace(/[^0-9]/g, ''))) {
-      req.flash('error', 'Nomor HP tidak valid (minimal 9 digit).');
-      return res.redirect('/pendakian');
-    }
-
-    // Validate dates
-    const tanggalMasukDate = new Date(tanggal_pendakian);
-    const tanggalKeluarDate = new Date(tanggal_keluar);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (tanggalMasukDate < today) {
-      req.flash('error', 'Tanggal masuk tidak boleh di masa lalu.');
-      return res.redirect('/pendakian');
-    }
-
-    if (tanggalKeluarDate <= tanggalMasukDate) {
-      req.flash('error', 'Tanggal keluar harus setelah tanggal masuk.');
-      return res.redirect('/pendakian');
-    }
-
-    // Validate jumlah anggota
-    const jumlah = parseInt(jumlah_anggota, 10);
-    if (jumlah < 1 || jumlah > 20) {
-      req.flash('error', 'Jumlah anggota harus antara 1-20 orang.');
-      return res.redirect('/pendakian');
-    }
-
+    const jumlah = parseInt(jumlah_anggota, 10) || 1;
     const harga = parseInt(harga_per_orang, 10) || 150000;
     const totalBayar = harga * jumlah;
     const kodeBooking = generateKodeBooking();
+
+    console.log('Creating booking:', kodeBooking, 'for user:', req.session.user.id);
 
     // Insert into pemesanan table
     await db.query(
@@ -155,8 +129,8 @@ exports.buatPemesanan = async (req, res) => {
         tanggal_keluar,
         pintu_masuk,
         pintu_keluar,
-        nomor_hp,
-        email,
+        nomor_hp || '',
+        email || req.session.user.email,
         jumlah,
         harga,
         totalBayar,
@@ -166,18 +140,22 @@ exports.buatPemesanan = async (req, res) => {
       ]
     );
 
-    // Also insert into simaksi for backward compatibility with admin dashboard
-    await db.query(
-      `INSERT INTO simaksi (id_user, id_gunung, tanggal_pendakian, jumlah_anggota, status_pengajuan) 
-       VALUES (?, ?, ?, ?, ?)`,
-      [req.session.user.id, id_gunung, tanggal_pendakian, jumlah, 'Pending']
-    );
+    // Backward compatibility
+    try {
+        await db.query(
+          `INSERT INTO simaksi (id_user, id_gunung, tanggal_pendakian, jumlah_anggota, status_pengajuan) 
+           VALUES (?, ?, ?, ?, ?)`,
+          [req.session.user.id, id_gunung, tanggal_pendakian, jumlah, 'Pending']
+        );
+    } catch (simaksiErr) {
+        console.warn('⚠️ Simaksi legacy table insert failed (non-critical):', simaksiErr.message);
+    }
 
-    // Redirect to QRIS payment page
+    console.log('✅ Booking created successfully. Redirecting to payment...');
     res.redirect(`/pembayaran/${kodeBooking}`);
   } catch (err) {
-    console.error('Buat pemesanan error:', err);
-    req.flash('error', 'Terjadi kesalahan saat memproses pemesanan. Silakan coba lagi.');
+    console.error('❌ Buat pemesanan error:', err);
+    req.flash('error', 'Gagal memproses pendaftaran: ' + err.message);
     res.redirect('/pendakian');
   }
 };
@@ -186,10 +164,12 @@ exports.buatPemesanan = async (req, res) => {
 exports.konfirmasiBayar = async (req, res) => {
   try {
     const { kode_booking } = req.params;
+    const { final_metode } = req.body;
 
     const [result] = await db.query(
-      `UPDATE pemesanan SET status = 'dibayar' WHERE kode_booking = ? AND id_user = ?`,
-      [kode_booking, req.session.user.id]
+      `UPDATE pemesanan SET status = 'dibayar', metode_pembayaran = ? 
+       WHERE kode_booking = ? AND id_user = ?`,
+      [final_metode || 'QRIS', kode_booking, req.session.user.id]
     );
 
     if (result.affectedRows === 0) {
@@ -277,6 +257,7 @@ exports.uploadBukti = async (req, res) => {
 exports.showPembayaranSukses = async (req, res) => {
   try {
     const { kode_booking } = req.params;
+    const QRCode = require('qrcode');
 
     const [pemesanan] = await db.query(
       `SELECT p.*, g.nama_gunung FROM pemesanan p JOIN gunung g ON p.id_gunung = g.id WHERE p.kode_booking = ? AND p.id_user = ?`,
@@ -288,9 +269,15 @@ exports.showPembayaranSukses = async (req, res) => {
       return res.redirect('/pendakian');
     }
 
+    const data = pemesanan[0];
+    
+    // Generate QR Code for the booking
+    const qrCodeDataUrl = await QRCode.toDataURL(data.kode_booking);
+
     res.render('pembayaran-sukses', {
       user: req.session.user,
-      pemesanan: pemesanan[0],
+      pemesanan: data,
+      qrCode: qrCodeDataUrl,
       formatRupiah,
       success: req.flash('success')
     });
@@ -304,6 +291,7 @@ exports.showPembayaranSukses = async (req, res) => {
 exports.showStatusPemesanan = async (req, res) => {
   try {
     const { kode_booking } = req.params;
+    const QRCode = require('qrcode');
 
     const [pemesanan] = await db.query(
       `SELECT p.*, g.nama_gunung, g.ketinggian FROM pemesanan p JOIN gunung g ON p.id_gunung = g.id WHERE p.kode_booking = ? AND p.id_user = ?`,
@@ -315,9 +303,15 @@ exports.showStatusPemesanan = async (req, res) => {
       return res.redirect('/pendakian');
     }
 
+    const data = pemesanan[0];
+    
+    // Generate QR Code for the booking
+    const qrCodeDataUrl = await QRCode.toDataURL(data.kode_booking);
+
     res.render('status-pemesanan', {
       user: req.session.user,
-      pemesanan: pemesanan[0],
+      pemesanan: data,
+      qrCode: qrCodeDataUrl,
       formatRupiah
     });
   } catch (err) {
@@ -456,7 +450,7 @@ exports.adminDetailPemesanan = async (req, res) => {
 
     res.render('admin-pemesanan-detail', {
       user: req.session.user,
-      pemesanan: pemesanan[0],
+      order: pemesanan[0],
       formatRupiah,
       error: req.flash('error'),
       success: req.flash('success')

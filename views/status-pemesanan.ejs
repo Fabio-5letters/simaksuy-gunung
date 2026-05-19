@@ -105,12 +105,8 @@
                             <p class="font-semibold"><%= new Date(pemesanan.tanggal_keluar).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) %></p>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-500">Pintu Masuk</p>
-                            <p class="font-semibold"><%= pemesanan.pintu_masuk %></p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-500">Pintu Keluar</p>
-                            <p class="font-semibold"><%= pemesanan.pintu_keluar %></p>
+                            <p class="text-xs text-gray-500">Pintu Jalur</p>
+                            <p class="font-semibold"><%= pemesanan.pintu_masuk %> &rarr; <%= pemesanan.pintu_keluar %></p>
                         </div>
                         <div>
                             <p class="text-xs text-gray-500">Jumlah Anggota</p>
@@ -122,6 +118,20 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- QR Code / E-Tiket Section -->
+                <% if (pemesanan.status === 'diverifikasi') { %>
+                    <div class="bg-white border-2 border-dashed border-green-300 rounded-xl p-8 mb-6 flex flex-col items-center">
+                        <p class="text-sm font-bold text-green-600 uppercase tracking-widest mb-4">E-Tiket Resmi</p>
+                        <div class="bg-white p-2 border border-gray-100 shadow-sm rounded-lg mb-4">
+                            <img src="<%= qrCode %>" alt="QR Code E-Tiket" class="w-48 h-48">
+                        </div>
+                        <p class="text-xs text-gray-500 text-center">
+                            Tunjukkan QR Code ini kepada petugas di basecamp<br>
+                            sebagai bukti pendaftaran resmi Anda.
+                        </p>
+                    </div>
+                <% } %>
 
                 <!-- Proof Upload (if applicable) -->
                 <% if (pemesanan.bukti_pembayaran) { %>
