@@ -575,4 +575,44 @@ router.get('/download/:filename', (req, res) => {
   }
 });
 
+// Tambahkan rute untuk halaman detail panduan
+router.get('/panduan/:slug', (req, res) => {
+    const slug = req.params.slug;
+    const panduan = {
+        keselamatan: {
+            title: 'Panduan Keselamatan',
+            content: 'Prosedur evakuasi, pertolongan pertama, dan persiapan fisik/mental.'
+        },
+        medis: {
+            title: 'Panduan Medis',
+            content: 'Obat-obatan wajib, penanganan hipotermia, dan penyakit ketinggian.'
+        },
+        teknis: {
+            title: 'Panduan Teknis',
+            content: 'Navigasi, komunikasi, dan perencanaan perjalanan.'
+        },
+        peralatan: {
+            title: 'Panduan Peralatan',
+            content: 'Peralatan wajib, tambahan, dan perawatan.'
+        },
+        fisik: {
+            title: 'Panduan Fisik',
+            content: 'Latihan fisik, nutrisi, dan istirahat.'
+        },
+        etika: {
+            title: 'Panduan Etika',
+            content: 'Jaga kebersihan, hormati alam, dan sikap terhadap pendaki lain.'
+        }
+    };
+
+    if (panduan[slug]) {
+        res.render('panduan-detail', {
+            title: panduan[slug].title,
+            content: panduan[slug].content
+        });
+    } else {
+        res.status(404).render('404', { title: 'Panduan Tidak Ditemukan' });
+    }
+});
+
 module.exports = router;
