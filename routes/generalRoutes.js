@@ -569,7 +569,7 @@ router.get('/download/:filename', (req, res) => {
 
   // Check if file exists
   if (require('fs').existsSync(resolvedPath)) {
-    res.download(resolvedPath);
+    res.sendFile(resolvedPath);
   } else {
     res.status(404).render('error', { message: 'File panduan tidak ditemukan', user: req.session.user });
   }
