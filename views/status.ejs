@@ -191,9 +191,9 @@
                                         <% } %>
                                     </div>
                                     <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Status Terakhir</p>
-                                    <% if (item.status_pengajuan === 'Disetujui') { %>
-                                        <a href="/riwayat" class="mt-4 text-green-600 font-black text-xs uppercase tracking-widest hover:underline">
-                                            Lihat Etiket <i class="fas fa-arrow-right ml-1"></i>
+                                    <% if (item.status_pengajuan === 'Disetujui' || item.status === 'diverifikasi') { %>
+                                        <a href="/download-tiket/<%= item.kode_booking || item.id %>?format=html" class="mt-4 text-green-600 font-black text-xs uppercase tracking-widest hover:underline flex items-center">
+                                            Lihat Tiket (Digital) <i class="fas fa-ticket-alt ml-1"></i>
                                         </a>
                                     <% } %>
                                 </div>

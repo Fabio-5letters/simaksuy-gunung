@@ -124,9 +124,15 @@
                                             </div>
                                         </div>
                                         <% if (user) { %>
-                                            <a href="/daftar/<%= item.id %>" class="mt-4 w-full btn-primary text-white font-bold py-3 rounded-xl transition flex items-center justify-center">
-                                                <i class="fas fa-plus-circle mr-2"></i>Daftar Pendakian
-                                            </a>
+                                            <% if (item.status === 'Tutup') { %>
+                                                <button class="mt-4 w-full bg-gray-400 text-white font-bold py-3 rounded-xl cursor-not-allowed flex items-center justify-center" disabled>
+                                                    <i class="fas fa-times-circle mr-2"></i>Pendakian Ditutup
+                                                </button>
+                                            <% } else { %>
+                                                <a href="/daftar/<%= item.id %>" class="mt-4 w-full btn-primary text-white font-bold py-3 rounded-xl transition flex items-center justify-center">
+                                                    <i class="fas fa-plus-circle mr-2"></i>Daftar Pendakian
+                                                </a>
+                                            <% } %>
                                         <% } else { %>
                                             <a href="/login" class="mt-4 w-full btn-primary text-white font-bold py-3 rounded-xl transition flex items-center justify-center">
                                                 <i class="fas fa-sign-in-alt mr-2"></i>Login untuk Daftar
@@ -203,9 +209,15 @@
                                 <% } %>
 
                                 <% if (user) { %>
-                                    <a href="/daftar/<%= item.id %>" class="mt-8 w-full btn-primary text-white font-black py-4 rounded-xl transition flex items-center justify-center text-lg">
-                                        <i class="fas fa-plus-circle mr-2"></i>Daftar Sekarang
-                                    </a>
+                                    <% if (item.status === 'Tutup') { %>
+                                        <button class="mt-8 w-full bg-gray-400 text-white font-black py-4 rounded-xl cursor-not-allowed flex items-center justify-center text-lg" disabled>
+                                            <i class="fas fa-times-circle mr-2"></i>Pendakian Ditutup
+                                        </button>
+                                    <% } else { %>
+                                        <a href="/daftar/<%= item.id %>" class="mt-8 w-full btn-primary text-white font-black py-4 rounded-xl transition flex items-center justify-center text-lg">
+                                            <i class="fas fa-plus-circle mr-2"></i>Daftar Sekarang
+                                        </a>
+                                    <% } %>
                                 <% } else { %>
                                     <a href="/login" class="mt-8 w-full btn-primary text-white font-black py-4 rounded-xl transition flex items-center justify-center text-lg">
                                         <i class="fas fa-sign-in-alt mr-2"></i>Login untuk Daftar

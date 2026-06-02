@@ -122,7 +122,11 @@
                 <!-- Featured Image -->
                 <div class="mb-16 relative group">
                     <div class="h-96 md:h-[32rem] bg-gradient-to-br from-green-400 to-green-600 rounded-[3rem] overflow-hidden shadow-2xl">
-                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop" alt="<%= berita.judul %>" class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+                        <% if (berita.gambar_path) { %>
+                            <img src="<%= berita.gambar_path %>" alt="<%= berita.judul %>" class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+                        <% } else { %>
+                            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop" alt="<%= berita.judul %>" class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+                        <% } %>
                     </div>
                     <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-green-600 rounded-full hidden md:flex items-center justify-center text-white shadow-2xl border-8 border-white">
                         <i class="fas fa-mountain text-4xl"></i>

@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const db = require('../db');
 const { getWeatherForMultipleMountains, getCurrentUpdateTime } = require('../utils/weatherService');
+const panduanController = require('../controllers/panduanController');
 
 const router = express.Router();
 
@@ -422,50 +423,13 @@ router.get('/riwayat', async (req, res) => {
   }
 });
 
-// Download E-Tiket
+// Download E-Tiket (Redirected to PDF generator)
 router.get('/download-etiket/:kode_booking', async (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
-
-  try {
-    const { kode_booking } = req.params;
-
-    const [pemesanan] = await db.query(`
-      SELECT p.*, g.nama_gunung, g.lokasi, g.ketinggian, u.nama AS nama_user, u.email AS email_user
-      FROM pemesanan p
-      JOIN gunung g ON p.id_gunung = g.id
-      JOIN users u ON p.id_user = u.id
-      WHERE p.kode_booking = ? AND p.id_user = ?
-    `, [kode_booking, req.session.user.id]);
-
-    if (pemesanan.length === 0) {
-      return res.status(404).render('error', { 
-        message: 'E-Tiket tidak ditemukan', 
-        user: req.session.user 
-      });
-    }
-
-    const data = pemesanan[0];
-
-    // Check if payment is verified
-    if (data.status !== 'diverifikasi') {
-      req.flash('error', 'E-Tiket hanya dapat diunduh setelah pembayaran diverifikasi.');
-      return res.redirect('/riwayat');
-    }
-
-    // Render E-Tiket as HTML
-    res.render('etiket', { 
-      user: req.session.user,
-      pemesanan: data
-    });
-  } catch (err) {
-    console.error('Download etiket error:', err);
-    res.status(500).render('error', { 
-      message: 'Terjadi kesalahan saat mengunduh E-Tiket', 
-      user: req.session.user 
-    });
-  }
+  const { kode_booking } = req.params;
+  res.redirect(`/download-tiket/${kode_booking}`);
 });
 
 // Informasi Cuaca page - accessible to all users
@@ -745,6 +709,37 @@ router.get('/panduan/:slug', (req, res) => {
         });
     } else {
         res.status(404).render('404', { title: 'Panduan Tidak Ditemukan', user: req.session.user });
+    }
+});
+
+// API: Download Panduan
+router.get('/api/download-panduan/:type', (req, res) => {
+    try {
+        const { type } = req.params;
+        const content = panduanController.generateContent(type);
+        
+        if (!content) {
+            return res.status(404).json({ error: 'Panduan tidak ditemukan' });
+        }
+
+        // Set headers untuk download file
+        res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+        res.setHeader('Content-Disposition', `attachment; filename="Panduan-${type.charAt(0).toUpperCase() + type.slice(1)}.txt"`);
+        
+        res.send(content);
+    } catch (err) {
+        console.error('Download panduan API error:', err);
+        res.status(500).json({ error: 'Terjadi kesalahan saat mengunduh panduan' });
+    }
+});
+
+// API: Get Panduan List
+router.get('/api/panduan-list', (req, res) => {
+    try {
+        panduanController.getPanduanList(req, res);
+    } catch (err) {
+        console.error('Get panduan list error:', err);
+        res.status(500).json({ error: 'Terjadi kesalahan' });
     }
 });
 

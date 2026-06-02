@@ -73,7 +73,7 @@
         <h3 class="text-xl font-bold mb-6 flex items-center text-gray-800">
           <i class="fas fa-plus-circle mr-3 text-purple-600"></i> Tambah Berita Baru
         </h3>
-        <form action="/admin/berita" method="POST">
+        <form action="/admin/berita" method="POST" enctype="multipart/form-data">
           <div class="space-y-6">
             <div>
               <label for="judul" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Judul Berita</label>
@@ -84,6 +84,19 @@
               <label for="konten" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Konten Berita</label>
               <textarea name="konten" id="konten" rows="5" required placeholder="Tuliskan isi berita di sini secara detail..." 
                 class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 font-medium text-gray-700 focus:border-purple-500 focus:outline-none transition resize-none"></textarea>
+            </div>
+            <div>
+              <label for="gambar" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Upload Gambar (Opsional)</label>
+              <div class="relative border-2 border-dashed border-purple-200 rounded-2xl p-6 bg-purple-50/30 hover:bg-purple-50/50 transition cursor-pointer" onclick="document.getElementById('gambar').click()">
+                <input type="file" name="gambar" id="gambar" accept=".jpg,.jpeg,.png,.webp" 
+                  class="hidden" onchange="updateFileName(this)">
+                <div class="text-center">
+                  <i class="fas fa-cloud-upload-alt text-3xl text-purple-400 mb-2"></i>
+                  <p class="text-sm font-bold text-gray-700">Klik untuk upload gambar</p>
+                  <p class="text-xs text-gray-500 mt-1">Format: JPG, JPEG, PNG, WEBP (Max 5MB)</p>
+                  <p id="fileName" class="text-xs text-purple-600 font-semibold mt-2"></p>
+                </div>
+              </div>
             </div>
           </div>
           <div class="mt-8 flex justify-end">
@@ -106,6 +119,7 @@
           <table class="w-full text-left">
             <thead>
               <tr class="bg-gray-50/50 text-gray-400 uppercase text-[10px] font-black tracking-widest border-b border-gray-100">
+                <th class="px-8 py-5">Gambar</th>
                 <th class="px-8 py-5">Judul</th>
                 <th class="px-8 py-5">Konten</th>
                 <th class="px-8 py-5">Tanggal</th>
@@ -116,6 +130,15 @@
               <% if (berita && berita.length > 0) { %>
                 <% berita.forEach(item => { %>
                   <tr class="hover:bg-gray-50 transition group">
+                    <td class="px-8 py-5">
+                      <% if (item.gambar_path) { %>
+                        <img src="<%= item.gambar_path %>" alt="<%= item.judul %>" class="w-12 h-12 object-cover rounded-lg shadow-sm">
+                      <% } else { %>
+                        <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                          <i class="fas fa-image text-gray-400 text-xs"></i>
+                        </div>
+                      <% } %>
+                    </td>
                     <td class="px-8 py-5">
                         <p class="font-bold text-gray-800"><%= item.judul %></p>
                     </td>
@@ -143,7 +166,7 @@
                 <% }) %>
               <% } else { %>
                 <tr>
-                  <td colspan="4" class="px-8 py-20 text-center">
+                  <td colspan="5" class="px-8 py-20 text-center">
                     <div class="flex flex-col items-center">
                         <i class="fas fa-newspaper text-5xl text-gray-200 mb-4"></i>
                         <p class="text-gray-400 font-bold uppercase tracking-widest">Belum ada berita yang diterbitkan</p>
@@ -172,7 +195,7 @@
           <i class="fas fa-times text-xl"></i>
         </button>
       </div>
-      <form id="editForm" method="POST" class="p-8">
+      <form id="editForm" method="POST" enctype="multipart/form-data" class="p-8">
         <div class="space-y-6">
           <div>
             <label for="edit_judul" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Judul Berita</label>
@@ -183,6 +206,19 @@
             <label for="edit_konten" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Konten Berita</label>
             <textarea name="konten" id="edit_konten" rows="6" required 
               class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 font-medium text-gray-700 focus:border-purple-500 focus:outline-none transition resize-none"></textarea>
+          </div>
+          <div>
+            <label for="edit_gambar" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Update Gambar (Opsional)</label>
+            <div class="relative border-2 border-dashed border-purple-200 rounded-2xl p-4 bg-purple-50/30 hover:bg-purple-50/50 transition cursor-pointer" onclick="document.getElementById('edit_gambar').click()">
+              <input type="file" name="gambar" id="edit_gambar" accept=".jpg,.jpeg,.png,.webp" 
+                class="hidden" onchange="updateEditFileName(this)">
+              <div class="text-center">
+                <i class="fas fa-cloud-upload-alt text-2xl text-purple-400 mb-1"></i>
+                <p class="text-xs font-bold text-gray-700">Klik untuk upload gambar baru</p>
+                <p class="text-[10px] text-gray-500">JPG, PNG, WEBP (Max 5MB)</p>
+                <p id="editFileName" class="text-xs text-purple-600 font-semibold mt-2"></p>
+              </div>
+            </div>
           </div>
         </div>
         <div class="mt-10 flex justify-end space-x-4">
@@ -202,11 +238,31 @@
       document.getElementById('editForm').action = `/admin/berita/update/${berita.id}`;
       document.getElementById('edit_judul').value = berita.judul;
       document.getElementById('edit_konten').value = berita.isi_berita || berita.konten;
+      document.getElementById('editFileName').textContent = '';
+      document.getElementById('edit_gambar').value = '';
       document.getElementById('editModal').classList.remove('hidden');
     }
 
     function closeEditModal() {
       document.getElementById('editModal').classList.add('hidden');
+    }
+
+    function updateFileName(input) {
+      const fileName = document.getElementById('fileName');
+      if (input.files && input.files[0]) {
+        fileName.textContent = '✓ ' + input.files[0].name + ' (' + (input.files[0].size / 1024).toFixed(2) + ' KB)';
+      } else {
+        fileName.textContent = '';
+      }
+    }
+
+    function updateEditFileName(input) {
+      const fileName = document.getElementById('editFileName');
+      if (input.files && input.files[0]) {
+        fileName.textContent = '✓ ' + input.files[0].name + ' (' + (input.files[0].size / 1024).toFixed(2) + ' KB)';
+      } else {
+        fileName.textContent = '';
+      }
     }
 
     window.onclick = function(event) {

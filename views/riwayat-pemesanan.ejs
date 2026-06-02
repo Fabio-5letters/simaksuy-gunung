@@ -127,10 +127,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mt-4 md:mt-0 md:ml-4">
-                                    <a href="/status-pemesanan/<%= order.kode_booking %>" class="btn-primary text-white font-semibold py-2 px-4 rounded-lg inline-flex items-center">
+                                <div class="mt-4 md:mt-0 md:ml-4 flex flex-col gap-2">
+                                    <a href="/status-pemesanan/<%= order.kode_booking %>" class="btn-primary text-white font-semibold py-2 px-4 rounded-lg inline-flex items-center justify-center">
                                         <i class="fas fa-eye mr-2"></i>Detail
                                     </a>
+                                    <% if (order.status === 'diverifikasi') { %>
+                                        <a href="/download-tiket/<%= order.kode_booking %>?format=html" class="bg-green-700 text-white font-semibold py-2 px-4 rounded-lg inline-flex items-center justify-center hover:bg-green-800 transition">
+                                            <i class="fas fa-ticket-alt mr-2"></i>Tiket
+                                        </a>
+                                    <% } %>
                                 </div>
                             </div>
                         </div>

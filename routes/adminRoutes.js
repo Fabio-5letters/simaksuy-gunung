@@ -2,6 +2,7 @@ const express = require('express');
 const db = require('../db');
 const adminController = require('../controllers/adminController');
 const pembayaranController = require('../controllers/pembayaranController');
+const upload = require('../utils/multerConfig');
 
 const router = express.Router();
 
@@ -23,8 +24,8 @@ router.post('/admin/gunung/delete/:id', isAdmin, adminController.deleteGunung);
 // ==================== MANAGE BERITA ====================
 router.get('/admin/berita', isAdmin, adminController.getBerita);
 router.get('/admin/berita/edit/:id', isAdmin, adminController.editBerita);
-router.post('/admin/berita', isAdmin, adminController.createBerita);
-router.post('/admin/berita/update/:id', isAdmin, adminController.updateBerita);
+router.post('/admin/berita', isAdmin, upload.single('gambar'), adminController.createBerita);
+router.post('/admin/berita/update/:id', isAdmin, upload.single('gambar'), adminController.updateBerita);
 router.post('/admin/berita/delete/:id', isAdmin, adminController.deleteBerita);
 
 // ==================== MANAGE PENDAKIAN ====================

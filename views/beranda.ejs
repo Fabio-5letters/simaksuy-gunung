@@ -260,7 +260,7 @@
                                             </div>
                                             <i class="fas fa-mountain text-3xl opacity-30"></i>
                                         </div>
-                                        <button onclick="showGunungDetail(<%= item.id %>)" class="mt-4 w-full <%= item.status === 'Buka' ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600 hover:bg-gray-700' %> text-white font-semibold py-2 rounded-lg transition flex items-center justify-center">
+                                        <button data-gunung-id="<%= item.id %>" class="btn-gunung-detail mt-4 w-full <%= item.status === 'Buka' ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600 hover:bg-gray-700' %> text-white font-semibold py-2 rounded-lg transition flex items-center justify-center">
                                             <i class="fas fa-info-circle mr-2"></i>Lihat Detail
                                         </button>
                                     </div>
@@ -290,10 +290,22 @@
                                 <h3 id="detailTitle" class="text-3xl font-bold text-gray-900"></h3>
                                 <p id="detailSubtitle" class="text-sm text-gray-500 mt-1"></p>
                             </div>
-                            <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-700">
+                            <button id="closeDetailHeader" class="text-gray-400 hover:text-gray-700">
                                 <i class="fas fa-times text-2xl"></i>
                             </button>
                         </div>
+                <!-- Status Alert if Mountain is Closed -->
+                <div id="statusAlert" class="hidden bg-red-50 border-l-4 border-red-500 p-4 mx-6 mt-4 rounded-lg">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-circle text-red-600 text-xl mt-0.5"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-red-800 font-bold">Status Gunung Ditutup</h3>
+                            <p class="text-red-700 text-sm mt-1">Pendaftaran tidak dapat dilakukan karena status gunung sedang ditutup. Silakan cek kembali kemudian untuk informasi terbaru.</p>
+                        </div>
+                    </div>
+                </div>
                 <div class="p-6 grid gap-6 md:grid-cols-2">
                     <div>
                         <p id="detailDescription" class="text-gray-700 leading-relaxed"></p>
@@ -311,14 +323,14 @@
                             <p class="text-sm text-gray-600">Kuota Harian</p>
                             <p id="detailQuota" class="font-semibold text-gray-900"></p>
                         </div>
-                        <div class="bg-green-50 rounded-2xl p-4">
+                        <div id="statusBox" class="bg-green-50 rounded-2xl p-4">
                             <p class="text-sm text-gray-600">Status</p>
                             <p id="detailStatus" class="font-semibold text-gray-900"></p>
                         </div>
                     </div>
                 </div>
                 <div class="bg-gray-50 p-6 flex justify-end space-x-3">
-                    <button onclick="closeDetailModal()" class="px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition">
+                    <button id="closeDetailFooter" class="px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition">
                         Tutup
                     </button>
                     <a id="btnDaftarModal" href="#" class="px-8 py-3 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700 transition">
@@ -465,21 +477,47 @@
             document.getElementById('detailStatus').innerText = item.status;
             document.getElementById('detailDescription').innerText = item.deskripsi || getGunungDescription(item.nama_gunung);
             
-            // Update Daftar Button
+            // Update Status Alert and Button
             const btnDaftar = document.getElementById('btnDaftarModal');
-            if (btnDaftar) {
-                if (item.status === 'Buka') {
-                    btnDaftar.href = `/daftar/${item.id}`;
-                    btnDaftar.innerText = 'Daftar Sekarang';
-                    btnDaftar.classList.remove('hidden');
-                    btnDaftar.classList.replace('bg-gray-400', 'bg-green-600');
-                    btnDaftar.style.pointerEvents = 'auto';
-                } else {
-                    btnDaftar.innerText = 'Ditutup';
-                    btnDaftar.classList.add('bg-gray-400');
-                    btnDaftar.classList.remove('bg-green-600');
-                    btnDaftar.style.pointerEvents = 'none';
-                }
+            const statusAlert = document.getElementById('statusAlert');
+            const statusBox = document.getElementById('statusBox');
+            
+            if (item.status === 'Tutup') {
+                // Show alert message
+                statusAlert.classList.remove('hidden');
+                
+                // Update status box color to red
+                statusBox.classList.remove('bg-green-50');
+                statusBox.classList.add('bg-red-50');
+                const statusText = document.getElementById('detailStatus');
+                statusText.classList.remove('text-gray-900');
+                statusText.classList.add('text-red-700');
+                
+                // Disable and style button
+                btnDaftar.innerText = 'Status Ditutup';
+                btnDaftar.classList.add('bg-gray-400', 'cursor-not-allowed');
+                btnDaftar.classList.remove('bg-green-600', 'hover:bg-green-700');
+                btnDaftar.style.pointerEvents = 'none';
+                btnDaftar.style.opacity = '0.6';
+                btnDaftar.href = '#';
+            } else {
+                // Hide alert message
+                statusAlert.classList.add('hidden');
+                
+                // Reset status box color to green
+                statusBox.classList.remove('bg-red-50');
+                statusBox.classList.add('bg-green-50');
+                const statusText = document.getElementById('detailStatus');
+                statusText.classList.remove('text-red-700');
+                statusText.classList.add('text-gray-900');
+                
+                // Enable button
+                btnDaftar.innerText = 'Daftar Sekarang';
+                btnDaftar.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                btnDaftar.classList.add('bg-green-600', 'hover:bg-green-700');
+                btnDaftar.style.pointerEvents = 'auto';
+                btnDaftar.style.opacity = '1';
+                btnDaftar.href = `/daftar/${item.id}`;
             }
             
             document.getElementById('detailModal').classList.remove('hidden');
@@ -497,6 +535,35 @@
                 }
             });
         }
+
+        // Event listeners for mountain detail buttons (CSP compliant - no inline onclick)
+        document.querySelectorAll('.btn-gunung-detail').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const gunungId = parseInt(this.dataset.gunungId);
+                showGunungDetail(gunungId);
+            });
+        });
+
+        // Event listeners for close buttons (CSP compliant - no inline onclick)
+        const closeDetailHeader = document.getElementById('closeDetailHeader');
+        if (closeDetailHeader) {
+            closeDetailHeader.addEventListener('click', closeDetailModal);
+        }
+
+        const closeDetailFooter = document.getElementById('closeDetailFooter');
+        if (closeDetailFooter) {
+            closeDetailFooter.addEventListener('click', closeDetailModal);
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('detailModal');
+                if (modal && !modal.classList.contains('hidden')) {
+                    closeDetailModal();
+                }
+            }
+        });
     </script>
 </body>
 </html>

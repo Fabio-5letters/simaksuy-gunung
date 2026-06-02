@@ -149,10 +149,13 @@
                             </div>
                         </div>
 
-                        <div class="text-center">
+                        <div class="text-center space-y-3">
                             <a href="/panduan/keselamatan" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold inline-block w-full">
                                 <i class="fas fa-info-circle mr-2"></i>Lihat Panduan
                             </a>
+                            <button class="install-panduan-btn w-full bg-white border-2 border-green-600 text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition" data-file="panduan-keselamatan.pdf">
+                                <i class="fas fa-download mr-2"></i>Install Panduan
+                            </button>
                         </div>
                     </div>
 
@@ -181,12 +184,13 @@
                             </div>
                         </div>
 
-                        <div class="text-center">
-
-                            <a href="/faq" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold inline-block w-full">
->>>>>>> 6d23c08 (bagian deskripsi dan footer)
+                        <div class="text-center space-y-3">
+                            <a href="/panduan/teknis" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold inline-block w-full">
                                 <i class="fas fa-info-circle mr-2"></i>Lihat Panduan
                             </a>
+                            <button class="install-panduan-btn w-full bg-white border-2 border-green-600 text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition" data-file="panduan-teknis.pdf">
+                                <i class="fas fa-download mr-2"></i>Install Panduan
+                            </button>
                         </div>
                     </div>
 
@@ -215,14 +219,13 @@
                             </div>
                         </div>
 
-                        <div class="text-center">
-<<<<<<< HEAD
+                        <div class="text-center space-y-3">
                             <a href="/panduan/peralatan" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold inline-block w-full">
-=======
-                            <a href="/faq" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold inline-block w-full">
->>>>>>> 6d23c08 (bagian deskripsi dan footer)
                                 <i class="fas fa-info-circle mr-2"></i>Lihat Panduan
                             </a>
+                            <button class="install-panduan-btn w-full bg-white border-2 border-green-600 text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition" data-file="panduan-peralatan.pdf">
+                                <i class="fas fa-download mr-2"></i>Install Panduan
+                            </button>
                         </div>
                     </div>
 
@@ -251,14 +254,13 @@
                             </div>
                         </div>
 
-                        <div class="text-center">
-<<<<<<< HEAD
+                        <div class="text-center space-y-3">
                             <a href="/panduan/fisik" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold inline-block w-full">
-=======
-                            <a href="/faq" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold inline-block w-full">
->>>>>>> 6d23c08 (bagian deskripsi dan footer)
                                 <i class="fas fa-info-circle mr-2"></i>Lihat Panduan
                             </a>
+                            <button class="install-panduan-btn w-full bg-white border-2 border-green-600 text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition" data-file="panduan-fisik.pdf">
+                                <i class="fas fa-download mr-2"></i>Install Panduan
+                            </button>
                         </div>
                     </div>
 
@@ -287,14 +289,13 @@
                             </div>
                         </div>
 
-                        <div class="text-center">
-<<<<<<< HEAD
+                        <div class="text-center space-y-3">
                             <a href="/panduan/medis" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold inline-block w-full">
-=======
-                            <a href="/faq" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold inline-block w-full">
->>>>>>> 6d23c08 (bagian deskripsi dan footer)
                                 <i class="fas fa-info-circle mr-2"></i>Lihat Panduan
                             </a>
+                            <button class="install-panduan-btn w-full bg-white border-2 border-green-600 text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition" data-file="panduan-medis.pdf">
+                                <i class="fas fa-download mr-2"></i>Install Panduan
+                            </button>
                         </div>
                     </div>
 
@@ -323,14 +324,13 @@
                             </div>
                         </div>
 
-                        <div class="text-center">
-<<<<<<< HEAD
+                        <div class="text-center space-y-3">
                             <a href="/panduan/etika" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold inline-block w-full">
-=======
-                            <a href="/faq" class="btn-cta text-white px-6 py-3 rounded-lg font-semibold inline-block w-full">
->>>>>>> 6d23c08 (bagian deskripsi dan footer)
                                 <i class="fas fa-info-circle mr-2"></i>Lihat Panduan
                             </a>
+                            <button class="install-panduan-btn w-full bg-white border-2 border-green-600 text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition" data-file="panduan-etika.pdf">
+                                <i class="fas fa-download mr-2"></i>Install Panduan
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -418,18 +418,29 @@
                     <i class="fas fa-book-open mr-3"></i>
                     <span></span>
                 </h3>
-                <button onclick="window.closeGuideModal()" class="text-white hover:text-green-200 transition">
+                <button id="close-header-btn" class="text-white hover:text-green-200 transition">
                     <i class="fas fa-times text-2xl"></i>
                 </button>
             </div>
             <div id="modal-content" class="p-8 max-h-[70vh] overflow-y-auto">
                 <!-- Content injected here -->
             </div>
-            <div class="p-6 bg-gray-50 border-t flex justify-end">
-                <button onclick="window.closeGuideModal()" class="bg-green-700 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-800 transition">
+            <div class="p-6 bg-gray-50 border-t flex justify-between gap-4">
+                <button id="download-pdf-btn" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center">
+                    <i class="fas fa-download mr-2"></i>Download PDF
+                </button>
+                <button id="close-modal-btn" class="bg-green-700 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-800 transition">
                     Tutup
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Success Toast Notification -->
+    <div id="success-toast" class="fixed bottom-6 right-6 z-50 hidden transform transition-all">
+        <div class="bg-green-600 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-3">
+            <i class="fas fa-check-circle text-xl"></i>
+            <span id="toast-message">Berhasil!</span>
         </div>
     </div>
 
@@ -445,7 +456,6 @@
             });
             document.addEventListener('click', () => profileDropdown.classList.add('hidden'));
         }
-<<<<<<< HEAD
 
         // Guide Data
         const guides = {
@@ -566,15 +576,58 @@
         };
 
         // Global functions for modal
+        window.currentGuideFile = null;
+
         window.downloadFile = function(filename) {
             const guide = guides[filename];
             if (guide) {
+                window.currentGuideFile = filename;
                 const modal = document.getElementById('guide-modal');
                 document.getElementById('modal-title').querySelector('span').innerText = guide.title;
                 document.getElementById('modal-content').innerHTML = guide.content;
                 modal.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
             }
+        };
+
+        // Download PDF function
+        window.downloadPdfFile = function() {
+            if (!window.currentGuideFile) return;
+            
+            const filename = window.currentGuideFile;
+            const guide = guides[filename];
+            
+            if (!guide) return;
+
+            // Map filename to panduan type
+            const typeMap = {
+                'panduan-keselamatan.pdf': 'keselamatan',
+                'panduan-teknis.pdf': 'teknis',
+                'panduan-peralatan.pdf': 'peralatan',
+                'panduan-fisik.pdf': 'fisik',
+                'panduan-medis.pdf': 'medis',
+                'panduan-etika.pdf': 'etika'
+            };
+
+            const type = typeMap[filename];
+            if (!type) return;
+
+            // Download file dari server
+            const downloadUrl = `/api/download-panduan/${type}`;
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = `Panduan-${type.charAt(0).toUpperCase() + type.slice(1)}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Show success notification
+            window.showToast(`${guide.title} berhasil diunduh!`);
+            
+            // Close modal setelah beberapa saat
+            setTimeout(() => {
+                window.closeGuideModal();
+            }, 1000);
         };
 
         window.closeGuideModal = function() {
@@ -585,12 +638,55 @@
             }
         };
 
+        // Toast notification function
+        window.showToast = function(message) {
+            const toast = document.getElementById('success-toast');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.innerText = message;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        };
+
         // Close on background click
         document.getElementById('guide-modal').addEventListener('click', function(e) {
             if (e.target === this) window.closeGuideModal();
         });
-=======
->>>>>>> 6d23c08 (bagian deskripsi dan footer)
+
+        // Event listeners untuk tombol Install Panduan
+        document.querySelectorAll('.install-panduan-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filename = this.getAttribute('data-file');
+                window.downloadFile(filename);
+            });
+        });
+
+        // Event listener untuk tombol Download PDF
+        const downloadPdfBtn = document.getElementById('download-pdf-btn');
+        if (downloadPdfBtn) {
+            downloadPdfBtn.addEventListener('click', window.downloadPdfFile);
+        }
+
+        // Event listener untuk tombol Tutup Modal
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        if (closeModalBtn) {
+            closeModalBtn.addEventListener('click', window.closeGuideModal);
+        }
+
+        // Event listener untuk tombol close di header
+        const closeHeaderBtn = document.getElementById('close-header-btn');
+        if (closeHeaderBtn) {
+            closeHeaderBtn.addEventListener('click', window.closeGuideModal);
+        }
+
+        // Close guide modal dengan tombol close di header
+        const closeGuideButtons = document.querySelectorAll('[onclick*="closeGuideModal"]');
+        closeGuideButtons.forEach(btn => {
+            btn.removeAttribute('onclick');
+            btn.addEventListener('click', window.closeGuideModal);
+        });
     </script>
 </body>
 </html>
