@@ -394,7 +394,7 @@ router.get('/riwayat', async (req, res) => {
       FROM simaksi s
       JOIN gunung g ON s.id_gunung = g.id
       ${whereClauseSimaksi}
-      ORDER BY s.created_at DESC
+      ORDER BY s.id DESC
       LIMIT ? OFFSET ?
     `, [...paramsSimaksi, limit, offset]);
 

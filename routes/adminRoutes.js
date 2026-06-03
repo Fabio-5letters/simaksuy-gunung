@@ -2,6 +2,7 @@ const express = require('express');
 const db = require('../db');
 const adminController = require('../controllers/adminController');
 const pembayaranController = require('../controllers/pembayaranController');
+const pintuJalurController = require('../controllers/pintuJalurController');
 const upload = require('../utils/multerConfig');
 
 const router = express.Router();
@@ -39,6 +40,17 @@ router.post('/admin/pendakian/delete/:id', isAdmin, adminController.deletePendak
 router.get('/admin/pemesanan', isAdmin, pembayaranController.adminPemesanan);
 router.get('/admin/pemesanan/:id', isAdmin, pembayaranController.adminDetailPemesanan);
 router.post('/admin/verifikasi/:id', isAdmin, pembayaranController.verifikasiPemesanan);
+
+// ==================== MANAGE PINTU JALUR (ENTRY/EXIT POINTS) ====================
+router.get('/admin/pintu-jalur', isAdmin, pintuJalurController.getPintuJalur);
+router.get('/admin/pintu-jalur/tambah', isAdmin, pintuJalurController.showTambahPintu);
+router.post('/admin/pintu-jalur', isAdmin, pintuJalurController.createPintuJalur);
+router.get('/admin/pintu-jalur/edit/:id', isAdmin, pintuJalurController.showEditPintu);
+router.post('/admin/pintu-jalur/update/:id', isAdmin, pintuJalurController.updatePintuJalur);
+router.post('/admin/pintu-jalur/delete/:id', isAdmin, pintuJalurController.deletePintuJalur);
+
+// API - Get entry points by mountain (for registration form)
+router.get('/api/pintu-jalur', pintuJalurController.getPintuByGunung);
 
 // ==================== ADMIN DASHBOARD (LAST PRIORITY) ====================
 router.get('/admin', isAdmin, async (req, res) => {

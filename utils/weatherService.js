@@ -1,186 +1,194 @@
 /**
  * Weather Service - Fetch real-time weather data
- * Using OpenWeatherMap API for accurate weather information
+ * Using Open-Meteo API (Free, No API Key Required)
+ * Documentation: https://open-meteo.com/en/docs
  */
 
 const axios = require('axios');
 
-const OPENWEATHER_API_KEY = process.env.OPENWEATHER_API_KEY || null;
-const OPENWEATHER_BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
+const OPENMETEO_BASE_URL = 'https://api.open-meteo.com/v1/forecast';
 
 /**
- * Get real-time weather data for a mountain location
- * @param {string} latitude - Mountain latitude
- * @param {string} longitude - Mountain longitude
- * @param {string} mountainName - Mountain name for fallback
+ * WMO Weather Interpretation Codes
+ * Reference: https://www.noaa.gov/media/en/infographics/wmo-weather-codes
+ */
+const weatherCodeMap = {
+  0: { condition: 'Cerah', icon: 'fas fa-sun', color: 'green' },
+  1: { condition: 'Cerah Sebagian', icon: 'fas fa-cloud-sun', color: 'green' },
+  2: { condition: 'Berawan Sebagian', icon: 'fas fa-cloud-sun', color: 'yellow' },
+  3: { condition: 'Berawan', icon: 'fas fa-cloud', color: 'yellow' },
+  45: { condition: 'Berkabut', icon: 'fas fa-smog', color: 'yellow' },
+  48: { condition: 'Kabut Berembun', icon: 'fas fa-smog', color: 'yellow' },
+  51: { condition: 'Gerimis Ringan', icon: 'fas fa-cloud-rain', color: 'yellow' },
+  53: { condition: 'Gerimis', icon: 'fas fa-cloud-rain', color: 'yellow' },
+  55: { condition: 'Gerimis Lebat', icon: 'fas fa-cloud-rain', color: 'red' },
+  61: { condition: 'Hujan Ringan', icon: 'fas fa-cloud-rain', color: 'yellow' },
+  63: { condition: 'Hujan', icon: 'fas fa-cloud-rain', color: 'red' },
+  65: { condition: 'Hujan Lebat', icon: 'fas fa-cloud-rain', color: 'red' },
+  71: { condition: 'Salju Ringan', icon: 'fas fa-snowflake', color: 'yellow' },
+  73: { condition: 'Salju', icon: 'fas fa-snowflake', color: 'red' },
+  75: { condition: 'Salju Lebat', icon: 'fas fa-snowflake', color: 'red' },
+  77: { condition: 'Butir Salju', icon: 'fas fa-snowflake', color: 'red' },
+  80: { condition: 'Hujan Rintik Ringan', icon: 'fas fa-cloud-rain', color: 'yellow' },
+  81: { condition: 'Hujan Rintik', icon: 'fas fa-cloud-rain', color: 'red' },
+  82: { condition: 'Hujan Rintik Lebat', icon: 'fas fa-cloud-rain', color: 'red' },
+  85: { condition: 'Salju Rintik Ringan', icon: 'fas fa-snowflake', color: 'yellow' },
+  86: { condition: 'Salju Rintik Lebat', icon: 'fas fa-snowflake', color: 'red' },
+  95: { condition: 'Badai Petir', icon: 'fas fa-bolt', color: 'red' },
+  96: { condition: 'Badai dengan Es Ringan', icon: 'fas fa-bolt', color: 'red' },
+  99: { condition: 'Badai dengan Es Lebat', icon: 'fas fa-bolt', color: 'red' }
+};
+
+/**
+ * Get weather info from WMO code
+ * @param {number} code - WMO weather code
+ * @returns {Object} Weather information
+ */
+function getWeatherInfoFromCode(code) {
+  return weatherCodeMap[code] || { 
+    condition: 'Tidak Diketahui', 
+    icon: 'fas fa-cloud-question', 
+    color: 'gray' 
+  };
+}
+
+/**
+ * Get real-time weather data for a mountain location using Open-Meteo API
+ * @param {number} latitude - Mountain latitude
+ * @param {number} longitude - Mountain longitude
+ * @param {string} mountainName - Mountain name
  * @returns {Promise<Object>} Weather data object
  */
 async function getWeatherData(latitude, longitude, mountainName) {
   try {
-    // If no API key, return mock data
-    if (!OPENWEATHER_API_KEY) {
-      console.warn(`Weather API key not configured. Using mock data for ${mountainName}`);
+    const response = await axios.get(OPENMETEO_BASE_URL, {
+      params: {
+        latitude: latitude,
+        longitude: longitude,
+        current: 'temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,precipitation,rain',
+        daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max',
+        daily_precipitation_unit: 'mm',
+        wind_speed_unit: 'kmh',
+        timezone: 'Asia/Jakarta',
+        forecast_days: 7
+      },
+      timeout: 8000
+    });
+
+    if (!response.data || !response.data.current) {
       return getMockWeatherData(mountainName);
     }
-
-    const response = await axios.get(OPENWEATHER_BASE_URL, {
-      params: {
-        lat: latitude,
-        lon: longitude,
-        appid: OPENWEATHER_API_KEY,
-        units: 'metric', // Use Celsius
-        lang: 'id' // Indonesian language
-      },
-      timeout: 5000 // 5 second timeout
-    });
 
     return formatWeatherData(response.data, mountainName);
   } catch (error) {
     console.error(`Error fetching weather for ${mountainName}:`, error.message);
-    // Return mock data if API fails
     return getMockWeatherData(mountainName);
   }
 }
 
 /**
- * Format OpenWeatherMap API response to our standard format
- * @param {Object} data - OpenWeatherMap API response
+ * Format Open-Meteo API response to our standard format
+ * @param {Object} data - Open-Meteo API response
  * @param {string} mountainName - Mountain name
  * @returns {Object} Formatted weather data
  */
 function formatWeatherData(data, mountainName) {
-  const condition = data.weather[0];
-  const weatherIcons = {
-    'Clear': 'fas fa-sun',
-    'Clouds': 'fas fa-cloud',
-    'Rain': 'fas fa-cloud-rain',
-    'Drizzle': 'fas fa-cloud-rain-heavy',
-    'Thunderstorm': 'fas fa-bolt',
-    'Snow': 'fas fa-snowflake',
-    'Mist': 'fas fa-smog',
-    'Smoke': 'fas fa-smog',
-    'Haze': 'fas fa-smog',
-    'Dust': 'fas fa-wind',
-    'Fog': 'fas fa-smog',
-    'Sand': 'fas fa-wind',
-    'Ash': 'fas fa-wind',
-    'Squall': 'fas fa-wind',
-    'Tornado': 'fas fa-tornado'
-  };
+  const current = data.current;
+  const daily = data.daily;
+  
+  const weatherInfo = getWeatherInfoFromCode(current.weather_code);
+  
+  // Forecast untuk 7 hari ke depan
+  const forecast = [];
+  for (let i = 0; i < Math.min(7, daily.time.length); i++) {
+    const forecastInfo = getWeatherInfoFromCode(daily.weather_code[i]);
+    forecast.push({
+      date: new Date(daily.time[i]),
+      condition: forecastInfo.condition,
+      icon: forecastInfo.icon,
+      color: forecastInfo.color,
+      tempMax: Math.round(daily.temperature_2m_max[i]),
+      tempMin: Math.round(daily.temperature_2m_min[i]),
+      precipitation: Math.round(daily.precipitation_sum[i] * 10) / 10,
+      windSpeed: Math.round(daily.wind_speed_10m_max[i]),
+      weatherCode: daily.weather_code[i]
+    });
+  }
 
-  const windDirections = [
-    'Utara', 'Timur Laut', 'Timur', 'Tenggara', 'Selatan', 'Barat Daya', 'Barat', 'Barat Laut'
-  ];
-
-  // Calculate wind direction
-  const windDegrees = data.wind.deg || 0;
-  const windDirectionIndex = Math.round(windDegrees / 45) % 8;
-  const windDirection = windDirections[windDirectionIndex];
+  // Estimasi peluang hujan berdasarkan precipitation
+  const rainChance = current.rain > 0 ? Math.min(current.rain * 20, 100) : 0;
 
   return {
     mountain: mountainName,
-    temperature: Math.round(data.main.temp),
-    feelsLike: Math.round(data.main.feels_like),
-    tempMin: Math.round(data.main.temp_min),
-    tempMax: Math.round(data.main.temp_max),
-    humidity: data.main.humidity,
-    pressure: data.main.pressure,
-    windSpeed: Math.round(data.wind.speed * 3.6), // Convert m/s to km/h
-    windDirection: windDirection,
-    windDegrees: data.wind.deg || 0,
-    clouds: data.clouds.all,
-    condition: condition.main,
-    description: condition.description,
-    icon: weatherIcons[condition.main] || 'fas fa-cloud',
-    visibility: Math.round(data.visibility / 1000), // Convert to km
-    sunrise: new Date(data.sys.sunrise * 1000),
-    sunset: new Date(data.sys.sunset * 1000),
-    timestamp: new Date(data.dt * 1000)
+    temperature: Math.round(current.temperature_2m),
+    humidity: current.relative_humidity_2m,
+    windSpeed: Math.round(current.wind_speed_10m),
+    precipitation: current.precipitation || 0,
+    condition: weatherInfo.condition,
+    icon: weatherInfo.icon,
+    color: weatherInfo.color,
+    rainChance: Math.round(rainChance),
+    weatherCode: current.weather_code,
+    forecast: forecast,
+    timestamp: new Date(),
+    isRealTime: true
   };
 }
 
 /**
- * Get mock weather data for demonstration
+ * Get mock weather data for demonstration (fallback)
  * @param {string} mountainName - Mountain name
  * @returns {Object} Mock weather data
  */
 function getMockWeatherData(mountainName) {
   // Variasi data cuaca berdasarkan nama gunung
   const weatherVariations = {
-    'Gunung Merbabu': {
-      temperature: 18, feelsLike: 16, tempMin: 14, tempMax: 22,
-      windSpeed: 8, condition: 'Berawan', humidity: 75
-    },
-    'Gunung Merapi': {
-      temperature: 15, feelsLike: 12, tempMin: 10, tempMax: 20,
-      windSpeed: 12, condition: 'Berawan Tebal', humidity: 80
-    },
-    'Gunung Lawu': {
-      temperature: 20, feelsLike: 18, tempMin: 16, tempMax: 25,
-      windSpeed: 6, condition: 'Cerah', humidity: 65
-    },
-    'Gunung Sindoro': {
-      temperature: 17, feelsLike: 15, tempMin: 13, tempMax: 21,
-      windSpeed: 7, condition: 'Berawan', humidity: 70
-    },
-    'Semeru': {
-      temperature: 12, feelsLike: 9, tempMin: 8, tempMax: 16,
-      windSpeed: 15, condition: 'Hujan Ringan', humidity: 85
-    },
-    'Gede Pangrango': {
-      temperature: 16, feelsLike: 14, tempMin: 12, tempMax: 20,
-      windSpeed: 9, condition: 'Berawan', humidity: 78
-    },
-    'Bromo': {
-      temperature: 19, feelsLike: 17, tempMin: 15, tempMax: 24,
-      windSpeed: 10, condition: 'Cerah Berawan', humidity: 68
-    },
-    'Slamet': {
-      temperature: 14, feelsLike: 11, tempMin: 9, tempMax: 18,
-      windSpeed: 11, condition: 'Berawan', humidity: 82
-    },
-    'Ciremai': {
-      temperature: 18, feelsLike: 16, tempMin: 14, tempMax: 23,
-      windSpeed: 7, condition: 'Cerah', humidity: 72
-    }
+    'Gunung Merbabu': { tempCode: 1, temp: 18, humidity: 75, wind: 8 },
+    'Gunung Merapi': { tempCode: 3, temp: 15, humidity: 80, wind: 12 },
+    'Gunung Lawu': { tempCode: 0, temp: 20, humidity: 65, wind: 6 },
+    'Gunung Sindoro': { tempCode: 2, temp: 17, humidity: 70, wind: 7 },
+    'Semeru': { tempCode: 61, temp: 12, humidity: 85, wind: 15 },
+    'Gede Pangrango': { tempCode: 2, temp: 16, humidity: 78, wind: 9 },
+    'Bromo': { tempCode: 1, temp: 19, humidity: 68, wind: 10 },
+    'Slamet': { tempCode: 3, temp: 14, humidity: 82, wind: 11 },
+    'Ciremai': { tempCode: 0, temp: 18, humidity: 72, wind: 7 }
   };
 
-  const variation = weatherVariations[mountainName] || {
-    temperature: 17, feelsLike: 15, tempMin: 12, tempMax: 22,
-    windSpeed: 8, condition: 'Berawan', humidity: 75
-  };
+  const variation = weatherVariations[mountainName] || { tempCode: 1, temp: 17, humidity: 75, wind: 8 };
+  const weatherInfo = getWeatherInfoFromCode(variation.tempCode);
 
-  const windDirections = ['Barat Laut', 'Timur', 'Selatan', 'Barat Daya', 'Utara', 'Timur Laut', 'Selatan', 'Barat'];
-  const random = Math.abs(mountainName.charCodeAt(0)) % windDirections.length;
-
-  const conditionIcons = {
-    'Cerah': 'fas fa-sun',
-    'Berawan': 'fas fa-cloud',
-    'Berawan Tebal': 'fas fa-cloud',
-    'Cerah Berawan': 'fas fa-cloud-sun',
-    'Hujan Ringan': 'fas fa-cloud-rain',
-  };
+  // Generate mock forecast
+  const forecast = [];
+  for (let i = 0; i < 7; i++) {
+    const randomCode = Object.keys(weatherCodeMap)[Math.floor(Math.random() * 10)];
+    const fInfo = getWeatherInfoFromCode(parseInt(randomCode));
+    forecast.push({
+      date: new Date(Date.now() + i * 24 * 60 * 60 * 1000),
+      condition: fInfo.condition,
+      icon: fInfo.icon,
+      color: fInfo.color,
+      tempMax: variation.temp + Math.floor(Math.random() * 5),
+      tempMin: variation.temp - Math.floor(Math.random() * 5),
+      precipitation: Math.floor(Math.random() * 20),
+      windSpeed: variation.wind + Math.floor(Math.random() * 5),
+      weatherCode: parseInt(randomCode)
+    });
+  }
 
   return {
     mountain: mountainName,
-    temperature: variation.temperature,
-    feelsLike: variation.feelsLike,
-    tempMin: variation.tempMin,
-    tempMax: variation.tempMax,
+    temperature: variation.temp,
     humidity: variation.humidity,
-    pressure: 1013,
-    windSpeed: variation.windSpeed,
-    windDirection: windDirections[random],
-    windDegrees: random * 45,
-    clouds: 60,
-    condition: variation.condition,
-    description: variation.condition.toLowerCase(),
-    icon: conditionIcons[variation.condition] || 'fas fa-cloud',
-    visibility: 10,
-    sunrise: new Date(Date.now() + 5 * 60 * 60 * 1000), // 5 hours from now
-    sunset: new Date(Date.now() + 15 * 60 * 60 * 1000), // 15 hours from now
+    windSpeed: variation.wind,
+    precipitation: Math.random() * 5,
+    condition: weatherInfo.condition,
+    icon: weatherInfo.icon,
+    color: weatherInfo.color,
+    rainChance: Math.floor(Math.random() * 60),
+    weatherCode: variation.tempCode,
+    forecast: forecast,
     timestamp: new Date(),
-    isRealTime: false // Mark as mock data
+    isRealTime: false
   };
 }
 

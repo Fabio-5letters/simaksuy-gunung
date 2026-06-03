@@ -107,31 +107,13 @@
                             <div>
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Pintu Masuk</label>
                                 <select name="pintu_masuk" id="pintuMasuk" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none transition bg-white">
-                                    <option value="">Pilih Pintu Masuk</option>
-                                    <% if (gunung.pintuJalur && gunung.pintuJalur.length > 0) { %>
-                                        <% gunung.pintuJalur.forEach(p => { %>
-                                            <option value="<%= p %>"><%= p %></option>
-                                        <% }) %>
-                                    <% } else { %>
-                                        <option value="Cibodas">Cibodas</option>
-                                        <option value="Gunung Putri">Gunung Putri</option>
-                                        <option value="Selabintana">Selabintana</option>
-                                    <% } %>
+                                    <option value="">Memuat pintu masuk...</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Pintu Keluar</label>
                                 <select name="pintu_keluar" id="pintuKeluar" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none transition bg-white">
-                                    <option value="">Pilih Pintu Keluar</option>
-                                    <% if (gunung.pintuJalur && gunung.pintuJalur.length > 0) { %>
-                                        <% gunung.pintuJalur.forEach(p => { %>
-                                            <option value="<%= p %>"><%= p %></option>
-                                        <% }) %>
-                                    <% } else { %>
-                                        <option value="Cibodas">Cibodas</option>
-                                        <option value="Gunung Putri">Gunung Putri</option>
-                                        <option value="Selabintana">Selabintana</option>
-                                    <% } %>
+                                    <option value="">Memuat pintu keluar...</option>
                                 </select>
                             </div>
                         </div>
@@ -269,6 +251,53 @@
             btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...';
             return true;
         };
+
+        // Load pintu jalur secara dinamis
+        const pintuMasukSelect = document.getElementById('pintuMasuk');
+        const pintuKeluarSelect = document.getElementById('pintuKeluar');
+        const gunungIdInput = document.querySelector('input[name="id_gunung"]');
+
+        async function loadPintuJalur() {
+            const gunungId = gunungIdInput.value;
+            
+            if (!gunungId) {
+                pintuMasukSelect.innerHTML = '<option value="">Pilih Gunung Terlebih Dahulu</option>';
+                pintuKeluarSelect.innerHTML = '<option value="">Pilih Gunung Terlebih Dahulu</option>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/pintu-jalur?id_gunung=${gunungId}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                const pintuList = result.success ? result.data : [];
+
+                let optionsHtml = '<option value="">Pilih Pintu</option>';
+                if (Array.isArray(pintuList) && pintuList.length > 0) {
+                    pintuList.forEach(pintu => {
+                        optionsHtml += `<option value="${pintu.nama_pintu}">${pintu.nama_pintu} (${pintu.lokasi || ''})</option>`;
+                    });
+                } else {
+                    optionsHtml = '<option value="">Tidak ada pintu tersedia</option>';
+                }
+
+                pintuMasukSelect.innerHTML = optionsHtml;
+                pintuKeluarSelect.innerHTML = optionsHtml;
+            } catch (error) {
+                console.error('Error loading pintu jalur:', error);
+                pintuMasukSelect.innerHTML = '<option value="">Error memuat data</option>';
+                pintuKeluarSelect.innerHTML = '<option value="">Error memuat data</option>';
+            }
+        }
+
+        // Load initial data saat page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPintuJalur();
+        });
     </script>
 </body>
 </html>
