@@ -43,6 +43,18 @@ router.post('/simaksi', isAuthenticated, async (req, res) => {
       return res.redirect('/beranda');
     }
 
+    // Check status gunung - MUST BE OPEN
+    const [gunung] = await db.query('SELECT status FROM gunung WHERE id = ?', [id_gunung]);
+    if (gunung.length === 0) {
+      req.flash('error', 'Gunung tidak ditemukan.');
+      return res.redirect('/beranda');
+    }
+    
+    if (gunung[0].status === 'Tutup') {
+      req.flash('error', 'Pendaftaran tidak dapat dilakukan karena status gunung sedang ditutup.');
+      return res.redirect('/beranda');
+    }
+
     // Validate tanggal_pendakian is in the future
     const pendakianDate = new Date(tanggal_pendakian);
     const today = new Date();

@@ -74,16 +74,12 @@ app.get('/', (req, res) => {
   res.redirect('/beranda');
 });
 
-// Use auth routes (rate limiting disabled)
+// Mount routers
+app.use('/', pembayaranRoutes);
 app.use('/', authRoutes);
-
-// Use other routes
 app.use('/', userRoutes);
 app.use('/', adminRoutes);
-// generalRoutes dan pembayaranRoutes butuh dependency eksternal & koneksi API;
-// biarkan agar server bisa start meski service tertentu gagal.
 app.use('/', generalRoutes);
-app.use('/', pembayaranRoutes);
 
 
 // 404 handler

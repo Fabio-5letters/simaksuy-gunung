@@ -372,7 +372,7 @@ This project is licensed under the ISC License.
 
 - **Email:** info@simaksi.com
 - **Phone:** +62 274 515 912
-- **Address:** Semarang, Indonesia
+- **Address:** Jakarta, Indonesia
 
 ---
 

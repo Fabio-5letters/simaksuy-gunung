@@ -47,9 +47,9 @@
         <div class="container mx-auto max-w-4xl flex justify-between items-center">
             <h3 class="text-lg font-bold text-gray-800">E-Tiket Pendakian</h3>
             <div class="flex space-x-3">
-                <button onclick="window.print()" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition">
-                    <i class="fas fa-print mr-2"></i>Cetak E-Tiket
-                </button>
+                <a href="/download-tiket/<%= pemesanan.kode_booking || pemesanan.id %>?format=pdf" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition flex items-center">
+                    <i class="fas fa-file-pdf mr-2"></i>Download PDF
+                </a>
                 <a href="/riwayat" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition">
                     <i class="fas fa-arrow-left mr-2"></i>Kembali
                 </a>

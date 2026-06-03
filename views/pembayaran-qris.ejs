@@ -64,54 +64,47 @@
             <!-- Header -->
             <div class="gradient-header text-white p-6 text-center">
                 <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-qrcode text-3xl"></i>
+                    <i class="fas fa-wallet text-3xl"></i>
                 </div>
-                <h2 class="text-2xl font-bold mb-2">Pembayaran QRIS</h2>
-                <p class="text-green-100">Scan QR Code di bawah untuk melakukan pembayaran</p>
+                <h2 class="text-2xl font-bold mb-2">Instruksi Pembayaran</h2>
+                <p class="text-green-100">Silakan pilih metode dan selesaikan pembayaran Anda</p>
             </div>
 
             <div class="p-8">
-                <!-- Booking Info Card -->
-                <div class="bg-gray-50 rounded-xl p-6 mb-6 border border-gray-200">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                        <i class="fas fa-receipt text-green-600 mr-2"></i>Detail Pemesanan
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <p class="text-sm text-gray-500">Kode Booking</p>
-                            <p class="font-mono font-bold text-lg text-green-700"><%= pemesanan.kode_booking %></p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-500">Nama Pendaki</p>
-                            <p class="font-semibold text-gray-900"><%= user.nama %></p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-500">Tujuan</p>
-                            <p class="font-semibold text-gray-900"><%= pemesanan.nama_gunung %> (<%= pemesanan.ketinggian %> mdpl)</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-500">Tanggal Pendakian</p>
-                            <p class="font-semibold text-gray-900">
-                                <%= new Date(pemesanan.tanggal_masuk).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) %>
-                                - 
-                                <%= new Date(pemesanan.tanggal_keluar).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) %>
-                            </p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-500">Pintu Masuk / Keluar</p>
-                            <p class="font-semibold text-gray-900"><%= pemesanan.pintu_masuk %> → <%= pemesanan.pintu_keluar %></p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-500">Jumlah Anggota</p>
-                            <p class="font-semibold text-gray-900"><%= pemesanan.jumlah_anggota %> orang</p>
-                        </div>
+                <!-- Payment Method Selection -->
+                <div class="mb-8">
+                    <label class="block text-gray-700 text-sm font-bold mb-4 uppercase tracking-wider text-center">Pilih Metode Pembayaran</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button type="button" onclick="switchPayment('QRIS')" id="btn-method-qris" class="relative flex items-center p-4 border-2 border-green-500 rounded-2xl cursor-pointer transition-all bg-green-50 shadow-sm">
+                            <div class="w-10 h-10 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-qrcode text-xl"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="font-bold text-gray-900">QRIS</p>
+                                <p class="text-[10px] text-gray-500">Gopay, OVO, Dana, LinkAja</p>
+                            </div>
+                            <div id="check-qris" class="absolute top-4 right-4 text-green-600">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </button>
+                        <button type="button" onclick="switchPayment('BANK')" id="btn-method-bank" class="relative flex items-center p-4 border-2 border-gray-100 rounded-2xl cursor-pointer transition-all bg-white hover:border-blue-300">
+                            <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-university text-xl"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="font-bold text-gray-900">Transfer Bank</p>
+                                <p class="text-[10px] text-gray-500">BCA, Mandiri, BNI, BRI</p>
+                            </div>
+                            <div id="check-bank" class="absolute top-4 right-4 text-blue-600 hidden">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </button>
                     </div>
                 </div>
 
                 <!-- QRIS Code Section -->
-                <div class="text-center mb-6">
+                <div id="section-qris" class="text-center mb-6">
                     <div class="bg-white border-2 border-dashed border-green-300 rounded-xl p-8 inline-block shadow-inner">
-                        <!-- Dummy QR Code - Replace with actual QRIS generator -->
                         <div class="bg-white p-4 rounded-lg">
                             <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=<%= pemesanan.kode_booking %>&color=1e5631" 
                                  alt="QR Code Pembayaran" 
@@ -122,6 +115,36 @@
                             Scan QR Code menggunakan aplikasi e-wallet atau mobile banking
                         </p>
                     </div>
+                </div>
+
+                <!-- Bank Transfer Section -->
+                <div id="section-bank" class="bg-white border-2 border-dashed border-blue-300 rounded-xl p-8 mb-6 hidden">
+                    <h4 class="text-center font-bold text-gray-700 mb-6 uppercase tracking-wider">Rekening Pembayaran</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <div class="flex items-center">
+                                <div class="w-12 h-8 bg-blue-600 rounded flex items-center justify-center text-white font-bold text-[10px] mr-3">BCA</div>
+                                <div>
+                                    <p class="text-xs text-gray-500">Nomor Rekening</p>
+                                    <p class="font-mono font-bold text-gray-900">8010 2938 44</p>
+                                </div>
+                            </div>
+                            <button onclick="navigator.clipboard.writeText('8010293844')" class="text-blue-600 hover:text-blue-700"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <div class="flex items-center">
+                                <div class="w-12 h-8 bg-orange-500 rounded flex items-center justify-center text-white font-bold text-[10px] mr-3">MANDIRI</div>
+                                <div>
+                                    <p class="text-xs text-gray-500">Nomor Rekening</p>
+                                    <p class="font-mono font-bold text-gray-900">137 000 992 11</p>
+                                </div>
+                            </div>
+                            <button onclick="navigator.clipboard.writeText('13700099211')" class="text-blue-600 hover:text-blue-700"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <p class="text-center text-xs text-gray-500 mt-6 italic text-blue-800">
+                        A/N <strong>PT SIMAKSI GUNUNG INDONESIA</strong>
+                    </p>
                 </div>
 
                 <!-- Total Payment -->
@@ -137,13 +160,6 @@
                     </div>
                 </div>
 
-                <!-- Payment Method -->
-                <div class="flex items-center justify-center space-x-3 mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <i class="fas fa-credit-card text-blue-600"></i>
-                    <span class="text-sm font-medium text-blue-800">Metode: QRIS</span>
-                    <span class="text-xs text-blue-600">(<%= pemesanan.metode_pembayaran %>)</span>
-                </div>
-
                 <!-- Timer / Info -->
                 <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6 text-center">
                     <p class="text-sm text-yellow-800">
@@ -155,6 +171,7 @@
                 <!-- Action Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4">
                     <form action="/konfirmasi-bayar/<%= pemesanan.kode_booking %>" method="POST" class="flex-1">
+                        <input type="hidden" name="final_metode" id="final_metode" value="QRIS">
                         <button type="submit" class="w-full btn-pay text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center text-lg">
                             <i class="fas fa-check-circle mr-2"></i>
                             Saya Sudah Bayar
@@ -167,7 +184,62 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Order Summary Card (at bottom) -->
+        <div class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h3 class="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide flex items-center">
+                <i class="fas fa-receipt text-green-600 mr-2"></i>Detail Pemesanan
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                    <p class="text-[10px] text-gray-500 uppercase font-bold">Kode Booking</p>
+                    <p class="font-mono font-bold text-green-700"><%= pemesanan.kode_booking %></p>
+                </div>
+                <div>
+                    <p class="text-[10px] text-gray-500 uppercase font-bold">Tujuan</p>
+                    <p class="font-semibold text-gray-900 text-xs"><%= pemesanan.nama_gunung %></p>
+                </div>
+                <div>
+                    <p class="text-[10px] text-gray-500 uppercase font-bold">Tanggal</p>
+                    <p class="font-semibold text-gray-900 text-xs"><%= new Date(pemesanan.tanggal_masuk).toLocaleDateString('id-ID', {day:'numeric', month:'short'}) %></p>
+                </div>
+                <div>
+                    <p class="text-[10px] text-gray-500 uppercase font-bold">Anggota</p>
+                    <p class="font-semibold text-gray-900 text-xs"><%= pemesanan.jumlah_anggota %> Orang</p>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        function switchPayment(method) {
+            const sectionQris = document.getElementById('section-qris');
+            const sectionBank = document.getElementById('section-bank');
+            const btnQris = document.getElementById('btn-method-qris');
+            const btnBank = document.getElementById('btn-method-bank');
+            const checkQris = document.getElementById('check-qris');
+            const checkBank = document.getElementById('check-bank');
+            const finalInput = document.getElementById('final_metode');
+
+            if (method === 'QRIS') {
+                sectionQris.classList.remove('hidden');
+                sectionBank.classList.add('hidden');
+                btnQris.className = 'relative flex items-center p-4 border-2 border-green-500 rounded-2xl cursor-pointer transition-all bg-green-50 shadow-sm';
+                btnBank.className = 'relative flex items-center p-4 border-2 border-gray-100 rounded-2xl cursor-pointer transition-all bg-white hover:border-blue-300';
+                checkQris.classList.remove('hidden');
+                checkBank.classList.add('hidden');
+                finalInput.value = 'QRIS';
+            } else {
+                sectionQris.classList.add('hidden');
+                sectionBank.classList.remove('hidden');
+                btnBank.className = 'relative flex items-center p-4 border-2 border-blue-500 rounded-2xl cursor-pointer transition-all bg-blue-50 shadow-sm';
+                btnQris.className = 'relative flex items-center p-4 border-2 border-gray-100 rounded-2xl cursor-pointer transition-all bg-white hover:border-green-300';
+                checkBank.classList.remove('hidden');
+                checkQris.classList.add('hidden');
+                finalInput.value = 'Transfer Bank';
+            }
+        }
+    </script>
 
     <!-- Footer -->
     <footer class="gradient-header text-white py-8 mt-12">

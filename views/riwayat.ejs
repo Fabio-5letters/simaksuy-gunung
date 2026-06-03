@@ -275,8 +275,8 @@
                                                 <td class="px-8 py-6">
                                                     <div class="flex space-x-3">
                                                         <% if (item.status_pengajuan === 'Disetujui' || item.status === 'diverifikasi') { %>
-                                                            <a href="/download-etiket/<%= item.kode_booking || item.id %>" class="bg-green-600 text-white px-4 py-2 rounded-xl text-xs font-black hover:bg-green-700 transition shadow-lg shadow-green-100 flex items-center">
-                                                                <i class="fas fa-download mr-1.5"></i>E-TIKET
+                                                            <a href="/download-tiket/<%= item.kode_booking || item.id %>?format=html" class="bg-green-600 text-white px-4 py-2 rounded-xl text-xs font-black hover:bg-green-700 transition shadow-lg shadow-green-100 flex items-center">
+                                                                <i class="fas fa-ticket-alt mr-1.5"></i>LIHAT TIKET
                                                             </a>
                                                         <% } else if (item.status_pengajuan === 'Pending' || item.status === 'pending' || item.status === 'dibayar') { %>
                                                             <a href="/status-pemesanan/<%= item.kode_booking %>" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-black hover:bg-blue-700 transition shadow-lg shadow-blue-100 flex items-center">
@@ -389,7 +389,7 @@
                         <ul class="space-y-2 text-green-100 text-sm">
                             <li class="flex items-center"><i class="fas fa-phone mr-2"></i>+62 274 515 912</li>
                             <li class="flex items-center"><i class="fas fa-envelope mr-2"></i>info@simaksi.com</li>
-                            <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>Semarang, Indonesia</li>
+                            <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>Jakarta, Indonesia</li>
                         </ul>
                     </div>
                 </div>

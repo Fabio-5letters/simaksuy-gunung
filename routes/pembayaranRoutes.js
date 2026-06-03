@@ -42,7 +42,15 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
-// Middleware to check if user is logged in
+// Middleware to check if user is logged in (User or Admin)
+function isAnyAuthenticated(req, res, next) {
+  if (req.session.user && (req.session.user.role === 'user' || req.session.user.role === 'admin')) {
+    return next();
+  }
+  res.redirect('/login');
+}
+
+// Middleware to check if user is logged in (Strictly User)
 function isAuthenticated(req, res, next) {
   if (req.session.user && req.session.user.role === 'user') {
     return next();
@@ -93,5 +101,8 @@ router.get('/status-pemesanan/:kode_booking', isAuthenticated, pembayaranControl
 
 // GET /riwayat-pemesanan - List all user's orders
 router.get('/riwayat-pemesanan', isAuthenticated, pembayaranController.riwayatPemesanan);
+
+// GET /download-tiket/:kode_registrasi - Download ticket as PDF (Admins can also download)
+router.get('/download-tiket/:kode_registrasi', isAnyAuthenticated, pembayaranController.downloadTiket);
 
 module.exports = router;

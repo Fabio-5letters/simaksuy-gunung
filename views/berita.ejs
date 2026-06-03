@@ -123,7 +123,11 @@
                         <% berita.forEach(item => { %>
                             <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-100">
                                 <div class="h-56 overflow-hidden bg-gradient-to-br from-green-400 to-green-600 relative">
-                                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=300&fit=crop" alt="Berita" class="w-full h-full object-cover opacity-90 transition duration-500 hover:scale-110">
+                                    <% if (item.gambar_path) { %>
+                                        <img src="<%= item.gambar_path %>" alt="<%= item.judul %>" class="w-full h-full object-cover opacity-90 transition duration-500 hover:scale-110">
+                                    <% } else { %>
+                                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=300&fit=crop" alt="Berita" class="w-full h-full object-cover opacity-90 transition duration-500 hover:scale-110">
+                                    <% } %>
                                     <div class="absolute top-4 right-4 bg-white px-3 py-1 rounded-full shadow-md">
                                         <span class="text-green-700 text-xs font-bold uppercase tracking-wider">Terbaru</span>
                                     </div>
@@ -207,7 +211,7 @@
                         <ul class="space-y-2 text-green-100 text-sm">
                             <li class="flex items-center"><i class="fas fa-phone mr-2"></i>+62 274 515 912</li>
                             <li class="flex items-center"><i class="fas fa-envelope mr-2"></i>info@simaksi.com</li>
-                            <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>Semarang, Indonesia</li>
+                            <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i>Jakarta, Indonesia</li>
                         </ul>
                     </div>
                 </div>

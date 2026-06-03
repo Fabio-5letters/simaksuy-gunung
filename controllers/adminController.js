@@ -1,4 +1,6 @@
 const db = require('../db');
+const path = require('path');
+const fs = require('fs');
 
 // ==================== GUNUNG MANAGEMENT ====================
 
@@ -110,11 +112,25 @@ exports.editBerita = async (req, res) => {
 // Create new berita
 exports.createBerita = async (req, res) => {
   const { judul, konten } = req.body;
+  let gambarPath = null;
+  
   try {
-    await db.query('INSERT INTO berita (judul, isi_berita, tanggal) VALUES (?, ?, NOW())', [judul, konten]);
+    // Get gambar path if file was uploaded
+    if (req.file) {
+      gambarPath = '/uploads/berita/' + req.file.filename;
+    }
+    
+    await db.query('INSERT INTO berita (judul, isi_berita, gambar_path, tanggal) VALUES (?, ?, ?, NOW())', 
+      [judul, konten, gambarPath]);
     req.flash('success', 'Berita berhasil ditambahkan');
     res.redirect('/admin/berita');
   } catch (err) {
+    // Delete uploaded file jika ada error saat insert
+    if (req.file) {
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error('Error deleting file:', err);
+      });
+    }
     console.error('Error creating berita:', err);
     req.flash('error', 'Gagal menambahkan berita');
     res.redirect('/admin/berita');
@@ -125,11 +141,35 @@ exports.createBerita = async (req, res) => {
 exports.updateBerita = async (req, res) => {
   const { id } = req.params;
   const { judul, konten } = req.body;
+  
   try {
-    await db.query('UPDATE berita SET judul = ?, isi_berita = ? WHERE id = ?', [judul, konten, id]);
+    // Get berita lama untuk check gambar lama
+    const [beritaLama] = await db.query('SELECT gambar_path FROM berita WHERE id = ?', [id]);
+    let gambarPath = beritaLama[0]?.gambar_path || null;
+    
+    // Jika ada file baru, delete gambar lama dan gunakan file baru
+    if (req.file) {
+      // Delete gambar lama jika ada
+      if (gambarPath) {
+        const oldFilePath = path.join(__dirname, '../public', gambarPath);
+        fs.unlink(oldFilePath, (err) => {
+          if (err) console.error('Error deleting old file:', err);
+        });
+      }
+      gambarPath = '/uploads/berita/' + req.file.filename;
+    }
+    
+    await db.query('UPDATE berita SET judul = ?, isi_berita = ?, gambar_path = ? WHERE id = ?', 
+      [judul, konten, gambarPath, id]);
     req.flash('success', 'Berita berhasil diperbarui');
     res.redirect('/admin/berita');
   } catch (err) {
+    // Delete uploaded file jika ada error saat update
+    if (req.file) {
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error('Error deleting file:', err);
+      });
+    }
     console.error('Error updating berita:', err);
     req.flash('error', 'Gagal memperbarui berita');
     res.redirect('/admin/berita');
@@ -140,6 +180,18 @@ exports.updateBerita = async (req, res) => {
 exports.deleteBerita = async (req, res) => {
   const { id } = req.params;
   try {
+    // Get berita untuk get gambar path
+    const [berita] = await db.query('SELECT gambar_path FROM berita WHERE id = ?', [id]);
+    
+    // Delete gambar dari file system jika ada
+    if (berita[0]?.gambar_path) {
+      const filePath = path.join(__dirname, '../public', berita[0].gambar_path);
+      fs.unlink(filePath, (err) => {
+        if (err) console.error('Error deleting image file:', err);
+      });
+    }
+    
+    // Delete berita dari database
     await db.query('DELETE FROM berita WHERE id = ?', [id]);
     req.flash('success', 'Berita berhasil dihapus');
     res.redirect('/admin/berita');
