@@ -1,20 +1,39 @@
-# TODO - Revisi Tahap Kedua (SIMAKSI Gunung)
+# TODO - Perbaikan fitur admin gunung & berita
 
-- [ ] Implement Tombol “Lihat Detail Peringatan” di halaman Cuaca:
-  - [ ] Buat modal/section detail peringatan.
-  - [ ] Hubungkan logika status peringatan dari data cuaca.
-  - [ ] Tambahkan route/controller atau render-ready data yang diperlukan.
+## Tahap 1 — Analisis & dasar data
+- [x] Cek struktur tabel `gunung` dan `berita` (database-init.sql / database.sql)
+- [x] Identifikasi CRUD gunung dan berita yang berjalan di `adminController.js`
+- [x] Identifikasi form/route yang dipakai di view `kelola-gunung.ejs`, `edit-gunung.ejs`, `kelola-berita.ejs`, `edit-berita.ejs`
 
-- [ ] Implement Logika Ketersediaan Gunung:
-  - [ ] Filter list gunung di halaman `/pendakian` agar tidak menampilkan gunung dengan status `Tutup` atau `Tidak Bisa Didaki`.
-  - [ ] Pastikan tombol daftar tidak muncul pada gunung yang ditutup.
+## Tahap 2 — Tambah kolom relasi pintu masuk/keluar
+- [x] Tambah kolom `pintu_masuk_id` dan `pintu_keluar_id` pada tabel `gunung`
+- [ ] Update SQL/migrasi yang sesuai (database-init.sql dan/atau database.sql)
+  - Catatan: perubahan kolom dilakukan di `database-init.sql`; migrasi aplikasi (kalau ada script) perlu dijalankan supaya DB mengikuti
 
-- [ ] Implement/rapikan Tombol “Daftar Pendakian”:
-  - [ ] Pastikan alur klik tombol mengarah ke `/daftar/:id` (form pendaftaran) saat gunung berstatus `Buka`.
-  - [ ] Audit tombol di `gunung-detail.ejs` dan `pendakian.ejs` agar konsisten.
 
-- [ ] Perbaikan Halaman “Panduan”:
-  - [ ] Rapikan layout `views/panduan.ejs` agar lebih responsif dan tidak terlihat berantakan.
-  - [ ] Hilangkan struktur elemen yang berulang/aneh jika ada.
-  - [ ] Pastikan styling konsisten (grid, spacing, tipografi).
+
+## Tahap 3 — Fitur pilih pintu masuk/keluar saat tambah/edit gunung
+- [x] Update `controllers/adminController.js`:
+  - createGunung menyimpan `pintu_masuk_id` dan `pintu_keluar_id`
+  - updateGunung menyimpan `pintu_masuk_id` dan `pintu_keluar_id`
+  - editGunung mengirim daftar pintu per gunung untuk dropdown
+
+- [x] Update view `views/kelola-gunung.ejs`:
+  - alur tambah: setelah simpan redirect ke halaman edit untuk memilih pintu
+  - tambah info helper di form tambah
+
+- [x] Update view `views/edit-gunung.ejs`:
+  - tambah dropdown “Pintu Masuk” dan “Pintu Keluar” (pilih dari `pintu_jalur` milik gunung)
+
+
+## Tahap 4 — Betulkan CRUD berita
+- [ ] Cek dan perbaiki mismatch field/action pada `views/kelola-berita.ejs` (modal edit)
+- [ ] Pastikan `edit-berita.ejs` konsisten dengan controller (`judul`, `konten`, upload `gambar`)
+- [ ] Pastikan delete gambar memakai `gambar_path` (controller) dan view menampilkan `gambar_path`
+
+## Tahap 5 — Testing
+- [ ] Jalankan server
+- [ ] Test tambah gunung -> otomatis ke edit -> pilih pintu masuk/keluar -> simpan
+- [ ] Test edit gunung -> ubah pintu masuk/keluar -> simpan
+- [ ] Test CRUD berita: create/upload -> edit/update (ganti gambar) -> delete
 

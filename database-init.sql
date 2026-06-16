@@ -22,7 +22,28 @@ CREATE TABLE IF NOT EXISTS gunung (
     ketinggian INT NOT NULL,
     kuota_harian INT NOT NULL,
     status ENUM('Buka', 'Tutup') NOT NULL DEFAULT 'Buka',
+    -- pintu pilihan admin (ambil dari tabel pintu_jalur)
+    pintu_masuk_id INT NULL,
+    pintu_keluar_id INT NULL,
+    -- daftar pintu legacy untuk form pendaftaran lama
+    pintu_jalur VARCHAR(500) NULL,
+    pintu_masuk_ids TEXT NULL,
+    pintu_keluar_ids TEXT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create pintu_jalur table before admin edit pages use it
+CREATE TABLE IF NOT EXISTS pintu_jalur (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_gunung INT NOT NULL,
+    nama_pintu VARCHAR(100) NOT NULL,
+    lokasi VARCHAR(255) NOT NULL,
+    keterangan TEXT,
+    status ENUM('aktif', 'nonaktif') DEFAULT 'aktif',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_gunung) REFERENCES gunung(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_pintu_per_gunung (id_gunung, nama_pintu)
 );
 
 -- Create berita table
@@ -30,6 +51,7 @@ CREATE TABLE IF NOT EXISTS berita (
     id INT AUTO_INCREMENT PRIMARY KEY,
     judul VARCHAR(255) NOT NULL,
     isi_berita TEXT NOT NULL,
+    gambar_path VARCHAR(255) NULL,
     tanggal DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -94,6 +116,18 @@ INSERT IGNORE INTO gunung (id, nama_gunung, lokasi, ketinggian, kuota_harian, st
 (2, 'Gunung Merapi', 'Yogyakarta, Jawa Tengah', 2911, 150, 'Buka'),
 (3, 'Gunung Lawu', 'Karanganyar, Jawa Tengah', 3265, 80, 'Buka'),
 (4, 'Gunung Sindoro', 'Wonosobo, Jawa Tengah', 3136, 120, 'Buka');
+
+-- Insert sample pintu_jalur data if empty
+INSERT IGNORE INTO pintu_jalur (id_gunung, nama_pintu, lokasi, keterangan, status) VALUES
+(1, 'Selo', 'Boyolali, Jawa Tengah', 'Jalur populer Gunung Merbabu via Selo', 'aktif'),
+(1, 'Wekas', 'Magelang, Jawa Tengah', 'Jalur Gunung Merbabu via Wekas', 'aktif'),
+(1, 'Suwanting', 'Magelang, Jawa Tengah', 'Jalur Gunung Merbabu via Suwanting', 'aktif'),
+(2, 'Selo', 'Boyolali, Jawa Tengah', 'Jalur Gunung Merapi via Selo', 'aktif'),
+(2, 'Babadan', 'Magelang, Jawa Tengah', 'Jalur Gunung Merapi via Babadan', 'aktif'),
+(3, 'Cemoro Sewu', 'Magetan, Jawa Timur', 'Jalur Gunung Lawu via Cemoro Sewu', 'aktif'),
+(3, 'Cemoro Kandang', 'Karanganyar, Jawa Tengah', 'Jalur Gunung Lawu via Cemoro Kandang', 'aktif'),
+(4, 'Kledung', 'Temanggung, Jawa Tengah', 'Jalur Gunung Sindoro via Kledung', 'aktif'),
+(4, 'Sigedang', 'Wonosobo, Jawa Tengah', 'Jalur Gunung Sindoro via Sigedang', 'aktif');
 
 -- Insert dummy data into berita table if empty
 INSERT IGNORE INTO berita (id, judul, isi_berita, tanggal) VALUES

@@ -2,68 +2,59 @@ const mysql = require('mysql2');
 const fs = require('fs');
 const path = require('path');
 
-// Connect without specifying database first
 const connection = mysql.createConnection({
   host: 'localhost',
-  user: 'root', // Update if you have a different username  
-  password: '' // Update if you have a password
+  user: 'root',
+  password: ''
 });
 
-function initializeDatabase() {
+function query(sql) {
   return new Promise((resolve, reject) => {
-    // Create database
-    connection.query('CREATE DATABASE IF NOT EXISTS simaksi_db', (error) => {
+    connection.query(sql, (error, result) => {
       if (error) {
-        console.error('Error creating database:', error);
-        return reject(error);
+        reject(error);
+        return;
       }
-      
-      console.log('✓ Database simaksi_db ready');
-      
-      // Select the database
-      connection.query('USE simaksi_db', (error) => {
-        if (error) {
-          console.error('Error selecting database:', error);
-          return reject(error);
-        }
-        
-        // Read and execute initialization SQL
-        const sqlFile = path.join(__dirname, 'database-init.sql');
-        const sql = fs.readFileSync(sqlFile, 'utf8');
-        
-        // Split by semicolon and execute each statement
-        const statements = sql.split(';').filter(statement => statement.trim());
-        let executed = 0;
-        
-        statements.forEach((statement, index) => {
-          connection.query(statement, (error) => {
-            if (error) {
-              console.error(`Error executing statement ${index + 1}:`, error);
-            } else {
-              executed++;
-            }
-            
-            if (executed === statements.length) {
-              console.log('✓ Database tables initialized successfully');
-              connection.end();
-              resolve();
-            }
-          });
-        });
-      });
+
+      resolve(result);
     });
   });
 }
 
-// Run initialization if this file is executed directly
+async function initializeDatabase() {
+  try {
+    await query('CREATE DATABASE IF NOT EXISTS simaksi_db');
+    console.log('Database simaksi_db ready');
+
+    await query('USE simaksi_db');
+
+    const sqlFile = path.join(__dirname, 'database-init.sql');
+    const sql = fs.readFileSync(sqlFile, 'utf8');
+    const statements = sql.split(';').filter(statement => statement.trim());
+
+    for (let index = 0; index < statements.length; index += 1) {
+      try {
+        await query(statements[index]);
+      } catch (error) {
+        console.error(`Error executing statement ${index + 1}:`, error);
+        throw error;
+      }
+    }
+
+    console.log('Database tables initialized successfully');
+  } finally {
+    connection.end();
+  }
+}
+
 if (require.main === module) {
   initializeDatabase()
     .then(() => {
-      console.log('✓ Database setup completed successfully!');
+      console.log('Database setup completed successfully!');
       process.exit(0);
     })
     .catch((error) => {
-      console.error('✗ Database setup failed:', error);
+      console.error('Database setup failed:', error.message);
       process.exit(1);
     });
 }

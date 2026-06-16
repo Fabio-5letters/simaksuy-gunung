@@ -6,6 +6,7 @@ const path = require('path');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const db = require('./db');
+const ensureAdminSchema = require('./migrations/002-sync-admin-schema');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes');
@@ -130,6 +131,12 @@ function startServer(port) {
 }
 
 const PORT = process.env.PORT || 8081;
-startServer(PORT);
+ensureAdminSchema()
+  .catch((err) => {
+    console.error('Database schema sync error:', err.message);
+  })
+  .finally(() => {
+    startServer(PORT);
+  });
 
 module.exports = app;

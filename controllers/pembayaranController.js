@@ -33,8 +33,15 @@ exports.showDaftar = async (req, res) => {
       return res.redirect('/pendakian');
     }
 
-    // Split pintu_jalur string into array
-    const pintuJalur = data.pintu_jalur ? data.pintu_jalur.split(',').map(p => p.trim()) : [];
+    let pintuJalur = data.pintu_jalur ? data.pintu_jalur.split(',').map(p => p.trim()) : [];
+
+    if (pintuJalur.length === 0) {
+      const [pintuRows] = await db.query(
+        'SELECT nama_pintu FROM pintu_jalur WHERE id_gunung = ? AND status = "aktif" ORDER BY nama_pintu',
+        [id]
+      );
+      pintuJalur = pintuRows.map((pintu) => pintu.nama_pintu);
+    }
 
     res.render('pendaftaran', {
       user: req.session.user,
